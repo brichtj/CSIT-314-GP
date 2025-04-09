@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 
 function App() {
+  const [user_profile, setUserProfile] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -15,6 +16,7 @@ function App() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          user_profile,
           username,
           password,
         }),
@@ -45,6 +47,16 @@ function App() {
         <div className="form-container">
           <p className="title">Welcome back</p>
           <form className="form">
+            <select className="input" id="userProfile_input"
+              value={user_profile}
+              onChange={(e) => setUserProfile(e.target.value)}
+            >
+              <option value="" disabled selected>Login as:</option> {/* or can just put HomeOwner or Cleaner as default selected */}
+              <option value="UserAdmin">User Admin</option>
+              <option value="Cleaner">Cleaner</option>
+              <option value="HomeOwner">Home Owner</option>
+              <option value="PlatformManagement">Platform Management</option>
+            </select>
             <input type="email" className="input" id="email_input" placeholder="Email"
               value={username}
               onChange={(e) => setUsername(e.target.value)}

@@ -1,0 +1,61 @@
+
+// Seperate password from user table
+// Assuming using username to login
+User_Login_Details:
+username        varchar                 PK
+password        varchar         //do we hash password? Python can use hashlib to hash(encode) password
+
+User:
+UserID          varchar                 PK
+username        varchar                 FK reference User_Login_Details(username)
+UserProfile     ENUM UserProfile
+
+User::User_Admin
+// Maybe need a staffID(but is abit reduntant)
+StaffID         varchar                 CK
+
+User::Cleaner
+email           varchar                 CK
+phone           varchar                 CK
+DOB             DATE(yyyy/mm/dd)
+
+Service:
+ServiceID       varchar                 PK
+UserID          varchar                 FK reference User::Cleaner(UserID)
+CategoryID      varchar                 FK reference Category(CategoryID)
+Price           decimal(8,2)
+Description     text
+views           int
+shortisted      int
+
+User::HomeOwner
+email           varchar                 CK
+phone           varchar                 CK
+DOB             DATE(yyyy/mm/dd)
+Address
+
+// for shortlist sql cannot store list(better not to) so need another table that shows what service that a shortlist included
+shortlist
+shortlistID     varchar                 PK
+UserID          varchar                 FK reference User::HomeOwner(UserID)
+
+shortisted_item
+shortlistID     varchar                 FK reference shortist(shortlistID)
+ServiceID       varchar                 FK reference Service(ServiceID)            // using list to store what user have shortisted
+
+Matched_History:
+HistoryID       varchar                 PK
+Date            DATE(yyyy/mm/dd)
+CleanerUserID   varchar                 FK reference User::Cleaner(UserID)
+HOUserID        varchar                 FK reference User::HomeOwner(UserID)
+ServiceID       varchar                 FK reference Service(ServiceID)
+
+PlatformManager
+StaffID         varchahr                CK
+
+// Can use ENUM for Category also unless we need add details to category(eg description)
+// ENUM Category(A,B,C....)
+Category
+CategoryID      varchar                 PK
+Name            varchar
+description     text

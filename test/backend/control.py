@@ -1,10 +1,10 @@
 from entity import User, UserAdmin, Cleaner, HomeOwner, PlatfromManagement
 
 user_classes = {
-    1: UserAdmin,
-    2: Cleaner,
-    3: HomeOwner,
-    4: PlatfromManagement
+    UserAdmin: UserAdmin,
+    Cleaner: Cleaner,
+    HomeOwner: HomeOwner,
+    PlatfromManagement: PlatfromManagement
 }
 
 def login_control(mode, username, password) ->User:

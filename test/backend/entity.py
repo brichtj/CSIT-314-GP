@@ -6,10 +6,12 @@ class User:
         self.password = password
 
     def authenticate(self):
-        if self.username in mock_user_db and self.password == mock_user_db[self.username]:
-            return
+        if self.username in mock_user_db:
+            if self.password == mock_user_db[self.username]:
+                return
+            raise Exception("Incorrect password!")
         
-        raise Exception("Authentication Failed")
+        raise Exception("Incorrect Username")
     
     def pullDetail(self):
         #need to be change after database is complete

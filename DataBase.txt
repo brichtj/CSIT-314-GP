@@ -1,0 +1,48 @@
+Login_Details
+Username	VARCHAR     	PRIMARY KEY REFERENCES User(username)
+Password	VARCHAR
+
+User
+UserID		VARCHAR     	PRIMARY KEY
+Username	VARCHAR     	FOREIGN KEY REFERENCES User_Login_Details(username)
+UserProfile    	ENUM('User_Admin', 'Cleaner', 'HomeOwner', ‘PlatformManager’)
+Email          	VARCHAR    	UNIQUE
+Phone          	VARCHAR     	UNIQUE
+DOB            	DATE
+
+User_Admin::User
+UserID         	VARCHAR     	PRIMARY KEY REFERENCES User(UserID)
+
+Cleaner::User
+UserID         	VARCHAR     	PRIMARY KEY REFERENCES User(UserID)
+
+HomeOwner::User
+UserID         	VARCHAR     	PRIMARY KEY REFERENCES User(UserID)
+Address        	TEXT
+
+Service
+ServiceID      	VARCHAR     	PRIMARY KEY
+Title		TEXT
+UserID         	VARCHAR     	FOREIGN KEY REFERENCES Cleaner(UserID)
+Category     	ENUM(A, B, C …)
+Price          	DECIMAL(8,2)
+Description    	TEXT
+Views          	INT
+Shortlisted    	INT
+
+Shortlist_Record
+UserID         	VARCHAR     	FOREIGN KEY REFERENCES HomeOwner(UserID)
+ServiceID	VARCHAR	FOREIGN KEY REFERENCES Service(ServiceID)
+
+Matched_History
+HistoryID      	VARCHAR     	PRIMARY KEY
+Date           	DATE
+HOUserID       VARCHAR     	FOREIGN KEY REFERENCES HomeOwner(UserID)
+ServiceID      	VARCHAR     	FOREIGN KEY REFERENCES Service(ServiceID)
+
+PlatformManager
+UserID		VARCHAR	FOREIGN KEY REFERENCES User(UserID)
+
+Category
+CategoryID	VARCHAR	PRIMARY KEY
+Description	TEXT

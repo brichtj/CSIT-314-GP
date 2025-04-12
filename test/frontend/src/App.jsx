@@ -1,9 +1,11 @@
+
+
 import React, { useState } from 'react';
 import './App.css';
 
 function App() {
   const [user_profile, setUserProfile] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const login = async (e) => {
@@ -58,8 +60,8 @@ function App() {
               <option value="PlatformManagement">Platform Management</option>
             </select>
             <input type="email" className="input" id="email_input" placeholder="Email"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input type="password" className="input" id="password_input" placeholder="Password"
               value={password}

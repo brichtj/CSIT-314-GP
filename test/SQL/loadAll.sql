@@ -2,24 +2,25 @@ DROP TABLE IF EXISTS Shortlist_Record CASCADE;
 DROP TABLE IF EXISTS Matched_History CASCADE;
 DROP TABLE IF EXISTS Service CASCADE;
 DROP TABLE IF EXISTS Category CASCADE;
-DROP TABLE IF EXISTS User_Admin CASCADE;
+DROP TABLE IF EXISTS UserAdmin CASCADE;
 DROP TABLE IF EXISTS Cleaner CASCADE;
 DROP TABLE IF EXISTS HomeOwner CASCADE;
-DROP TABLE IF EXISTS PlatformManager CASCADE;
-DROP TABLE IF EXISTS "User" CASCADE;
+DROP TABLE IF EXISTS PlatformManagement CASCADE;
+DROP TABLE IF EXISTS "user" CASCADE;
 DROP TABLE IF EXISTS Login_Details CASCADE;
 DROP TYPE IF EXISTS user_profile CASCADE;
 
-CREATE TYPE user_profile AS ENUM ('User_Admin', 'Cleaner', 'HomeOwner', 'PlatformManager');
+CREATE TYPE user_profile AS ENUM ('UserAdmin', 'Cleaner', 'HomeOwner', 'PlatformManagement');
 
 -- Table: Login_Details
 CREATE TABLE Login_Details (
+    UserProfile user_profile NOT NULL, -- Use the defined ENUM type here
     Email VARCHAR(255) PRIMARY KEY NOT NULL,
     Password VARCHAR(255) UNIQUE NOT NULL
 );
 
 -- Table: User
-CREATE TABLE "User" (
+CREATE TABLE "user" (
     UserID VARCHAR(255) PRIMARY KEY NOT NULL,
     Username VARCHAR(255) UNIQUE NOT NULL,
     UserProfile user_profile NOT NULL, -- Use the defined ENUM type here
@@ -29,29 +30,29 @@ CREATE TABLE "User" (
 	FOREIGN KEY (Email) REFERENCES Login_Details(Email) ON DELETE CASCADE
 );
 
--- Table: User_Admin
-CREATE TABLE User_Admin (
+-- Table: UserAdmin
+CREATE TABLE UserAdmin (
     UserID VARCHAR(255) PRIMARY KEY NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES "User"(UserID) ON DELETE CASCADE
+    FOREIGN KEY (UserID) REFERENCES "user"(UserID) ON DELETE CASCADE
 );
 
 -- Table: Cleaner
 CREATE TABLE Cleaner (
     UserID VARCHAR(255) PRIMARY KEY NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES "User"(UserID) ON DELETE CASCADE
+    FOREIGN KEY (UserID) REFERENCES "user"(UserID) ON DELETE CASCADE
 );
 
 -- Table: HomeOwner
 CREATE TABLE HomeOwner (
     UserID VARCHAR(255) PRIMARY KEY NOT NULL,
     Address TEXT NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES "User"(UserID) ON DELETE CASCADE
+    FOREIGN KEY (UserID) REFERENCES "user"(UserID) ON DELETE CASCADE
 );
 
--- Table: PlatformManager
-CREATE TABLE PlatformManager (
+-- Table: PlatformManagement
+CREATE TABLE PlatformManagement (
     UserID VARCHAR(255) PRIMARY KEY NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES "User"(UserID) ON DELETE CASCADE
+    FOREIGN KEY (UserID) REFERENCES "user"(UserID) ON DELETE CASCADE
 );
 
 -- Table: Category
@@ -93,151 +94,151 @@ CREATE TABLE Matched_History (
 	FOREIGN KEY (ServiceID) REFERENCES Service(ServiceID) ON DELETE CASCADE
 );
 
--- Insert into Login_Details for User_Admin
-INSERT INTO Login_Details (Email, Password) VALUES
-('admin1@example.com', 'passwordUA1'),
-('admin2@example.com', 'passwordUA2'),
-('admin3@example.com', 'passwordUA3'),
-('admin4@example.com', 'passwordUA4'),
-('admin5@example.com', 'passwordUA5'),
-('admin6@example.com', 'passwordUA6'),
-('admin7@example.com', 'passwordUA7'),
-('admin8@example.com', 'passwordUA8'),
-('admin9@example.com', 'passwordUA9'),
-('admin10@example.com', 'passwordUA10'),
-('admin11@example.com', 'passwordUA11'),
-('admin12@example.com', 'passwordUA12'),
-('admin13@example.com', 'passwordUA13'),
-('admin14@example.com', 'passwordUA14'),
-('admin15@example.com', 'passwordUA15'),
-('admin16@example.com', 'passwordUA16'),
-('admin17@example.com', 'passwordUA17'),
-('admin18@example.com', 'passwordUA18'),
-('admin19@example.com', 'passwordUA19'),
-('admin20@example.com', 'passwordUA20'),
-('admin21@example.com', 'passwordUA21'),
-('admin22@example.com', 'passwordUA22'),
-('admin23@example.com', 'passwordUA23'),
-('admin24@example.com', 'passwordUA24'),
-('admin25@example.com', 'passwordUA25');
+-- Insert into Login_Details for UserAdmin
+INSERT INTO Login_Details (UserProfile, Email, Password) VALUES
+('UserAdmin', 'admin1@example.com', 'passwordUA1'),
+('UserAdmin', 'admin2@example.com', 'passwordUA2'),
+('UserAdmin', 'admin3@example.com', 'passwordUA3'),
+('UserAdmin', 'admin4@example.com', 'passwordUA4'),
+('UserAdmin', 'admin5@example.com', 'passwordUA5'),
+('UserAdmin', 'admin6@example.com', 'passwordUA6'),
+('UserAdmin', 'admin7@example.com', 'passwordUA7'),
+('UserAdmin', 'admin8@example.com', 'passwordUA8'),
+('UserAdmin', 'admin9@example.com', 'passwordUA9'),
+('UserAdmin', 'admin10@example.com', 'passwordUA10'),
+('UserAdmin', 'admin11@example.com', 'passwordUA11'),
+('UserAdmin', 'admin12@example.com', 'passwordUA12'),
+('UserAdmin', 'admin13@example.com', 'passwordUA13'),
+('UserAdmin', 'admin14@example.com', 'passwordUA14'),
+('UserAdmin', 'admin15@example.com', 'passwordUA15'),
+('UserAdmin', 'admin16@example.com', 'passwordUA16'),
+('UserAdmin', 'admin17@example.com', 'passwordUA17'),
+('UserAdmin', 'admin18@example.com', 'passwordUA18'),
+('UserAdmin', 'admin19@example.com', 'passwordUA19'),
+('UserAdmin', 'admin20@example.com', 'passwordUA20'),
+('UserAdmin', 'admin21@example.com', 'passwordUA21'),
+('UserAdmin', 'admin22@example.com', 'passwordUA22'),
+('UserAdmin', 'admin23@example.com', 'passwordUA23'),
+('UserAdmin', 'admin24@example.com', 'passwordUA24'),
+('UserAdmin', 'admin25@example.com', 'passwordUA25');
 
 -- Insert into Login_Details for Cleaner
-INSERT INTO Login_Details (Email, Password) VALUES
-('cleaner1@example.com', 'passwordCL1'),
-('cleaner2@example.com', 'passwordCL2'),
-('cleaner3@example.com', 'passwordCL3'),
-('cleaner4@example.com', 'passwordCL4'),
-('cleaner5@example.com', 'passwordCL5'),
-('cleaner6@example.com', 'passwordCL6'),
-('cleaner7@example.com', 'passwordCL7'),
-('cleaner8@example.com', 'passwordCL8'),
-('cleaner9@example.com', 'passwordCL9'),
-('cleaner10@example.com', 'passwordCL10'),
-('cleaner11@example.com', 'passwordCL11'),
-('cleaner12@example.com', 'passwordCL12'),
-('cleaner13@example.com', 'passwordCL13'),
-('cleaner14@example.com', 'passwordCL14'),
-('cleaner15@example.com', 'passwordCL15'),
-('cleaner16@example.com', 'passwordCL16'),
-('cleaner17@example.com', 'passwordCL17'),
-('cleaner18@example.com', 'passwordCL18'),
-('cleaner19@example.com', 'passwordCL19'),
-('cleaner20@example.com', 'passwordCL20'),
-('cleaner21@example.com', 'passwordCL21'),
-('cleaner22@example.com', 'passwordCL22'),
-('cleaner23@example.com', 'passwordCL23'),
-('cleaner24@example.com', 'passwordCL24'),
-('cleaner25@example.com', 'passwordCL25');
+INSERT INTO Login_Details (UserProfile, Email, Password) VALUES
+('Cleaner', 'cleaner1@example.com', 'passwordCL1'),
+('Cleaner', 'cleaner2@example.com', 'passwordCL2'),
+('Cleaner', 'cleaner3@example.com', 'passwordCL3'),
+('Cleaner', 'cleaner4@example.com', 'passwordCL4'),
+('Cleaner', 'cleaner5@example.com', 'passwordCL5'),
+('Cleaner', 'cleaner6@example.com', 'passwordCL6'),
+('Cleaner', 'cleaner7@example.com', 'passwordCL7'),
+('Cleaner', 'cleaner8@example.com', 'passwordCL8'),
+('Cleaner', 'cleaner9@example.com', 'passwordCL9'),
+('Cleaner', 'cleaner10@example.com', 'passwordCL10'),
+('Cleaner', 'cleaner11@example.com', 'passwordCL11'),
+('Cleaner', 'cleaner12@example.com', 'passwordCL12'),
+('Cleaner', 'cleaner13@example.com', 'passwordCL13'),
+('Cleaner', 'cleaner14@example.com', 'passwordCL14'),
+('Cleaner', 'cleaner15@example.com', 'passwordCL15'),
+('Cleaner', 'cleaner16@example.com', 'passwordCL16'),
+('Cleaner', 'cleaner17@example.com', 'passwordCL17'),
+('Cleaner', 'cleaner18@example.com', 'passwordCL18'),
+('Cleaner', 'cleaner19@example.com', 'passwordCL19'),
+('Cleaner', 'cleaner20@example.com', 'passwordCL20'),
+('Cleaner', 'cleaner21@example.com', 'passwordCL21'),
+('Cleaner', 'cleaner22@example.com', 'passwordCL22'),
+('Cleaner', 'cleaner23@example.com', 'passwordCL23'),
+('Cleaner', 'cleaner24@example.com', 'passwordCL24'),
+('Cleaner', 'cleaner25@example.com', 'passwordCL25');
 
 -- Insert into Login_Details for HomeOwner
-INSERT INTO Login_Details (Email, Password) VALUES
-('homeowner1@example.com', 'passwordHO1'),
-('homeowner2@example.com', 'passwordHO2'),
-('homeowner3@example.com', 'passwordHO3'),
-('homeowner4@example.com', 'passwordHO4'),
-('homeowner5@example.com', 'passwordHO5'),
-('homeowner6@example.com', 'passwordHO6'),
-('homeowner7@example.com', 'passwordHO7'),
-('homeowner8@example.com', 'passwordHO8'),
-('homeowner9@example.com', 'passwordHO9'),
-('homeowner10@example.com', 'passwordHO10'),
-('homeowner11@example.com', 'passwordHO11'),
-('homeowner12@example.com', 'passwordHO12'),
-('homeowner13@example.com', 'passwordHO13'),
-('homeowner14@example.com', 'passwordHO14'),
-('homeowner15@example.com', 'passwordHO15'),
-('homeowner16@example.com', 'passwordHO16'),
-('homeowner17@example.com', 'passwordHO17'),
-('homeowner18@example.com', 'passwordHO18'),
-('homeowner19@example.com', 'passwordHO19'),
-('homeowner20@example.com', 'passwordHO20'),
-('homeowner21@example.com', 'passwordHO21'),
-('homeowner22@example.com', 'passwordHO22'),
-('homeowner23@example.com', 'passwordHO23'),
-('homeowner24@example.com', 'passwordHO24'),
-('homeowner25@example.com', 'passwordHO25');
+INSERT INTO Login_Details (UserProfile, Email, Password) VALUES
+('HomeOwner', 'homeowner1@example.com', 'passwordHO1'),
+('HomeOwner', 'homeowner2@example.com', 'passwordHO2'),
+('HomeOwner', 'homeowner3@example.com', 'passwordHO3'),
+('HomeOwner', 'homeowner4@example.com', 'passwordHO4'),
+('HomeOwner', 'homeowner5@example.com', 'passwordHO5'),
+('HomeOwner', 'homeowner6@example.com', 'passwordHO6'),
+('HomeOwner', 'homeowner7@example.com', 'passwordHO7'),
+('HomeOwner', 'homeowner8@example.com', 'passwordHO8'),
+('HomeOwner', 'homeowner9@example.com', 'passwordHO9'),
+('HomeOwner', 'homeowner10@example.com', 'passwordHO10'),
+('HomeOwner', 'homeowner11@example.com', 'passwordHO11'),
+('HomeOwner', 'homeowner12@example.com', 'passwordHO12'),
+('HomeOwner', 'homeowner13@example.com', 'passwordHO13'),
+('HomeOwner', 'homeowner14@example.com', 'passwordHO14'),
+('HomeOwner', 'homeowner15@example.com', 'passwordHO15'),
+('HomeOwner', 'homeowner16@example.com', 'passwordHO16'),
+('HomeOwner', 'homeowner17@example.com', 'passwordHO17'),
+('HomeOwner', 'homeowner18@example.com', 'passwordHO18'),
+('HomeOwner', 'homeowner19@example.com', 'passwordHO19'),
+('HomeOwner', 'homeowner20@example.com', 'passwordHO20'),
+('HomeOwner', 'homeowner21@example.com', 'passwordHO21'),
+('HomeOwner', 'homeowner22@example.com', 'passwordHO22'),
+('HomeOwner', 'homeowner23@example.com', 'passwordHO23'),
+('HomeOwner', 'homeowner24@example.com', 'passwordHO24'),
+('HomeOwner', 'homeowner25@example.com', 'passwordHO25');
 
--- Insert into Login_Details for PlatformManager
-INSERT INTO Login_Details (Email, Password) VALUES
-('manager1@example.com', 'passwordPM1'),
-('manager2@example.com', 'passwordPM2'),
-('manager3@example.com', 'passwordPM3'),
-('manager4@example.com', 'passwordPM4'),
-('manager5@example.com', 'passwordPM5'),
-('manager6@example.com', 'passwordPM6'),
-('manager7@example.com', 'passwordPM7'),
-('manager8@example.com', 'passwordPM8'),
-('manager9@example.com', 'passwordPM9'),
-('manager10@example.com', 'passwordPM10'),
-('manager11@example.com', 'passwordPM11'),
-('manager12@example.com', 'passwordPM12'),
-('manager13@example.com', 'passwordPM13'),
-('manager14@example.com', 'passwordPM14'),
-('manager15@example.com', 'passwordPM15'),
-('manager16@example.com', 'passwordPM16'),
-('manager17@example.com', 'passwordPM17'),
-('manager18@example.com', 'passwordPM18'),
-('manager19@example.com', 'passwordPM19'),
-('manager20@example.com', 'passwordPM20'),
-('manager21@example.com', 'passwordPM21'),
-('manager22@example.com', 'passwordPM22'),
-('manager23@example.com', 'passwordPM23'),
-('manager24@example.com', 'passwordPM24'),
-('manager25@example.com', 'passwordPM25');
+-- Insert into Login_Details for PlatformManagement
+INSERT INTO Login_Details (UserProfile, Email, Password) VALUES
+('PlatformManagement', 'manager1@example.com', 'passwordPM1'),
+('PlatformManagement', 'manager2@example.com', 'passwordPM2'),
+('PlatformManagement', 'manager3@example.com', 'passwordPM3'),
+('PlatformManagement', 'manager4@example.com', 'passwordPM4'),
+('PlatformManagement', 'manager5@example.com', 'passwordPM5'),
+('PlatformManagement', 'manager6@example.com', 'passwordPM6'),
+('PlatformManagement', 'manager7@example.com', 'passwordPM7'),
+('PlatformManagement', 'manager8@example.com', 'passwordPM8'),
+('PlatformManagement', 'manager9@example.com', 'passwordPM9'),
+('PlatformManagement', 'manager10@example.com', 'passwordPM10'),
+('PlatformManagement', 'manager11@example.com', 'passwordPM11'),
+('PlatformManagement', 'manager12@example.com', 'passwordPM12'),
+('PlatformManagement', 'manager13@example.com', 'passwordPM13'),
+('PlatformManagement', 'manager14@example.com', 'passwordPM14'),
+('PlatformManagement', 'manager15@example.com', 'passwordPM15'),
+('PlatformManagement', 'manager16@example.com', 'passwordPM16'),
+('PlatformManagement', 'manager17@example.com', 'passwordPM17'),
+('PlatformManagement', 'manager18@example.com', 'passwordPM18'),
+('PlatformManagement', 'manager19@example.com', 'passwordPM19'),
+('PlatformManagement', 'manager20@example.com', 'passwordPM20'),
+('PlatformManagement', 'manager21@example.com', 'passwordPM21'),
+('PlatformManagement', 'manager22@example.com', 'passwordPM22'),
+('PlatformManagement', 'manager23@example.com', 'passwordPM23'),
+('PlatformManagement', 'manager24@example.com', 'passwordPM24'),
+('PlatformManagement', 'manager25@example.com', 'passwordPM25');
 
--- Insert statements for User_Admin (25 entries)
-INSERT INTO "User" (UserID, Username, UserProfile, Email) VALUES
-('UA001', 'adminuser1', 'User_Admin', 'admin1@example.com'),
-('UA002', 'adminuser2', 'User_Admin', 'admin2@example.com'),
-('UA003', 'adminuser3', 'User_Admin', 'admin3@example.com'),
-('UA004', 'adminuser4', 'User_Admin', 'admin4@example.com'),
-('UA005', 'adminuser5', 'User_Admin', 'admin5@example.com'),
-('UA006', 'adminuser6', 'User_Admin', 'admin6@example.com'),
-('UA007', 'adminuser7', 'User_Admin', 'admin7@example.com'),
-('UA008', 'adminuser8', 'User_Admin', 'admin8@example.com'),
-('UA009', 'adminuser9', 'User_Admin', 'admin9@example.com'),
-('UA010', 'adminuser10', 'User_Admin', 'admin10@example.com'),
-('UA011', 'adminuser11', 'User_Admin', 'admin11@example.com'),
-('UA012', 'adminuser12', 'User_Admin', 'admin12@example.com'),
-('UA013', 'adminuser13', 'User_Admin', 'admin13@example.com'),
-('UA014', 'adminuser14', 'User_Admin', 'admin14@example.com'),
-('UA015', 'adminuser15', 'User_Admin', 'admin15@example.com'),
-('UA016', 'adminuser16', 'User_Admin', 'admin16@example.com'),
-('UA017', 'adminuser17', 'User_Admin', 'admin17@example.com'),
-('UA018', 'adminuser18', 'User_Admin', 'admin18@example.com'),
-('UA019', 'adminuser19', 'User_Admin', 'admin19@example.com'),
-('UA020', 'adminuser20', 'User_Admin', 'admin20@example.com'),
-('UA021', 'adminuser21', 'User_Admin', 'admin21@example.com'),
-('UA022', 'adminuser22', 'User_Admin', 'admin22@example.com'),
-('UA023', 'adminuser23', 'User_Admin', 'admin23@example.com'),
-('UA024', 'adminuser24', 'User_Admin', 'admin24@example.com'),
-('UA025', 'adminuser25', 'User_Admin', 'admin25@example.com');
+-- Insert statements for UserAdmin (25 entries)
+INSERT INTO "user" (UserID, Username, UserProfile, Email) VALUES
+('UA001', 'adminuser1', 'UserAdmin', 'admin1@example.com'),
+('UA002', 'adminuser2', 'UserAdmin', 'admin2@example.com'),
+('UA003', 'adminuser3', 'UserAdmin', 'admin3@example.com'),
+('UA004', 'adminuser4', 'UserAdmin', 'admin4@example.com'),
+('UA005', 'adminuser5', 'UserAdmin', 'admin5@example.com'),
+('UA006', 'adminuser6', 'UserAdmin', 'admin6@example.com'),
+('UA007', 'adminuser7', 'UserAdmin', 'admin7@example.com'),
+('UA008', 'adminuser8', 'UserAdmin', 'admin8@example.com'),
+('UA009', 'adminuser9', 'UserAdmin', 'admin9@example.com'),
+('UA010', 'adminuser10', 'UserAdmin', 'admin10@example.com'),
+('UA011', 'adminuser11', 'UserAdmin', 'admin11@example.com'),
+('UA012', 'adminuser12', 'UserAdmin', 'admin12@example.com'),
+('UA013', 'adminuser13', 'UserAdmin', 'admin13@example.com'),
+('UA014', 'adminuser14', 'UserAdmin', 'admin14@example.com'),
+('UA015', 'adminuser15', 'UserAdmin', 'admin15@example.com'),
+('UA016', 'adminuser16', 'UserAdmin', 'admin16@example.com'),
+('UA017', 'adminuser17', 'UserAdmin', 'admin17@example.com'),
+('UA018', 'adminuser18', 'UserAdmin', 'admin18@example.com'),
+('UA019', 'adminuser19', 'UserAdmin', 'admin19@example.com'),
+('UA020', 'adminuser20', 'UserAdmin', 'admin20@example.com'),
+('UA021', 'adminuser21', 'UserAdmin', 'admin21@example.com'),
+('UA022', 'adminuser22', 'UserAdmin', 'admin22@example.com'),
+('UA023', 'adminuser23', 'UserAdmin', 'admin23@example.com'),
+('UA024', 'adminuser24', 'UserAdmin', 'admin24@example.com'),
+('UA025', 'adminuser25', 'UserAdmin', 'admin25@example.com');
 
--- Insert into User_Admin
-INSERT INTO User_Admin (UserID) SELECT UserID FROM "User" WHERE UserProfile = 'User_Admin';
+-- Insert into UserAdmin
+INSERT INTO UserAdmin (UserID) SELECT UserID FROM "user" WHERE UserProfile = 'UserAdmin';
 
 -- Insert statements for Cleaner (25 entries)
-INSERT INTO "User" (UserID, Username, UserProfile, Email) VALUES
+INSERT INTO "user" (UserID, Username, UserProfile, Email) VALUES
 ('CL001', 'cleaner1', 'Cleaner', 'cleaner1@example.com'),
 ('CL002', 'cleaner2', 'Cleaner', 'cleaner2@example.com'),
 ('CL003', 'cleaner3', 'Cleaner', 'cleaner3@example.com'),
@@ -265,10 +266,10 @@ INSERT INTO "User" (UserID, Username, UserProfile, Email) VALUES
 ('CL025', 'cleaner25', 'Cleaner', 'cleaner25@example.com');
 
 -- Insert into Cleaner
-INSERT INTO Cleaner (UserID) SELECT UserID FROM "User" WHERE UserProfile = 'Cleaner';
+INSERT INTO Cleaner (UserID) SELECT UserID FROM "user" WHERE UserProfile = 'Cleaner';
 
 -- Insert statements for HomeOwner (25 entries)
-INSERT INTO "User" (UserID, Username, UserProfile, Email) VALUES
+INSERT INTO "user" (UserID, Username, UserProfile, Email) VALUES
 ('HO001', 'homeowner1', 'HomeOwner', 'homeowner1@example.com'),
 ('HO002', 'homeowner2', 'HomeOwner', 'homeowner2@example.com'),
 ('HO003', 'homeowner3', 'HomeOwner', 'homeowner3@example.com'),
@@ -297,38 +298,38 @@ INSERT INTO "User" (UserID, Username, UserProfile, Email) VALUES
 
 -- Insert into HomeOwner (with address)
 INSERT INTO HomeOwner (UserID, Address) 
-SELECT UserID, '123 Home Street' FROM "User" WHERE UserProfile = 'HomeOwner';
+SELECT UserID, '123 Home Street' FROM "user" WHERE UserProfile = 'HomeOwner';
 
--- Insert statements for PlatformManager (25 entries)
-INSERT INTO "User" (UserID, Username, UserProfile, Email) VALUES
-('PM001', 'manager1', 'PlatformManager', 'manager1@example.com'),
-('PM002', 'manager2', 'PlatformManager', 'manager2@example.com'),
-('PM003', 'manager3', 'PlatformManager', 'manager3@example.com'),
-('PM004', 'manager4', 'PlatformManager', 'manager4@example.com'),
-('PM005', 'manager5', 'PlatformManager', 'manager5@example.com'),
-('PM006', 'manager6', 'PlatformManager', 'manager6@example.com'),
-('PM007', 'manager7', 'PlatformManager', 'manager7@example.com'),
-('PM008', 'manager8', 'PlatformManager', 'manager8@example.com'),
-('PM009', 'manager9', 'PlatformManager', 'manager9@example.com'),
-('PM010', 'manager10', 'PlatformManager', 'manager10@example.com'),
-('PM011', 'manager11', 'PlatformManager', 'manager11@example.com'),
-('PM012', 'manager12', 'PlatformManager', 'manager12@example.com'),
-('PM013', 'manager13', 'PlatformManager', 'manager13@example.com'),
-('PM014', 'manager14', 'PlatformManager', 'manager14@example.com'),
-('PM015', 'manager15', 'PlatformManager', 'manager15@example.com'),
-('PM016', 'manager16', 'PlatformManager', 'manager16@example.com'),
-('PM017', 'manager17', 'PlatformManager', 'manager17@example.com'),
-('PM018', 'manager18', 'PlatformManager', 'manager18@example.com'),
-('PM019', 'manager19', 'PlatformManager', 'manager19@example.com'),
-('PM020', 'manager20', 'PlatformManager', 'manager20@example.com'),
-('PM021', 'manager21', 'PlatformManager', 'manager21@example.com'),
-('PM022', 'manager22', 'PlatformManager', 'manager22@example.com'),
-('PM023', 'manager23', 'PlatformManager', 'manager23@example.com'),
-('PM024', 'manager24', 'PlatformManager', 'manager24@example.com'),
-('PM025', 'manager25', 'PlatformManager', 'manager25@example.com');
+-- Insert statements for PlatformManagement (25 entries)
+INSERT INTO "user" (UserID, Username, UserProfile, Email) VALUES
+('PM001', 'manager1', 'PlatformManagement', 'manager1@example.com'),
+('PM002', 'manager2', 'PlatformManagement', 'manager2@example.com'),
+('PM003', 'manager3', 'PlatformManagement', 'manager3@example.com'),
+('PM004', 'manager4', 'PlatformManagement', 'manager4@example.com'),
+('PM005', 'manager5', 'PlatformManagement', 'manager5@example.com'),
+('PM006', 'manager6', 'PlatformManagement', 'manager6@example.com'),
+('PM007', 'manager7', 'PlatformManagement', 'manager7@example.com'),
+('PM008', 'manager8', 'PlatformManagement', 'manager8@example.com'),
+('PM009', 'manager9', 'PlatformManagement', 'manager9@example.com'),
+('PM010', 'manager10', 'PlatformManagement', 'manager10@example.com'),
+('PM011', 'manager11', 'PlatformManagement', 'manager11@example.com'),
+('PM012', 'manager12', 'PlatformManagement', 'manager12@example.com'),
+('PM013', 'manager13', 'PlatformManagement', 'manager13@example.com'),
+('PM014', 'manager14', 'PlatformManagement', 'manager14@example.com'),
+('PM015', 'manager15', 'PlatformManagement', 'manager15@example.com'),
+('PM016', 'manager16', 'PlatformManagement', 'manager16@example.com'),
+('PM017', 'manager17', 'PlatformManagement', 'manager17@example.com'),
+('PM018', 'manager18', 'PlatformManagement', 'manager18@example.com'),
+('PM019', 'manager19', 'PlatformManagement', 'manager19@example.com'),
+('PM020', 'manager20', 'PlatformManagement', 'manager20@example.com'),
+('PM021', 'manager21', 'PlatformManagement', 'manager21@example.com'),
+('PM022', 'manager22', 'PlatformManagement', 'manager22@example.com'),
+('PM023', 'manager23', 'PlatformManagement', 'manager23@example.com'),
+('PM024', 'manager24', 'PlatformManagement', 'manager24@example.com'),
+('PM025', 'manager25', 'PlatformManagement', 'manager25@example.com');
 
--- Insert into PlatformManager
-INSERT INTO PlatformManager (UserID) SELECT UserID FROM "User" WHERE UserProfile = 'PlatformManager';
+-- Insert into PlatformManagement
+INSERT INTO PlatformManagement (UserID) SELECT UserID FROM "user" WHERE UserProfile = 'PlatformManagement';
 
 -- Insert 100 entries for the Category table
 INSERT INTO Category (CategoryID, Description) VALUES

@@ -14,6 +14,7 @@ CREATE TYPE user_profile AS ENUM ('User_Admin', 'Cleaner', 'HomeOwner', 'Platfor
 
 -- Table: Login_Details
 CREATE TABLE Login_Details (
+    UserProfile user_profile NOT NULL, -- Use the defined ENUM type here
     Email VARCHAR(255) PRIMARY KEY NOT NULL,
     Password VARCHAR(255) UNIQUE NOT NULL
 );
@@ -27,6 +28,7 @@ CREATE TABLE "User" (
 	Phone VARCHAR(255) UNIQUE,
     DOB DATE,
 	FOREIGN KEY (Email) REFERENCES Login_Details(Email) ON DELETE CASCADE
+    FOREIGN KEY (UserProfile) REFERENCES Login_Details(UserProfile) ON DELETE CASCADE
 );
 
 -- Table: User_Admin

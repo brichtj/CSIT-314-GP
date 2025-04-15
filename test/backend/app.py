@@ -1,66 +1,59 @@
-
-
 from flask import Flask, request, jsonify
-from control import login_control, createUser_control
-from flask_cors import CORS
+import psycopg2
 
-import json
+from repository.user_login_gateway import UserLoginGateway
+from repository.user_gateway import UserGateway
+from control.user_login_controller import UserLoginController
 
 app = Flask(__name__)
-CORS(app)  # Allow React to call the backend
+
+# Setup DB connection
+host = "localhost"       # "localhost" or an IP address
+database = "csit314"     # your_database name
+user = "root"       # user
+password = "root123"  # password
+
+try:
+    connection = psycopg2.connect(
+        host=host,
+        database=database,
+        user=user,
+        password=password
+    )
+
+    # Set the client encoding to UTF-8 explicitly
+    connection.set_client_encoding('UTF8')
+    cursor = connection.cursor()
+
+    print("Database: Connection established successfully!")
+
+    cursor.execute("SELECT version();")
+    db_version = cursor.fetchone()
+    print(f"Database: PostgreSQL version: {db_version}")
+
+except Exception as e:
+    print(f"Error connecting to the database: {e}")
+
+# Inject gateway into controller
+login_gateway = UserLoginGateway(cursor)
+user_gateway = UserGateway(cursor)
+
+user_controller = UserLoginController(login_gateway, user_gateway)
 
 
-# login funtion
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    profile = data.get('login_profile')
-    email = data.get('email')
-    password = data.get('password')
-
-    # check empty username and empty password
-    if not email or not password:
-        return jsonify({"error": "email and password required"}), 400
-
-    try:
-        # call controller
-        user = login_control(profile, email, password)
-
-        # Object toString()
-        user_dict = user.__dict__
-        # return JSON
-        return jsonify({"user": user_dict}), 200    # Success response
-
-    except Exception as e:
-        # print error messages for debug purposes
-        print(str(e))
-        # Return appropriate error message and status
-        return jsonify({"error": str(e)}), 400
-
-
-@app.route('/createUser', methods=['POST'])
-def createUser():
-    data = request.get_json()
     profile = data.get('user_profile')
-    username = data.get('username')
-    password = data.get('password')
     email = data.get('email')
-    phone = data.get('phone')
-    add = data.get('address')
+    password = data.get('password')
 
-    if not username or not email or not phone:
-        return jsonify({"error": "missing data when creating user"})
+    result = user_controller.login(profile, email, password)
 
-    try:
-        # maybe password creation need another funtion
-        if createUser_control(profile, username, password, email, phone, add):
-            return jsonify({"User created"}), 200    # Success response
-    except Exception as e:
-        # print error messages for debug purposes
-        print(str(e))
-        # Return appropriate error message and status
-        return jsonify({"error": str(e)}), 400
-
+    if result['success']:
+        return jsonify(result['user'].to_dict()), 200
+    else:
+        return jsonify({'error': result['error']}), 401
 
 if __name__ == '__main__':
     app.run(debug=True)

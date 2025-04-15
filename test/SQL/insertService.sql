@@ -1,3 +1,4 @@
+
 -- Insert 100 entries for the Service table
 INSERT INTO Service (ServiceID, Title, UserID, CategoryID, Price, Description, Views, Shortlisted) VALUES
 ('srv001', 'Basic House Cleaning', 'CL001', 'cat001', 50.00, 'General cleaning of all rooms in the house including sweeping, mopping, and dusting.', 0, 0),

@@ -1,3 +1,4 @@
+
 -- Insert 100 entries for the Category table
 INSERT INTO Category (CategoryID, Description) VALUES
 ('cat001', 'House Cleaning'),
@@ -100,3 +101,4 @@ INSERT INTO Category (CategoryID, Description) VALUES
 ('cat098', 'Home Renovation Cleanup'),
 ('cat099', 'Storm Cleanup'),
 ('cat100', 'Beach House Cleaning');
+

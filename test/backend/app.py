@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import psycopg2
 
-from boundary.user_login_gateway import UserLoginGateway
+from repository.user_login_gateway import UserLoginGateway
 from control.user_controller import UserController
 
 app = Flask(__name__)
@@ -52,7 +52,6 @@ def login():
         return jsonify(result['user']), 200
     else:
         return jsonify({'error': result['error']}), 401
-
 
 if __name__ == '__main__':
     app.run(debug=True)

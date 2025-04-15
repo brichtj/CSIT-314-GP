@@ -2,15 +2,15 @@ DROP TABLE IF EXISTS Shortlist_Record CASCADE;
 DROP TABLE IF EXISTS Matched_History CASCADE;
 DROP TABLE IF EXISTS Service CASCADE;
 DROP TABLE IF EXISTS Category CASCADE;
-DROP TABLE IF EXISTS User_Admin CASCADE;
+DROP TABLE IF EXISTS UserAdmin CASCADE;
 DROP TABLE IF EXISTS Cleaner CASCADE;
 DROP TABLE IF EXISTS HomeOwner CASCADE;
-DROP TABLE IF EXISTS PlatformManager CASCADE;
-DROP TABLE IF EXISTS "User" CASCADE;
+DROP TABLE IF EXISTS PlatformManagement CASCADE;
+DROP TABLE IF EXISTS "user" CASCADE;
 DROP TABLE IF EXISTS Login_Details CASCADE;
 DROP TYPE IF EXISTS user_profile CASCADE;
 
-CREATE TYPE user_profile AS ENUM ('User_Admin', 'Cleaner', 'HomeOwner', 'PlatformManager');
+CREATE TYPE user_profile AS ENUM ('UserAdmin', 'Cleaner', 'HomeOwner', 'PlatformManagement');
 
 -- Table: Login_Details
 CREATE TABLE Login_Details (
@@ -20,7 +20,7 @@ CREATE TABLE Login_Details (
 );
 
 -- Table: User
-CREATE TABLE "User" (
+CREATE TABLE "user" (
     UserID VARCHAR(255) PRIMARY KEY NOT NULL,
     Username VARCHAR(255) UNIQUE NOT NULL,
     UserProfile user_profile NOT NULL, -- Use the defined ENUM type here
@@ -28,32 +28,31 @@ CREATE TABLE "User" (
 	Phone VARCHAR(255) UNIQUE,
     DOB DATE,
 	FOREIGN KEY (Email) REFERENCES Login_Details(Email) ON DELETE CASCADE
-    FOREIGN KEY (UserProfile) REFERENCES Login_Details(UserProfile) ON DELETE CASCADE
 );
 
--- Table: User_Admin
-CREATE TABLE User_Admin (
+-- Table: UserAdmin
+CREATE TABLE UserAdmin (
     UserID VARCHAR(255) PRIMARY KEY NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES "User"(UserID) ON DELETE CASCADE
+    FOREIGN KEY (UserID) REFERENCES "user"(UserID) ON DELETE CASCADE
 );
 
 -- Table: Cleaner
 CREATE TABLE Cleaner (
     UserID VARCHAR(255) PRIMARY KEY NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES "User"(UserID) ON DELETE CASCADE
+    FOREIGN KEY (UserID) REFERENCES "user"(UserID) ON DELETE CASCADE
 );
 
 -- Table: HomeOwner
 CREATE TABLE HomeOwner (
     UserID VARCHAR(255) PRIMARY KEY NOT NULL,
     Address TEXT NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES "User"(UserID) ON DELETE CASCADE
+    FOREIGN KEY (UserID) REFERENCES "user"(UserID) ON DELETE CASCADE
 );
 
--- Table: PlatformManager
-CREATE TABLE PlatformManager (
+-- Table: PlatformManagement
+CREATE TABLE PlatformManagement (
     UserID VARCHAR(255) PRIMARY KEY NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES "User"(UserID) ON DELETE CASCADE
+    FOREIGN KEY (UserID) REFERENCES "user"(UserID) ON DELETE CASCADE
 );
 
 -- Table: Category

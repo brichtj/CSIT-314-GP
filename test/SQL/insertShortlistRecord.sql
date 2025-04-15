@@ -1,3 +1,4 @@
+
 -- Insert 100 entries for the Shortlist_Record table
 INSERT INTO Shortlist_Record (UserID, ServiceID) VALUES
 ('HO001', 'srv001'),
@@ -100,3 +101,4 @@ INSERT INTO Shortlist_Record (UserID, ServiceID) VALUES
 ('HO023', 'srv098'),
 ('HO024', 'srv099'),
 ('HO025', 'srv100');
+

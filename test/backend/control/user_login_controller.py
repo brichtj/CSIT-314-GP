@@ -16,9 +16,10 @@ user_classes = {
     'PlatformManagement': PlatformManagement
 }
 
-class UserController:
-    def __init__(self, login_gateway):
+class UserLoginController:
+    def __init__(self, login_gateway, user_gateway):
         self.login_gateway = login_gateway
+        self.user_gateway = user_gateway
 
     def login(self, profile, email, password):
         login_entity = UserLogin(profile, email, password)
@@ -34,10 +35,9 @@ class UserController:
             user = userClass(row[0], row[1], row[2], row[3], row[4], row[5])
             
             if type(user).__name__ == 'HomeOwner':
-                row = self.login_gateway.getAddress(user.getUserID())
+                row = self.user_gateway.getAddress(user.getUserID())
                 user.setAddress(row[0])
             
-            user_json = json.dumps(user.__dict__)
-            return {'success': True, 'user': user_json}
+            return {'success': True, 'user': user}
         
         return {'success': False, 'error': 'Invalid credentials'}

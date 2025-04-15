@@ -7,5 +7,15 @@ class User:
         self.phone = phone
         self.dob = dob
 
+    def to_dict(self):
+        return {
+            "userid": self.userid,
+            "username": self.username,
+            "userprofile": self.userprofile,
+            "email": self.email,
+            "phone": self.phone,
+            "dob": self.dob
+        }
+
     def getUserID(self):
         return self.userid

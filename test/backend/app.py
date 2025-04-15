@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify
 import psycopg2
 
 from repository.user_login_gateway import UserLoginGateway
-from control.user_controller import UserController
+from repository.user_gateway import UserGateway
+from control.user_login_controller import UserLoginController
 
 app = Flask(__name__)
 
@@ -35,8 +36,9 @@ except Exception as e:
 
 # Inject gateway into controller
 login_gateway = UserLoginGateway(cursor)
+user_gateway = UserGateway(cursor)
 
-user_controller = UserController(login_gateway)
+user_controller = UserLoginController(login_gateway, user_gateway)
 
 
 @app.route('/login', methods=['POST'])
@@ -49,7 +51,7 @@ def login():
     result = user_controller.login(profile, email, password)
 
     if result['success']:
-        return jsonify(result['user']), 200
+        return jsonify(result['user'].to_dict()), 200
     else:
         return jsonify({'error': result['error']}), 401
 

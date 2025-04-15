@@ -7,3 +7,9 @@ class HomeOwner(User):
 
     def setAddress(self, address):
         self.address = address
+
+    def to_dict(self):
+        return {
+            **super().to_dict(),
+            "address": self.address
+        }

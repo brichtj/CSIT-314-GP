@@ -17,7 +17,7 @@ const auth = useAuthenticationStore()
 const router = useRouter()
 
 const handleLogin = async () => {
-  router.push('/home')
+  //router.push('/home')
   try {
     const value = await auth.login(username.value, password.value)
     console.log(value)

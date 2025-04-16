@@ -1,12 +1,14 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import psycopg2
 
 from repository.user_login_gateway import UserLoginGateway
 from repository.user_gateway import UserGateway
 from control.user_login_controller import UserLoginController
+from loginStory import login_controller
 
 app = Flask(__name__)
-
+CORS(app)
 # Setup DB connection
 host = "localhost"       # "localhost" or an IP address
 database = "csit314"     # your_database name
@@ -42,21 +44,26 @@ user_controller = UserLoginController(login_gateway, user_gateway)
 
 @app.route('/login', methods=['POST'])
 def login():
-    if cursor is None: 
-        #cursor did not load, properly, just return json
-        return jsonify({"success": True, "message": "This is a custom response"}), 200
+    print('login post method was called')
 
     data = request.get_json()
-    profile = data.get('user_profile')
-    email = data.get('email')
-    password = data.get('password')
+    result = login_controller(data['username'],data['password'])
+    return jsonify(result)
+    # if cursor is None: 
+    #     #cursor did not load, properly, just return json
+    #     return jsonify({"success": True, "message": "This is a custom response"}), 200
 
-    result = user_controller.login(profile, email, password)
+    # data = request.get_json()
+    # profile = data.get('user_profile')
+    # email = data.get('email')
+    # password = data.get('password')
 
-    if result['success']:
-        return jsonify(result['user'].to_dict()), 200
-    else:
-        return jsonify({'error': result['error']}), 401
+    # result = user_controller.login(profile, email, password)
+
+    # if result['success']:
+    #     return jsonify(result['user'].to_dict()), 200
+    # else:
+    #     return jsonify({'error': result['error']}), 401
 @app.route('/', methods=['GET'])
 def default():
     if cursor is None: 

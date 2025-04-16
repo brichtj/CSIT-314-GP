@@ -42,6 +42,6 @@ data8 = {
     "UserProfileID": 3
 }
 
-response = requests.post(url, json=data3)
+response = requests.post(url, json=data8)
 print(response.status_code)
 print(response.json())

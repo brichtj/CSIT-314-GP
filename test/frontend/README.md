@@ -1,12 +1,58 @@
-# React + Vite
+# frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This template should help get you started developing with Vue 3 in Vite.
 
-Currently, two official plugins are available:
+## Recommended IDE Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 
-## Expanding the ESLint configuration
+## Type Support for `.vue` Imports in TS
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vite.dev/config/).
+
+## Project Setup
+
+```sh
+npm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
+```
+
+### Type-Check, Compile and Minify for Production
+
+```sh
+npm run build
+```
+
+### Run Unit Tests with [Vitest](https://vitest.dev/)
+
+```sh
+npm run test:unit
+```
+
+### Run End-to-End Tests with [Playwright](https://playwright.dev)
+
+```sh
+# Install browsers for the first run
+npx playwright install
+
+# When testing on CI, must build the project first
+npm run build
+
+# Runs the end-to-end tests
+npm run test:e2e
+# Runs the tests only on Chromium
+npm run test:e2e -- --project=chromium
+# Runs the tests of a specific file
+npm run test:e2e -- tests/example.spec.ts
+# Runs the tests in debug mode
+npm run test:e2e -- --debug
+```

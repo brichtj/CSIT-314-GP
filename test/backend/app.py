@@ -57,6 +57,11 @@ def login():
         return jsonify(result['user'].to_dict()), 200
     else:
         return jsonify({'error': result['error']}), 401
+@app.route('/', methods=['GET'])
+def default():
+    if cursor is None: 
+        #cursor did not load, properly, just return json
+        return jsonify({"success": True, "message": "This is a custom response"}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -42,7 +42,7 @@ const handleLogin = async () => {
 <template>
   <div class="container">
     <Card class="centered-div">
-      <template #title><h2>Login to Santa's helpers</h2></template>
+      <template #title><h2>Login</h2></template>
       <template #content>
         <div class="space-y-6">
           <div>
@@ -67,7 +67,13 @@ const handleLogin = async () => {
             />
           </div>
 
-          <Button label="Login" icon="pi pi-sign-in" :loading="auth.loading" class="login-btn" @click="handleLogin" />
+          <Button
+            label="Login"
+            icon="pi pi-sign-in"
+            :loading="auth.loading"
+            class="login-btn"
+            @click="handleLogin"
+          />
 
           <Message v-if="error" severity="error" class="mt-2">
             {{ errorMessage }}
@@ -99,7 +105,7 @@ const handleLogin = async () => {
   width: 100%;
   max-width: 500px; /* Width adjusted for a more compact layout */
   background-color: #fffdf7; /* Soft cream background */
-  border: 2px solid #FFD700; /* Gold border */
+  border: 2px solid #ffd700; /* Gold border */
   border-radius: 16px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   padding: 2rem;
@@ -127,7 +133,7 @@ const handleLogin = async () => {
 /* Input Fields */
 .input-field {
   width: 100%;
-  border: 2px solid #FFD700; /* Gold border */
+  border: 2px solid #ffd700; /* Gold border */
   border-radius: 8px;
   padding: 0.8rem;
   background-color: #fff;
@@ -136,7 +142,7 @@ const handleLogin = async () => {
 }
 
 .input-field:focus {
-  border-color: #C62828; /* Red border on focus */
+  border-color: #c62828; /* Red border on focus */
   box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.2);
 }
 
@@ -159,7 +165,7 @@ const handleLogin = async () => {
 /* Error message styling */
 .error-message {
   background-color: #ffebee; /* Light red background for errors */
-  color: #C62828;
+  color: #c62828;
   border-radius: 8px;
   padding: 0.6rem;
   font-size: 1rem;
@@ -169,7 +175,7 @@ const handleLogin = async () => {
 /* Success message styling */
 .success-message {
   background-color: #c8e6c9; /* Light green background for success */
-  color: #2E7D32;
+  color: #2e7d32;
   border-radius: 8px;
   padding: 0.6rem;
   font-size: 1rem;

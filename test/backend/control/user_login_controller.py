@@ -5,10 +5,22 @@ from entity.Cleaner import Cleaner
 from entity.HomeOwner import HomeOwner
 from entity.PlatformManagement import PlatformManagement
 
-
 import json
 
-# funtion name to used for different mode
+UserProfile_DB_Entity_Map = {
+    'Admin' : 'UserAdmin',
+    'Cleaner' : 'Cleaner',
+    'HomeOwner' : 'HomeOwner',
+    'Manager' : 'PlatformManagement'
+}
+
+UserProfileID_UserProfile_Map = {
+    0: 'Admin',
+    1: 'Cleaner',
+    2: 'HomeOwner',
+    3: 'PlatformManagement'
+}
+
 user_classes = {
     'UserAdmin': UserAdmin,
     'Cleaner': Cleaner,
@@ -16,28 +28,35 @@ user_classes = {
     'PlatformManagement': PlatformManagement
 }
 
+
 class UserLoginController:
     def __init__(self, login_gateway, user_gateway):
         self.login_gateway = login_gateway
         self.user_gateway = user_gateway
 
-    def login(self, profile, email, password):
-        login_entity = UserLogin(profile, email, password)
+    def login(self, UserProfileID, Email, Password):
+
+        login_entity = UserLogin(UserProfileID_UserProfile_Map[UserProfileID], Email, Password)
 
         if not login_entity.is_valid():
             return {'success': False, 'error': 'Missing email or password'}
 
-        row = self.login_gateway.authenticate(profile, email, password)
+        row = self.login_gateway.authenticate(UserProfileID_UserProfile_Map[UserProfileID], Email, Password)
 
         if row:
-            user_role = row[2]
-            userClass = user_classes[user_role]
-            user = userClass(row[0], row[1], row[2], row[3], row[4], row[5])
+            user_role = UserProfile_DB_Entity_Map[row[0]]
             
-            if type(user).__name__ == 'HomeOwner':
-                row = self.user_gateway.getAddress(user.getUserID())
-                user.setAddress(row[0])
-            
-            return {'success': True, 'user': user}
+            row = self.user_gateway.getUserDetail(UserProfile_DB_Entity_Map[row[0]],row[1])
+
+            if row:
+                userClass = user_classes[user_role]
+                temp_list = list(row)
+                temp_list[2] = UserProfile_DB_Entity_Map[row[2]]
+                row = tuple(temp_list)
+                user = userClass(row)
+                print(user.to_dict())
+                if user.getIsActive():
+                    return {'success': True, 'user': user}
+                return {'success': False, 'error': 'User suspended'}
         
         return {'success': False, 'error': 'Invalid credentials'}

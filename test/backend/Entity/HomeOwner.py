@@ -1,15 +1,26 @@
 from entity.User import User
 
+# HomeOwner::UUser
+# int        HomeOwnerID
+# varchar    Address
+
 
 class HomeOwner(User):
-    def __init__(self, userid, username, userprofile, email, phone, dob):
-        super().__init__(userid, username, userprofile, email, phone, dob)
+    def __init__(self, row):
+        super().__init__(row)
+        self.Address = row[6]
+        self.HomeOwnerID = self.UserID
 
-    def setAddress(self, address):
-        self.address = address
+    def setAddress(self, Address):
+        self.Address = Address
 
     def to_dict(self):
         return {
-            **super().to_dict(),
-            "address": self.address
+            "HomeOwnerID": self.HomeOwnerID,
+            "Username": self.Username,
+            "UserProfile": self.UserProfile,
+            "Email": self.Email,
+            "Phone": self.Phone,
+            "IsActive": self.IsActive,
+            "address": self.Address
         }

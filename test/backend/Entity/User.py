@@ -1,21 +1,43 @@
+
+# User:
+# int        UserID
+# varchar    Username
+# int        UserProfile
+# varchar    Email
+# number     Phone
+# varchar    Password
+# bool       IsActive
+
+
 class User:
-    def __init__(self, userid, username, userprofile, email, phone, dob):
-        self.userid = userid
-        self.username = username
-        self.userprofile = userprofile
-        self.email = email
-        self.phone = phone
-        self.dob = dob
+    def __init__(self, UserID, Username, UserProfile, Email, Phone, IsActive):
+        self.UserID = UserID
+        self.Username = Username
+        self.UserProfile = UserProfile
+        self.Email = Email
+        self.Phone = Phone
+        self.IsActive = IsActive
+    
+    def __init__(self, row):
+        self.UserID = row[0]
+        self.Username = row[1]
+        self.UserProfile = row[2]
+        self.Email = row[3]
+        self.Phone = row[4]
+        self.IsActive = row[5]
 
     def to_dict(self):
         return {
-            "userid": self.userid,
-            "username": self.username,
-            "userprofile": self.userprofile,
-            "email": self.email,
-            "phone": self.phone,
-            "dob": self.dob
+            "UserID": self.UserID,
+            "Username": self.Username,
+            "UserProfile": self.UserProfile,
+            "Email": self.Email,
+            "Phone": self.Phone,
+            "IsActive": self.IsActive
         }
 
     def getUserID(self):
-        return self.userid
+        return self.UserID
+    
+    def getIsActive(self):
+        return self.IsActive

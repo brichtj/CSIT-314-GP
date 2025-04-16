@@ -1,8 +1,8 @@
 class UserLogin:
-    def __init__(self, profile, email, password):
-        self.profile = profile
-        self.email = email
-        self.password = password
+    def __init__(self, UserProfile, Email, Password):
+        self.UserProfile = UserProfile
+        self.Email = Email
+        self.Password = Password
 
     def is_valid(self):
-        return self.profile and self.email and self.password
+        return self.UserProfile and self.Email and self.Password

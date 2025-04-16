@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-import psycopg2
+import psycopg2, json
 
 from repository.user_login_gateway import UserLoginGateway
 from repository.user_gateway import UserGateway
@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Setup DB connection
 host = "localhost"       # "localhost" or an IP address
-database = "csit314"     # your_database name
+database = "csit314db"     # your_database name
 user = "root"       # user
 password = "root123"  # password
 
@@ -44,16 +44,23 @@ user_controller = UserLoginController(login_gateway, user_gateway)
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    profile = data.get('user_profile')
-    email = data.get('email')
-    password = data.get('password')
+    UserProfileID = data.get('UserProfileID')
+    Email = data.get('Email')
+    Password = data.get('Password')
 
-    result = user_controller.login(profile, email, password)
+    result = user_controller.login(UserProfileID, Email, Password)
 
     if result['success']:
-        return jsonify(result['user'].to_dict()), 200
+        output = json.dumps(result['user'].to_dict())
+        return jsonify(output), 200
     else:
         return jsonify({'error': result['error']}), 401
+
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    return jsonify('Logout successfully'), 200
+
 
 if __name__ == '__main__':
     app.run(debug=True)

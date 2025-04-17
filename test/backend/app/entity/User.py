@@ -1,4 +1,5 @@
 from app.db import get_db_connection
+import bcrypt
 
 
 # User:
@@ -30,12 +31,16 @@ class User:
         row = cur.fetchone()
         conn.close()
         if row:
+            print(f"{Email}: User found")
             return User(row[0], row[1])
         return None
 
     def check_password(self, input_password):
-        return self.Password == input_password
-    
+        input_password_bytes = input_password.encode('utf-8')
+        hash_password_bytes = self.Password.encode('utf-8')    
+        print(f"{self.Email}: Authenticating")    
+        return bcrypt.checkpw(input_password_bytes, hash_password_bytes)
+
     def pullDetails(self):
         conn = get_db_connection()
         cur = conn.cursor()
@@ -55,9 +60,9 @@ class User:
             self.Email = row[3]
             self.Phone = row[4]
             self.IsActive = row[5]
-            print(f"Details pulled: {self.Email}")
+            print(f"{self.Email}: Details pulled")
         else:
-            print(f"Failed to pull details: {self.Email}")
+            print(f"{self.Email}: Failed to pull details")
 
     def to_dict(self):
         return {
@@ -67,6 +72,6 @@ class User:
             "Phone": self.Phone,
             "IsActive": self.IsActive
         }
-    
+
     def getIsActive(self):
         return self.IsActive

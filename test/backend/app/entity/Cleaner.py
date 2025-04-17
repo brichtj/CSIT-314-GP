@@ -9,6 +9,7 @@ from app.entity.User import User, get_db_connection
 class Cleaner(User):
     @classmethod
     def from_user(cls, user):
+        print(f"{user.Email}: Downcasting User -> Cleaner:")
         return cls(user.Email, user.Password)
 
     def pullDetails(self):
@@ -26,9 +27,9 @@ class Cleaner(User):
 
         if row:
             self.Experience = row[0]
-            print(f"Cleaner Experience pulled: {self.Email}")
+            print(f"{self.Email}: Cleaner Experience pulled")
         else:
-            print(f"Failed to pull Cleaner Experience; {self.Email}")
+            print(f"{self.Email}: Failed to pull Cleaner Experience")
 
     def to_dict(self):
         return {

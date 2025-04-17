@@ -7,6 +7,7 @@ from app.entity.User import User
 class PlatformManagement(User):
     @classmethod
     def from_user(cls, user):
+        print(f"{user.Email}: Downcasting User -> PlatformManagement")
         return cls(user.Email, user.Password)
 
     def to_dict(self):

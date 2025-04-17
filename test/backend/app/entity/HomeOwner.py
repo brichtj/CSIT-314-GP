@@ -8,6 +8,7 @@ from app.entity.User import User, get_db_connection
 class HomeOwner(User):
     @classmethod
     def from_user(cls, user):
+        print(f"{user.Email}: Downcasting User -> HomeOwner")
         return cls(user.Email, user.Password)
 
     def pullDetails(self):
@@ -25,9 +26,9 @@ class HomeOwner(User):
 
         if row:
             self.Address = row[0]
-            print(f"HomeOwner Address pulled: {self.Email}")
+            print(f"{self.Email}: HomeOwner Address pulled")
         else:
-            print(f"Failed to pull HomeOwner Address: {self.Email}")
+            print(f"{self.Email}: Failed to pull HomeOwner Address")
 
     def to_dict(self):
         return {

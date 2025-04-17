@@ -21,8 +21,3 @@ def login():
         return jsonify(output), 200
     else:
         return jsonify({'error': result['error']}), 401
-
-
-@login_bp.route('/logout', methods=['POST'])
-def logout():
-    return jsonify('Logout successfully'), 200

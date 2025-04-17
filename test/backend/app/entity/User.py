@@ -33,6 +33,9 @@ class User:
             return User(row[0], row[1])
         return None
 
+    def check_password(self, input_password):
+        return self.Password == input_password
+    
     def pullDetails(self):
         conn = get_db_connection()
         cur = conn.cursor()
@@ -64,3 +67,6 @@ class User:
             "Phone": self.Phone,
             "IsActive": self.IsActive
         }
+    
+    def getIsActive(self):
+        return self.IsActive

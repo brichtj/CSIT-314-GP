@@ -40,16 +40,13 @@ class UserLoginController:
         if not user:
             return {'success': False, 'error': 'User not found'}
         
-        if self.check_password(user.Password, Password):            
+        if user.check_password(Password):            
             userClass = user_classes[UserProfile_DB_Entity_Map[UserProfileID_DB_Map[UserProfileID]]]
             userProfile = userClass.from_user(user)
             userProfile.pullDetails()
 
-            if userProfile.IsActive:
+            if userProfile.getIsActive():
                 return {'success': True, 'user': userProfile.to_dict()}
             return {'success': False, 'error': 'Account suspended'}
         
         return {'success': False, 'error': 'Invalid password'}
-
-    def check_password(self, stored_password, input_password):
-        return stored_password == input_password

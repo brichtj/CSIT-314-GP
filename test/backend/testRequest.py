@@ -42,6 +42,9 @@ data8 = {
     "UserProfileID": 3
 }
 
-response = requests.post(url, json=data8)
+url2 = "http://localhost:5000/logout"
+
+response = requests.post(url, json=data2)
+#response = requests.post(url2)
 print(response.status_code)
 print(response.json())

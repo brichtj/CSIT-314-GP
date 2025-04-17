@@ -18,6 +18,6 @@ def login():
 
     if result['success']:
         output = json.dumps(result['user'])
-        return jsonify(output), 200
+        return jsonify('Login successfully', {'User': output}), 200
     else:
         return jsonify({'error': result['error']}), 401

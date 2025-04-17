@@ -1,9 +1,9 @@
-from entity.User import User
-
+from .User import User
 
 class HomeOwner(User):
-    def __init__(self, userid, username, userprofile, email, phone, dob):
-        super().__init__(userid, username, userprofile, email, phone, dob)
+    def __init__(self, username, password, email, phone, address):
+        super().__init__(username, password, email, phone, address)
+        self.role = "homeowner"
 
-    def setAddress(self, address):
-        self.address = address
+    def __str__(self):
+        return f"HomeOwner: {self.username}, Email: {self.email}"

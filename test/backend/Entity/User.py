@@ -1,11 +1,7 @@
 class User:
-    def __init__(self, userid, username, userprofile, email, phone, dob):
-        self.userid = userid
+    def __init__(self, username, password, email, phone, address):
         self.username = username
-        self.userprofile = userprofile
+        self.password = password
         self.email = email
         self.phone = phone
-        self.dob = dob
-
-    def getUserID(self):
-        return self.userid
+        self.address = address

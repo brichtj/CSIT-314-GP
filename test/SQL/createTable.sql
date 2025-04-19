@@ -1,95 +1,112 @@
-DROP TABLE IF EXISTS Shortlist_Record CASCADE;
-DROP TABLE IF EXISTS Matched_History CASCADE;
-DROP TABLE IF EXISTS Service CASCADE;
-DROP TABLE IF EXISTS Category CASCADE;
-DROP TABLE IF EXISTS UserAdmin CASCADE;
-DROP TABLE IF EXISTS Cleaner CASCADE;
-DROP TABLE IF EXISTS HomeOwner CASCADE;
-DROP TABLE IF EXISTS PlatformManagement CASCADE;
-DROP TABLE IF EXISTS "user" CASCADE;
-DROP TABLE IF EXISTS Login_Details CASCADE;
-DROP TYPE IF EXISTS user_profile CASCADE;
+DROP TABLE IF EXISTS "ServiceLikes";
+DROP TABLE IF EXISTS "Views";
+DROP TABLE IF EXISTS "Matches";
+DROP TABLE IF EXISTS "Service";
+DROP TABLE IF EXISTS "Category";
+DROP TABLE IF EXISTS "HomeOwner";
+DROP TABLE IF EXISTS "Cleaner";
+DROP TABLE IF EXISTS "UserAdmin";
+DROP TABLE IF EXISTS "PlatformManagement";
+DROP TABLE IF EXISTS "User";
+DROP TYPE IF EXISTS "UserProfile";
 
-CREATE TYPE user_profile AS ENUM ('UserAdmin', 'Cleaner', 'HomeOwner', 'PlatformManagement');
+CREATE TYPE "UserProfile" AS ENUM( 'Admin', 'Cleaner', 'HomeOwner','Manager');
 
--- Table: Login_Details
-CREATE TABLE Login_Details (
-    UserProfile user_profile NOT NULL, -- Use the defined ENUM type here
-    Email VARCHAR(255) PRIMARY KEY NOT NULL,
-    Password VARCHAR(255) UNIQUE NOT NULL
+CREATE TABLE "User" (
+  "UserID" integer PRIMARY KEY,
+  "Username" varchar NOT NULL,
+  "UserProfile" "UserProfile" NOT NULL,
+  "Email" varchar NOT NULL,
+  "Phone" varchar,
+  "Password" varchar NOT NULL,
+  "IsActive" boolean NOT NULL
 );
 
--- Table: User
-CREATE TABLE "user" (
-    UserID VARCHAR(255) PRIMARY KEY NOT NULL,
-    Username VARCHAR(255) UNIQUE NOT NULL,
-    UserProfile user_profile NOT NULL, -- Use the defined ENUM type here
-    Email VARCHAR(255) UNIQUE NOT NULL,
-	Phone VARCHAR(255) UNIQUE,
-    DOB DATE,
-	FOREIGN KEY (Email) REFERENCES Login_Details(Email) ON DELETE CASCADE
+CREATE TABLE "HomeOwner" (
+  "HomeOwnerID" integer PRIMARY KEY,
+  "Address" varchar NOT NULL
 );
 
--- Table: UserAdmin
-CREATE TABLE UserAdmin (
-    UserID VARCHAR(255) PRIMARY KEY NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES "user"(UserID) ON DELETE CASCADE
+CREATE TABLE "Cleaner" (
+  "CleanerID" integer PRIMARY KEY,
+  "Experience" float NOT NULL
 );
 
--- Table: Cleaner
-CREATE TABLE Cleaner (
-    UserID VARCHAR(255) PRIMARY KEY NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES "user"(UserID) ON DELETE CASCADE
+CREATE TABLE "UserAdmin" (
+  "AdminID" integer PRIMARY KEY
 );
 
--- Table: HomeOwner
-CREATE TABLE HomeOwner (
-    UserID VARCHAR(255) PRIMARY KEY NOT NULL,
-    Address TEXT NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES "user"(UserID) ON DELETE CASCADE
+CREATE TABLE "PlatformManagement" (
+  "ManagerID" integer PRIMARY KEY
 );
 
--- Table: PlatformManagement
-CREATE TABLE PlatformManagement (
-    UserID VARCHAR(255) PRIMARY KEY NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES "user"(UserID) ON DELETE CASCADE
+CREATE TABLE "Service" (
+  "ServiceID" integer PRIMARY KEY,
+  "CategoryID" integer NOT NULL,
+  "Title" varchar NOT NULL,
+  "Description" text,
+  "DatePosted" timestamp NOT NULL,
+  "CleanerID" integer NOT NULL,
+  "LikeCount" integer NOT NULL,
+  "ViewCount" integer NOT NULL,
+  "MatchCount" integer NOT NULL,
+  "Price" float NOT NULL
 );
 
--- Table: Category
-CREATE TABLE Category (
-    CategoryID VARCHAR(255) PRIMARY KEY NOT NULL,
-    Description TEXT
+CREATE TABLE "ServiceLikes" (
+  "ServiceID" integer NOT NULL,
+  "HomeOwnerID" integer NOT NULL
 );
 
--- Table: Service
-CREATE TABLE Service (
-    ServiceID VARCHAR(255) PRIMARY KEY NOT NULL,
-    Title TEXT NOT NULL,
-    UserID VARCHAR(255) NOT NULL,
-	CategoryID VARCHAR(255) NOT NULL,
-	Price DECIMAL(8,2) NOT NULL,
-    Description TEXT,
-    Views INT DEFAULT 0,
-    Shortlisted INT DEFAULT 0,
-    FOREIGN KEY (UserID) REFERENCES Cleaner(UserID),
-	FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID)    
+CREATE TABLE "Category" (
+  "CategoryID" integer PRIMARY KEY,
+  "Title" varchar NOT NULL,
+  "Description" text
 );
 
--- Table: Shortlist_Record
-CREATE TABLE Shortlist_Record (
-    UserID VARCHAR(255) NOT NULL,
-    ServiceID VARCHAR(255) NOT NULL,
-	FOREIGN KEY (UserID) REFERENCES HomeOwner(UserID) ON DELETE CASCADE,
-	FOREIGN KEY (ServiceID) REFERENCES Service(ServiceID) ON DELETE CASCADE,
-	PRIMARY KEY (UserID, ServiceID)
+CREATE TABLE "Views" (
+  "HomeOwnerID" integer NOT NULL,
+  "ServiceID" integer NOT NULL
 );
 
--- Table: Matched_History
-CREATE TABLE Matched_History (
-    HistoryID VARCHAR(255) PRIMARY KEY NOT NULL,
-    Date DATE NOT NULL,
-    HOUserID VARCHAR(255) NOT NULL,
-    ServiceID VARCHAR(255) NOT NULL,
-	FOREIGN KEY (HOUserID) REFERENCES HomeOwner(UserID) ON DELETE CASCADE,
-	FOREIGN KEY (ServiceID) REFERENCES Service(ServiceID) ON DELETE CASCADE
+CREATE TABLE "Matches" (
+  "ServiceID" integer NOT NULL,
+  "HomeOwnerID" integer NOT NULL,
+  "Price" float NOT NULL,
+  "Date" timestamp NOT NULL,
+  "Rating" Integer
 );
+
+CREATE UNIQUE INDEX ON "ServiceLikes" ("ServiceID", "HomeOwnerID");
+
+CREATE UNIQUE INDEX ON "Views" ("ServiceID", "HomeOwnerID");
+
+CREATE UNIQUE INDEX ON "Matches" ("ServiceID", "HomeOwnerID");
+
+COMMENT ON TABLE "Service" IS 'Service can only be listed by Cleaners, so limit to UserID that has userprofileID of cleaner, LikeCount is so we dont have to aggregate for every service post';
+
+COMMENT ON TABLE "ServiceLikes" IS 'AutoIncremented LikeID, ServiceLikes can only be owned by homeowner';
+
+ALTER TABLE "HomeOwner" ADD FOREIGN KEY ("HomeOwnerID") REFERENCES "User" ("UserID") ON DELETE CASCADE;
+
+ALTER TABLE "Cleaner" ADD FOREIGN KEY ("CleanerID") REFERENCES "User" ("UserID") ON DELETE CASCADE;
+
+ALTER TABLE "UserAdmin" ADD FOREIGN KEY ("AdminID") REFERENCES "User" ("UserID") ON DELETE CASCADE;
+
+ALTER TABLE "PlatformManagement" ADD FOREIGN KEY ("ManagerID") REFERENCES "User" ("UserID") ON DELETE CASCADE;
+
+ALTER TABLE "Matches" ADD FOREIGN KEY ("HomeOwnerID") REFERENCES "HomeOwner" ("HomeOwnerID") ON DELETE CASCADE;
+
+ALTER TABLE "Views" ADD FOREIGN KEY ("HomeOwnerID") REFERENCES "HomeOwner" ("HomeOwnerID") ON DELETE CASCADE;
+
+ALTER TABLE "ServiceLikes" ADD FOREIGN KEY ("HomeOwnerID") REFERENCES "HomeOwner" ("HomeOwnerID") ON DELETE CASCADE;
+
+ALTER TABLE "Service" ADD FOREIGN KEY ("CleanerID") REFERENCES "Cleaner" ("CleanerID") ON DELETE CASCADE;
+
+ALTER TABLE "ServiceLikes" ADD FOREIGN KEY ("ServiceID") REFERENCES "Service" ("ServiceID") ON DELETE CASCADE;
+
+ALTER TABLE "Matches" ADD FOREIGN KEY ("ServiceID") REFERENCES "Service" ("ServiceID") ON DELETE CASCADE;
+
+ALTER TABLE "Views" ADD FOREIGN KEY ("ServiceID") REFERENCES "Service" ("ServiceID") ON DELETE CASCADE;
+
+ALTER TABLE "Service" ADD FOREIGN KEY ("CategoryID") REFERENCES "Category" ("CategoryID") ON DELETE CASCADE;

@@ -21,3 +21,7 @@ def login():
         return jsonify('Login successfully', {'User': output}), 200
     
     return jsonify({'error': result['error']}), 401
+
+@login_bp.route('/',methods=['GET'])
+def default():
+    return jsonify({'success':True})

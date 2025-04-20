@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, Request
+from flask import jsonify
 from database import get_db_connection
 from controllers.auth_controller import AuthController
 from schemas.auth_schema import LoginRequest
@@ -16,3 +17,6 @@ def get_conn():
 def login_route(request: LoginRequest, conn = Depends(get_conn)):
     controller = AuthController(conn)
     return controller.login(request)
+@app.route('/', methods=['GET'])
+def default():
+    return jsonify({'success':"true"})

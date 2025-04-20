@@ -1,4 +1,5 @@
-from app.entity.User import User, get_db_connection
+from app.entity.User import User
+from app.db import DB
 
 # Cleaner::User
 # int        CleanerID
@@ -8,30 +9,34 @@ from app.entity.User import User, get_db_connection
 
 class Cleaner(User):
     @classmethod
-    def from_user(cls, user):
+    def from_user(cls, user) -> User:
         print(f"{user.Email}: Downcasting User -> Cleaner:")
-        return cls(user.Email, user.Password)
+        try:
+            return cls(user.Email, user.Password)
+        except Exception as e:
+            print(f"{user.Email}: failed to Downcast User")
+            return user
 
     def pullDetails(self):
         super().pullDetails()
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("""
-                    SELECT "Experience"
-                    FROM "Cleaner"
-                    WHERE "CleanerID" = %s""",
-                    (self.UserID,)
-                    )
-        row = cur.fetchone()
-        conn.close()
+        query = """
+                SELECT "Experience"
+                FROM "Cleaner"
+                WHERE "CleanerID" = %s"""
+        params = (self.UserID,)
 
-        if row:
-            self.Experience = row[0]
+        db = DB()
+        result = db.execute_fetchone(query, params)
+
+        if result:
+            self.Experience = result[0]
             print(f"{self.Email}: Cleaner Experience pulled")
-        else:
-            print(f"{self.Email}: Failed to pull Cleaner Experience")
+            return
+        
+        print(f"{self.Email}: Failed to pull Cleaner Experience")
+        raise Exception("Failed to pull Cleaner Expreience")
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             "CleanerID": self.UserID,
             **super().to_dict(),

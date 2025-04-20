@@ -1,4 +1,4 @@
-from app.entity.User import User, get_db_connection
+from app.entity.User import User
 
 # Admin::User
 # int        AdminID
@@ -6,11 +6,15 @@ from app.entity.User import User, get_db_connection
 
 class UserAdmin(User):
     @classmethod
-    def from_user(cls, user):
+    def from_user(cls, user) -> User:
         print(f"{user.Email}: Downcasting User -> UserAdmin")
-        return cls(user.Email, user.Password)
+        try:
+            return cls(user.Email, user.Password)
+        except Exception as e:
+            print(f"{user.Email}: failed to Downcast User")
+            return user
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             "AdminID": self.UserID,
             **super().to_dict()

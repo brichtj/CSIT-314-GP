@@ -1,4 +1,4 @@
-from app.db import get_db_connection
+from app.db import DB
 import bcrypt
 
 
@@ -19,52 +19,54 @@ class User:
 
     @staticmethod
     def find_by_email(UserProfile, Email):
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("""
-                    SELECT "Email", "Password"
-                    FROM "User"
-                    WHERE "UserProfile" = %s
-                    AND "Email" = %s
-                    """,
-                    (UserProfile, Email,))
-        row = cur.fetchone()
-        conn.close()
-        if row:
-            print(f"{Email}: User found")
-            return User(row[0], row[1])
-        return None
+        query = """
+            SELECT "Email", "Password"
+            FROM "User"
+            WHERE "UserProfile" = %s
+            AND "Email" = %s"""
 
-    def check_password(self, input_password):
+        params = (UserProfile, Email,)
+
+        db = DB()
+        result = db.execute_fetchone(query, params)
+
+        if result:
+            print(f"{Email}: User found")
+            return User(result[0], result[1])
+
+        print(f"{Email}: User not found")
+        raise Exception('User not found')
+
+    def check_password(self, input_password) -> bool:
         input_password_bytes = input_password.encode('utf-8')
-        hash_password_bytes = self.Password.encode('utf-8')    
-        print(f"{self.Email}: Authenticating")    
+        hash_password_bytes = self.Password.encode('utf-8')
+        print(f"{self.Email}: Authenticating")
         return bcrypt.checkpw(input_password_bytes, hash_password_bytes)
 
     def pullDetails(self):
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("""
-                    SELECT "UserID", "Username", "UserProfile", "Email", "Phone", "IsActive"
-                    FROM "User"
-                    WHERE "Email" = %s""",
-                    (self.Email,)
-                    )
-        row = cur.fetchone()
-        conn.close()
+        query = """
+                SELECT "UserID", "Username", "UserProfile", "Email", "Phone", "IsActive"
+                FROM "User"
+                WHERE "Email" = %s"""
+        params = (self.Email,)
 
-        if row:
-            self.UserID = row[0]
-            self.Username = row[1]
-            self.UserProfile = row[2]
-            self.Email = row[3]
-            self.Phone = row[4]
-            self.IsActive = row[5]
+        db = DB()
+        result = db.execute_fetchone(query, params)
+
+        if result:
+            self.UserID = result[0]
+            self.Username = result[1]
+            self.UserProfile = result[2]
+            self.Email = result[3]
+            self.Phone = result[4]
+            self.IsActive = result[5]
             print(f"{self.Email}: Details pulled")
-        else:
-            print(f"{self.Email}: Failed to pull details")
+            return
 
-    def to_dict(self):
+        print(f"{self.Email}: Failed to pull details")
+        raise Exception("Failed to pull details")
+
+    def to_dict(self) -> dict:
         return {
             "Username": self.Username,
             "UserProfile": self.UserProfile,
@@ -73,5 +75,5 @@ class User:
             "IsActive": self.IsActive
         }
 
-    def getIsActive(self):
+    def getIsActive(self) -> bool:
         return self.IsActive

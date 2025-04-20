@@ -1,4 +1,5 @@
-from app.entity.User import User, get_db_connection
+from app.entity.User import User
+from app.db import DB
 
 # HomeOwner::UUser
 # int        HomeOwnerID
@@ -7,30 +8,34 @@ from app.entity.User import User, get_db_connection
 
 class HomeOwner(User):
     @classmethod
-    def from_user(cls, user):
+    def from_user(cls, user) -> User:
         print(f"{user.Email}: Downcasting User -> HomeOwner")
-        return cls(user.Email, user.Password)
+        try:
+            return cls(user.Email, user.Password)
+        except Exception as e:
+            print(f"{user.Email}: failed to Downcast User")
+            return user
 
     def pullDetails(self):
         super().pullDetails()
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("""
-                    SELECT "Address"
-                    FROM "HomeOwner"
-                    WHERE "HomeOwnerID" = %s""",
-                    (self.UserID,)
-                    )
-        row = cur.fetchone()
-        conn.close()
+        query = """
+                SELECT "Address"
+                FROM "HomeOwner"
+                WHERE "HomeOwnerID" = %s"""
+        params = (self.UserID,)
 
-        if row:
-            self.Address = row[0]
+        db = DB()
+        result = db.execute_fetchone(query, params)
+
+        if result:
+            self.Address = result[0]
             print(f"{self.Email}: HomeOwner Address pulled")
-        else:
-            print(f"{self.Email}: Failed to pull HomeOwner Address")
+            return
 
-    def to_dict(self):
+        print(f"{self.Email}: Failed to pull HomeOwner Address")
+        raise Exception("Failed to pull HomeOwner Address")
+
+    def to_dict(self) -> dict:
         return {
             "HomeOwnerID": self.UserID,
             **super().to_dict(),

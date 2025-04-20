@@ -1,13 +1,13 @@
 from flask import Blueprint, request, jsonify
-from app.control.UserLoginController import UserLoginController
+from control.user_login_controller import UserLoginController
 import json
 
-login_bp = Blueprint('login_bp', __name__)
+create_bp = Blueprint('create_bp', __name__)
 
 user_controller = UserLoginController()
 
 
-@login_bp.route('/login', methods=['POST'])
+@create_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     UserProfileID = data.get('UserProfileID')
@@ -22,6 +22,6 @@ def login():
     
     return jsonify({'error': result['error']}), 401
 
-@login_bp.route('/',methods=['GET'])
+@create_bp.route('/',methods=['GET'])
 def default():
     return jsonify({'success':True})

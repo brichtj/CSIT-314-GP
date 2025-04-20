@@ -30,6 +30,7 @@ export const useAuthenticationStore = defineStore('authentication', () => {
     const credentials = { username: username, password: password }
     try {
       const response = await http.post('/login', credentials)
+      console.log(response)
       user.value = response.data.user
       return response
     } catch (err: any) {

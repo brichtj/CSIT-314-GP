@@ -4,9 +4,6 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <head>
-    <title>Default Title</title>
-  </head>
   <div
     id="app"
     style="

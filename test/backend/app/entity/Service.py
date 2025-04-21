@@ -13,17 +13,36 @@ from app.db import DB
 
 
 class Service:
-    def __init__(self, ServiceID, CategoryID, Title, Description, DatePosted, CleanerID, LikeCount, ViewCount, MatchCount, Price):
+    def __init__(self, ServiceID):
         self.ServiceID = ServiceID
-        self.CategoryID = CategoryID
-        self.Title = Title
-        self.Description = Description
-        self.DatePosted = DatePosted
-        self.CleanerID = CleanerID
-        self.LikeCount = LikeCount
-        self.ViewCount = ViewCount
-        self.MatchCount = MatchCount
-        self.Price = Price
+        self.pullDetails()
+
+    def pullDetails(self):
+        query = """
+                SELECT "ServiceID", "CategoryID", "Title", "Description", "DatePosted", "CleanerID", "LikeCount", "ViewCount", "MatchCount", "Price"
+                FROM "Service"
+                WHERE "ServiceID" = %s"""
+        params = (self.ServiceID,)
+
+        db = DB()
+        result = db.execute_fetchone(query, params)
+
+        if result:
+            self.ServiceID = result[0]
+            self.CategoryID = result[1]
+            self.Title = result[2]
+            self.Description = result[3]
+            self.DatePosted = result[4]
+            self.CleanerID = result[5]
+            self.LikeCount = result[6]
+            self.ViewCount = result[7]
+            self.MatchCount = result[8]
+            self.Price = result[9]
+            print(f"{self.ServiceID}: Details pulled")
+            return
+
+        print(f"{self.ServiceID}: Failed to pull datails")
+        raise Exception("Failed to pull details")
 
     def to_dict(self) -> dict:
         return {
@@ -38,3 +57,120 @@ class Service:
             "MatchCount": self.MatchCount,
             "Price": self.Price
         }
+
+    def get_total_ServiceLikes(self) -> int:
+        query = """
+                SELECT COUNT(DISTINCT "HomeOwnerID")
+                FROM "ServiceLikes"
+                WHERE "ServiceID" = %s
+                GROUP BY "ServiceID"
+                """
+        params = (self.ServiceID,)
+
+        db = DB()
+        result = db.execute_fetchone(query, params)
+
+        if result:
+            print(f'{self.ServiceID}: total ServiceLikes calculated successfully')
+            return result[0]
+
+        print(f'{self.ServiceID}: Failed to calculate total ServiceLikes. Returning 0')
+        return 0
+
+    def update_LikeCount(self):
+        data = self.get_total_ServiceLikes()
+
+        query = """
+                UPDATE "Service"
+                SET "LikeCount" = %s
+                WHERE "ServiceID" = %s
+                """
+        params = (data, self.ServiceID)
+
+        db = DB()
+        result = db.execute_update(query, params)
+
+        if result:
+            self.LikeCount = data
+            print(f'{self.ServiceID}: LikeCount updated')
+            return
+
+        raise Exception("Failed to update LikeCount")
+
+    def get_total_Views(self) -> int:
+        query = """
+                SELECT COUNT(DISTINCT "HomeOwnerID")
+                FROM "Views"
+                WHERE "ServiceID" = %s
+                GROUP BY "ServiceID"
+                """
+        params = (self.ServiceID,)
+
+        db = DB()
+        result = db.execute_fetchone(query, params)
+
+        if result:
+            print(f'{self.ServiceID}: total Views calculated successfully')
+            return result[0]
+
+        print(f'{self.ServiceID}: Failed to calculate total Views. Returning 0')
+        return 0
+
+    def update_ViewCount(self):
+        data = self.get_total_Views()
+
+        query = """
+                UPDATE "Service"
+                SET "ViewCount" = %s
+                WHERE "ServiceID" = %s
+                """
+        params = (data, self.ServiceID)
+
+        db = DB()
+        result = db.execute_update(query, params)
+
+        if result:
+            self.ViewCount = data
+            print(f'{self.ServiceID}: ViewCount upated')
+            return
+
+        raise Exception("Failed to update ViewCount")
+
+    def get_total_Matches(self) -> int:
+        query = """
+                SELECT COUNT(*)
+                FROM "Matches"
+                WHERE "ServiceID" = %s
+                GROUP BY "ServiceID"
+                """
+        params = (self.ServiceID,)
+
+        db = DB()
+        result = db.execute_fetchone(query, params)
+
+        if result:
+            print(f'{self.ServiceID}: total Matches calculated successfully')
+            return result[0]
+
+        print(f'{self.ServiceID}: Failed to calculate total Matches. Returning 0')
+        return 0
+
+    def update_MatchCount(self):
+        data = self.get_total_Matches()
+
+        query = """
+                UPDATE "Service"
+                SET "MatchCount" = %s
+                WHERE "ServiceID" = %s
+                """
+        params = (data, self.ServiceID)
+
+        db = DB()
+        result = db.execute_update(query, params)
+
+        if result:
+            self.MatchCount = data
+            print(f'{self.ServiceID}: MatchCount upated')
+            return
+
+        raise Exception("Failed to update MatchCount")

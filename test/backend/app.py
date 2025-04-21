@@ -1,10 +1,6 @@
-from fastapi import FastAPI,Request
-from flask import jsonify
-from controller.UserLoginController import UserLoginController
-
+from fastapi import FastAPI
+from boundary.loginBoundary import login_boundary
 
 app = FastAPI()
 
-@app.post("/login")
-def loginBoundary():
-    return jsonify({"success":True})
+app.include_router(login_boundary)

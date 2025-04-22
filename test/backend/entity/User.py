@@ -1,6 +1,8 @@
+import traceback
 from Classes.LoginResponse import LoginResponse
 from Database import DB
 import bcrypt
+from utils.utils import log_exception
 
 
 class User:
@@ -8,12 +10,12 @@ class User:
     def __init__(self, Username, Password):
         self.Username = Username
         self.input_Password = Password
+        self.db = DB()  # Use provided DB or create a new one
 
     def login(self):
         try:
             self.pullDetails()
-            passwordCorrect = self.checkPassword()
-            if self.UserID is None:
+            if not hasattr(self, 'UserID') or self.UserID is None:
                 return LoginResponse(False, "User does not exist", None)
             if self.IsActive == False:
                 return LoginResponse(False, "User suspended", None)
@@ -22,30 +24,33 @@ class User:
             return LoginResponse(True, "welcome", self.to_dict())
 
         except Exception as e:
-            return LoginResponse(False, "Technical error", None)
-            pass
+            log_exception(e)
+            raise(e)
+        
 
     def pullDetails(self):
         query = """
-                    SELECT "UserID", "Username", "UserProfile", "Email", "Phone", "Password", "IsActive"
-                    FROM "User"
-                    WHERE "Email" = %s"""
+                    SELECT "UserID", "Username", "UserProfileID", "Email", "Phone", "Password", "IsActive"
+                    FROM "user"
+                    WHERE "Username" = %s
+                """
         params = (self.Username,)
+        # formatted_query = query % tuple(map(lambda x: f"'{x}'", params))
+        # print(f"Formatted query: {formatted_query}")
 
         db = DB()
         result = db.execute_fetchone(query, params)
-
-        if result:
-            self.UserID = result[0]
-            self.Username = result[1]
-            self.UserProfile = result[2]
-            self.Email = result[3]
-            self.Phone = result[4]
-            self.Password = result[5]
-            self.IsActive = result[6]
+        if result is not None:
+            self.UserID = result[0] or None
+            self.Username = result[1] or None
+            self.UserProfile = result[2] or None
+            self.Email = result[3] or None
+            self.Phone = result[4] or None
+            self.Password = result[5] or None
+            self.IsActive = result[6] or None
             print(f"{self.Email}: Details pulled")
         else:
-            print(f'{self.Email}: Failed to pull details')
+            print(f'{self.Username}: Failed to pull details')
 
     def checkPassword(self) -> bool:
         input_password_bytes = self.input_Password.encode('utf-8')

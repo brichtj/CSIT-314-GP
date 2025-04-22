@@ -1,10 +1,11 @@
 from fastapi import FastAPI,Request
 from fastapi.responses import JSONResponse
-from controller.UserLoginController import UserLoginController
-
+from Database import DB
+from  Boundary import *
 
 app = FastAPI()
+# Force singleton to initialize and connect
+_ = DB()
 
-@app.post("/login")
-def loginBoundary():
-    return JSONResponse(content={"success":True})
+
+app.include_router(login_boundary)

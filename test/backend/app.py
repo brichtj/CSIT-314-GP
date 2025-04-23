@@ -1,10 +1,12 @@
 from fastapi import FastAPI,Request
-from flask import jsonify
-from controller.UserLoginController import UserLoginController
-
+from fastapi.responses import JSONResponse
+from Database import DB
+from  Boundary import *
 
 app = FastAPI()
 
-@app.post("/login")
-def loginBoundary():
-    return jsonify({"success":True})
+# Force singleton to initialize and connect DB
+_ = DB()
+
+
+app.include_router(login_boundary)

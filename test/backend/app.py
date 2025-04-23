@@ -4,7 +4,8 @@ from Database import DB
 from  Boundary import *
 
 app = FastAPI()
-# Force singleton to initialize and connect
+
+# Force singleton to initialize and connect DB
 _ = DB()
 
 

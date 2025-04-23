@@ -7,10 +7,16 @@ from utils.utils import log_exception
 
 class User:
     # Password =  input_Password
-    def __init__(self, Username, Password):
-        self.Username = Username
-        self.input_Password = Password
-        self.db = DB()  # Use provided DB or create a new one
+    def __init__(self, username=None, input_password=None, email=None, phone=None, user_profile=None, is_active=True,homeOwnerAddress = None, CleanerExperience = None, db=None):
+        self.UserID = None
+        self.Username = username
+        self.Email = email
+        self.Phone = phone
+        self.Password = None # Will store hashed password for comparison
+        self.UserProfile = user_profile
+        self.IsActive = is_active
+        self.input_Password = input_password # Plain text for login/creation hashing
+        self.db = db or DB()
 
     def login(self):
         try:

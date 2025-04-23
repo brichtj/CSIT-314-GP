@@ -1,4 +1,3 @@
-import traceback
 from Classes.LoginResponse import LoginResponse
 from Database import DB
 import bcrypt

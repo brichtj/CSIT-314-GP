@@ -12,10 +12,10 @@ DROP TYPE IF EXISTS "UserProfile";
 
 CREATE TYPE "UserProfile" AS ENUM( 'Admin', 'Cleaner', 'HomeOwner','Manager');
 
-CREATE TABLE "User" (
+CREATE TABLE "user" (
   "UserID" integer PRIMARY KEY,
   "Username" varchar NOT NULL,
-  "UserProfile" "UserProfile" NOT NULL,
+  "UserProfileID" "UserProfile" NOT NULL,
   "Email" varchar NOT NULL,
   "Phone" varchar,
   "Password" varchar NOT NULL,
@@ -87,13 +87,13 @@ COMMENT ON TABLE "Service" IS 'Service can only be listed by Cleaners, so limit 
 
 COMMENT ON TABLE "ServiceLikes" IS 'AutoIncremented LikeID, ServiceLikes can only be owned by homeowner';
 
-ALTER TABLE "HomeOwner" ADD FOREIGN KEY ("HomeOwnerID") REFERENCES "User" ("UserID") ON DELETE CASCADE;
+ALTER TABLE "HomeOwner" ADD FOREIGN KEY ("HomeOwnerID") REFERENCES "user" ("UserID") ON DELETE CASCADE;
 
-ALTER TABLE "Cleaner" ADD FOREIGN KEY ("CleanerID") REFERENCES "User" ("UserID") ON DELETE CASCADE;
+ALTER TABLE "Cleaner" ADD FOREIGN KEY ("CleanerID") REFERENCES "user" ("UserID") ON DELETE CASCADE;
 
-ALTER TABLE "UserAdmin" ADD FOREIGN KEY ("AdminID") REFERENCES "User" ("UserID") ON DELETE CASCADE;
+ALTER TABLE "UserAdmin" ADD FOREIGN KEY ("AdminID") REFERENCES "user" ("UserID") ON DELETE CASCADE;
 
-ALTER TABLE "PlatformManagement" ADD FOREIGN KEY ("ManagerID") REFERENCES "User" ("UserID") ON DELETE CASCADE;
+ALTER TABLE "PlatformManagement" ADD FOREIGN KEY ("ManagerID") REFERENCES "user" ("UserID") ON DELETE CASCADE;
 
 ALTER TABLE "Matches" ADD FOREIGN KEY ("HomeOwnerID") REFERENCES "HomeOwner" ("HomeOwnerID") ON DELETE CASCADE;
 

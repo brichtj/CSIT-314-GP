@@ -1,6 +1,6 @@
 
 from Database import DB
-from Classes import MatchesResponse
+from Classes.MatchesResponse import MatchesResponse
 from utils.utils import log_exception
 
 # ServiecID
@@ -14,6 +14,8 @@ class Matches:
     def __init__(self):
         self.db = DB()
         self.Date = None
+        self.SerivceID = None
+        self.HomeOwnerID = None
 
     def searchByServiceID(self, ServiceID):
         try:
@@ -47,15 +49,15 @@ class Matches:
                     FROM "Matches"
                     WHERE "ServiceID" = %s
                     """
-            params = (self.SerivceID, self.HomeOwnerID, self.Date)
+            params = (self.SerivceID,)
 
-        if self.SerivceID or hasattr(self, 'ServiceID'):
+        if self.HomeOwnerID or hasattr(self, 'HomeOwnerID'):
             query = """
                     SELECT "ServiceID", "HomeOwnerID", "Price", "Date", "Rating"
                     FROM "Matches"
-                    WHERE "ServiceID" = %s
+                    WHERE "HomeOwnerID" = %s
                     """
-            params = (self.SerivceID, self.HomeOwnerID, self.Date)
+            params = (self.HomeOwnerID,)
 
         if not query or not params:
             print(f"error: Nothing pass in while querying database")

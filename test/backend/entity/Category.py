@@ -1,6 +1,6 @@
 
 from Database import DB
-from Classes import CategoryResponse
+from Classes.CategoryResponse import CategoryResponse
 from utils.utils import log_exception
 
 # CategoryID
@@ -9,7 +9,7 @@ from utils.utils import log_exception
 
 
 class Category:
-    def init(self):
+    def __init__(self):
         self.db = DB()
         self.Title = None
 
@@ -20,7 +20,7 @@ class Category:
             if not hasattr(self, 'Title') or not self.Title:
                 return CategoryResponse(False, "Category not found", None)
 
-            return CategoryResponse(True, "Category found", self.to_dict)
+            return CategoryResponse(True, "Category found", self.to_dict())
         except Exception as e:
             log_exception(e)
             raise (e)

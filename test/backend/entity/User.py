@@ -16,7 +16,9 @@ class User:
         self.UserProfile = user_profile
         self.IsActive = is_active
         self.input_Password = input_password  # Plain text for login/creation hashing
-        self.db = db or DB()
+        self.db = DB()
+        self.Address = None
+        self.Experience = None
 
     def login(self):
         try:
@@ -35,8 +37,8 @@ class User:
 
     def pullDetails(self):
         query = """
-                    SELECT "UserID", "Username", "UserProfileID", "Email", "Phone", "Password", "IsActive"
-                    FROM "user"
+                    SELECT "UserID", "Username", "UserProfile", "Email", "Phone", "Password", "IsActive"
+                    FROM "User"
                     WHERE "Username" = %s
                 """
         params = (self.Username,)
@@ -44,6 +46,7 @@ class User:
         # print(f"Formatted query: {formatted_query}")
 
         result = self.db.execute_fetchone(query, params)
+
         if result is not None:
             self.UserID = result[0] or None
             self.Username = result[1] or None

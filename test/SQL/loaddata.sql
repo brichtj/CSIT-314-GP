@@ -1,7 +1,7 @@
-INSERT INTO "User" (
+INSERT INTO "user" (
     "UserID",
     "Username",
-    "UserProfile",
+    "UserProfileID",
     "Email",
     "Phone",
     "Password",

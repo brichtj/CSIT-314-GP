@@ -43,7 +43,7 @@ cur = conn.cursor()
 
 cur.execute("""
             SELECT "UserID"
-            FROM "User"
+            FROM "user"
             """)
 
 rows = cur.fetchall()
@@ -53,7 +53,7 @@ for row in rows:
     hash = bcrypt.hashpw(password,bcrypt.gensalt())
     hash = hash.decode('utf-8')
     cur.execute("""
-                UPDATE "User"
+                UPDATE "user"
                 SET "Password" = %s
                 WHERE "UserID" = %s
                 """,

@@ -1,7 +1,7 @@
 from fastapi import FastAPI,Request
 from fastapi.responses import JSONResponse
 from Database import DB
-from  Boundary import *
+from  boundary import *
 
 app = FastAPI()
 

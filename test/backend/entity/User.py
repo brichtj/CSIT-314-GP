@@ -64,37 +64,22 @@ class User:
         else:
             print(f'{self.Username}: Failed to pull details')
 
-    def pullExperience(self):
-        query = """
-                SELECT "Experience"
-                FROM "Cleaner"
-                WHERE "CleanerID" = %s
-                """
-        params = (self.UserID,)
+    # put into homeowner class
+    # def pullAddress(self):
+    #     query = """
+    #             SELECT "Address"
+    #             FROM "HomeOwner"
+    #             WHERE "HomeOwnerID" = %s
+    #             """
+    #     params = (self.UserID,)
 
-        result = self.db.execute_fetchone(query, params)
+    #     result = self.db.execute_fetchone(query, params)
 
-        if result:
-            self.Experience = result[0]
-            print(f'{self.Username}: Experience pulled')
-        else:
-            print(f'{self.Username}: Failed to pull Experience')
-
-    def pullAddress(self):
-        query = """
-                SELECT "Address"
-                FROM "HomeOwner"
-                WHERE "HomeOwnerID" = %s
-                """
-        params = (self.UserID,)
-
-        result = self.db.execute_fetchone(query, params)
-
-        if result:
-            self.Address = result[0]
-            print(f'{self.Username}: Address pulled')
-        else:
-            print(f'{self.Username}: Failed to pull Address')
+    #     if result:
+    #         self.Address = result[0]
+    #         print(f'{self.Username}: Address pulled')
+    #     else:
+    #         print(f'{self.Username}: Failed to pull Address')
 
     def checkPassword(self) -> bool:
         input_password_bytes = self.input_Password.encode('utf-8')

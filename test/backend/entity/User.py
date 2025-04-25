@@ -6,7 +6,7 @@ from utils.utils import log_exception
 
 class User:
     # Password =  input_Password
-    def __init__(self, username=None, input_password=None, email=None, phone=None, user_profile=None, is_active=True, homeOwnerAddress=None, CleanerExperience=None, db=None):
+    def __init__(self, username=None, input_password=None, email=None, phone=None, user_profile=None, is_active=True):
         self.UserID = None
         self.Username = username
         self.Email = email
@@ -16,8 +16,6 @@ class User:
         self.IsActive = is_active
         self.input_Password = input_password  # Plain text for login/creation hashing
         self.db = DB()
-        self.Address = None
-        self.Experience = None
 
     def login(self):
         try:
@@ -41,28 +39,34 @@ class User:
             raise (e)
 
     def pullDetails(self):
-        query = """
-                    SELECT "UserID", "Username", "UserProfileID", "Email", "Phone", "Password", "IsActive"
-                    FROM "user"
-                    WHERE "Username" = %s
-                """
-        params = (self.Username,)
-        # formatted_query = query % tuple(map(lambda x: f"'{x}'", params))
-        # print(f"Formatted query: {formatted_query}")
+        try:
 
-        result = self.db.execute_fetchone(query, params)
+            query = """
+                        SELECT "UserID", "Username", "UserProfileID", "Email", "Phone", "Password", "IsActive"
+                        FROM "user"
+                        WHERE "Username" = %s
+                    """
+            params = (self.Username,)
+            # formatted_query = query % tuple(map(lambda x: f"'{x}'", params))
+            # print(f"Formatted query: {formatted_query}")
 
-        if result is not None:
-            self.UserID = result[0] or None
-            self.Username = result[1] or None
-            self.UserProfile = result[2] or None
-            self.Email = result[3] or None
-            self.Phone = result[4] or None
-            self.Password = result[5] or None
-            self.IsActive = result[6] or None
-            print(f"{self.Username}: Details pulled")
-        else:
-            print(f'{self.Username}: Failed to pull details')
+            result = self.db.execute_fetchone(query, params)
+
+            if result is not None:
+                self.UserID = result[0] or None
+                self.Username = result[1] or None
+                self.UserProfile = result[2] or None
+                self.Email = result[3] or None
+                self.Phone = result[4] or None
+                self.Password = result[5] or None
+                self.IsActive = result[6] or None
+                print(f"{self.Username}: Details pulled")
+            else:
+                print(f'{self.Username}: Failed to pull details')
+
+        except Exception as e:
+            log_exception(e)
+            raise (e)
 
     # put into homeowner class
     # def pullAddress(self):

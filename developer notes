@@ -1,0 +1,2 @@
+GRANT USAGE, SELECT, UPDATE ON SEQUENCE user_UserID_seq TO your_user;
+To enable sequence UserID to be returned to the backend you have to use this command

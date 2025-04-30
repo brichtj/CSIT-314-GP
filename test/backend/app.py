@@ -1,7 +1,7 @@
 from fastapi import FastAPI,Request
 from fastapi.responses import JSONResponse
 from Database import DB
-from  boundary import *
+from  Boundary import *
 
 app = FastAPI()
 
@@ -10,3 +10,4 @@ _ = DB()
 
 
 app.include_router(login_boundary)
+app.include_router(cleaner_boundary)

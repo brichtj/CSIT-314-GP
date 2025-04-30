@@ -40,21 +40,27 @@ class DB:
             return self.cur.fetchone()
         except Exception as e:
             print(f"Database error: {e}")
-            return ()
+            return (e)
 
     def execute_update(self, query, params=()) -> bool:
         try:
             self.cur.execute(query, params)
-            if self.cur.rowcount == 1:
+            
+            # If the query is returning something, fetch the first row
+            if self.cur.description:  # Check if there's a returning column
                 self.conn.commit()
-                return True
+                result = self.cur.fetchone()  # Only one row should be returned, note this is a TUPLE depending on what you want returned, e.g (1,"other stuff")
+                return result  # You could return the whole row if needed (result[0], etc.)
             elif self.cur.rowcount > 1:
                 raise Exception("Update affected more than 1 row. Rolling back.")
+            elif self.cur.rowcount == 1:
+                self.conn.commit()
+                return True
             raise Exception("No rows were updated. Rolling back.")
         except Exception as e:
             self.conn.rollback()
-            print(f"Database error: {e}")
-            return False
+            #print(f"Database error: {e}")
+            raise(e)
 
     def execute_bulk_update(self, query, params=()) -> int:
         try:
@@ -73,3 +79,64 @@ class DB:
         if hasattr(self, 'conn') and self.conn:
             self.cur.close()
             self.conn.close()
+
+    #insert bulk for batch insert rows to a SINGLE table
+    # Example insert_bulk
+# columns = ['name', 'email']
+# values_list = [
+#     ['John Doe', 'john.doe@example.com'],
+#     ['Jane Smith', 'jane.smith@example.com'],
+#     ['Alice Johnson', 'alice.johnson@example.com']
+# ]
+    def insert_bulk(self, table, columns, values_list) -> bool:
+        """
+        Insert multiple rows of data into the specified table.
+
+        :param table: The table to insert data into.
+        :param columns: List of column names.
+        :param values_list: List of objects (rows) where each object is a list of values for each row.
+        :return: True if the insert is successful, False otherwise.
+        """
+        try:
+            # Create the query dynamically using columns
+            query = f"INSERT INTO {table} ({', '.join(columns)}) VALUES ({', '.join(['%s'] * len(columns))})"
+
+            # Execute the query for each set of values
+            self.cur.executemany(query, values_list)
+
+            # Commit the transaction if insertion is successful
+            self.conn.commit()
+
+            print(f"Successfully inserted {len(values_list)} rows.")
+            return True
+        except Exception as e:
+            # Rollback in case of an error
+            self.conn.rollback()
+            print(f"Error inserting data: {e}")
+            return False
+        
+    #insert single row to a SINGLE table
+    def insert(self, table, columns, values) -> bool:
+        """
+        Insert data into the specified table.
+
+        :param table: The table to insert data into.
+        :param columns: List of column names.
+        :param values: List of values corresponding to the columns.
+        :return: True if the insert is successful, False otherwise.
+        """
+        try:
+            # Create the query dynamically using columns and values
+            query = f"INSERT INTO {table} ({', '.join(columns)}) VALUES ({', '.join(['%s'] * len(values))})"
+            self.cur.execute(query, values)
+
+            # Commit the transaction if insertion is successful
+            self.conn.commit()
+
+            print("Insert successful")
+            return True
+        except Exception as e:
+            # Rollback in case of an error
+            self.conn.rollback()
+            print(f"Error inserting data: {e}")
+            return False

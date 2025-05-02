@@ -28,7 +28,8 @@ class User:
                 return LoginResponse(False, "Password false", None)
 
             if self.UserProfile == "Cleaner":
-                self.pullExperience()
+                pass
+                #self.pullExperience()
             if self.UserProfile == "HomeOwner":
                 self.pullAddress()
 
@@ -84,14 +85,23 @@ class User:
     #         print(f'{self.Username}: Address pulled')
     #     else:
     #         print(f'{self.Username}: Failed to pull Address')
-
+    """
     def checkPassword(self) -> bool:
         input_password_bytes = self.input_Password.encode('utf-8')
         hash_password_bytes = self.Password.encode('utf-8')
 
         print(f"{self.Username}: Authenticating")
         return bcrypt.checkpw(input_password_bytes, hash_password_bytes)
+    """
 
+    def checkPassword(self) -> bool:
+        input_password_bytes = self.input_Password.encode('utf-8')
+        hash_password_bytes = self.Password.encode('utf-8')
+
+        is_match = bcrypt.checkpw(input_password_bytes, hash_password_bytes)
+        print(f"{self.Username}: Password match = {is_match}")
+        return is_match
+    """
     def to_dict(self) -> dict:
         dict = {
             "UserID": self.UserID,
@@ -100,3 +110,13 @@ class User:
             "Email": self.Email,
             "Phone": self.Phone
         }
+    """
+    def to_dict(self) -> dict:
+        return {
+            "id": self.UserID,
+            "name": self.Username,
+            "UserProfile": self.UserProfile,
+            "Email": self.Email,
+            "Phone": self.Phone
+        }
+

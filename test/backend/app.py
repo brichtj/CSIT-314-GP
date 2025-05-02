@@ -1,13 +1,29 @@
-from fastapi import FastAPI,Request
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware  # ✅ Added CORS import
+
 from Database import DB
-from  Boundary import *
+from Boundary import *
+
+from Boundary.Cleaner.CreateCleanerBoundary import router as cleaner_boundary
+from Boundary.HomeOwner.CreateHomeOwnerBoundary import router as homeowner_boundary
 
 app = FastAPI()
 
-# Force singleton to initialize and connect DB
+# ✅ Add CORS middleware to allow frontend to connect
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # You can change to ["http://localhost:5173"] for stricter config
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Initialize DB
 _ = DB()
 
-
+# Register routers
 app.include_router(login_boundary)
 app.include_router(cleaner_boundary)
+app.include_router(homeowner_boundary)
+

@@ -1,48 +1,35 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
 import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/LoginView.vue'
-import PlatformDashboard from '../views/PlatformDashboard.vue'
-
-// Optional placeholders for future roles
-const CleanerDashboard = { template: '<div><h1>Cleaner Dashboard</h1></div>' }
-const AdminPanel = { template: '<div><h1>Admin Panel</h1></div>' }
-
-const routes = [
-  {
-    path: '/',
-    redirect: '/login' // Optional: force all to login by default
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: LoginView
-  },
-  {
-    path: '/home',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/platform-dashboard',
-    name: 'platform-dashboard',
-    component: PlatformDashboard
-  },
-  {
-    path: '/cleaner-dashboard',
-    name: 'cleaner-dashboard',
-    component: CleanerDashboard
-  },
-  {
-    path: '/admin-panel',
-    name: 'admin-panel',
-    component: AdminPanel
-  }
-]
+import LoginView from '@/views/LoginView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes: [
+    {
+      path: '/home',
+      name: 'home',
+      component: HomeView,
+      meta: { title: 'Home - My App' },
+    },
+    {
+      path: '/',
+      name: 'login',
+      component: LoginView,
+    },
+    {
+      path: '/create-account',
+      name: 'CreateAccount',
+      component: () => import('@/views/CreateAccountView.vue')
+    },    
+    {
+      path: '/about',
+      name: 'about',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/AboutView.vue'),
+    },
+  ],
 })
 
 export default router

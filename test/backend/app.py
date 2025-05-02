@@ -1,25 +1,29 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from control import login_control
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware  # ✅ Added CORS import
 
-app = Flask(__name__)
-CORS(app)
+from Database import DB
+from Boundary import *
 
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    profile = data.get('login_profile')
-    username = data.get('username')
-    password = data.get('password')
+from Boundary.Cleaner.CreateCleanerBoundary import router as cleaner_boundary
+from Boundary.HomeOwner.CreateHomeOwnerBoundary import router as homeowner_boundary
 
-    if not username or not password:
-        return jsonify({"error": "username and password required"}), 400
+app = FastAPI()
 
-    try:
-        user = login_control(profile, username, password)
-        return jsonify({"user": user.__dict__}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+# ✅ Add CORS middleware to allow frontend to connect
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # You can change to ["http://localhost:5173"] for stricter config
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# Initialize DB
+_ = DB()
+
+# Register routers
+app.include_router(login_boundary)
+app.include_router(cleaner_boundary)
+app.include_router(homeowner_boundary)
+

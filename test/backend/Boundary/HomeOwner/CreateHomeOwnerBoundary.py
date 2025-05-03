@@ -1,6 +1,6 @@
 
 from fastapi.responses import JSONResponse
-from controller.Cleaner.CleanerCreationController import CleanerCreationController
+from controller.Homeowner.HomeOwnerCreationController import HomeOwnerCreationController
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
 from utils.utils import log_exception
@@ -10,19 +10,19 @@ import psycopg2
 
 router = APIRouter()
 
-class CleanerCreateRequest(BaseModel):
+class HomeOwnerCreateRequest(BaseModel):
     username: str
     email: str
     phone: str
-    experience: float
+    address: str
 
-@router.post("/CreateCleanerAccount")
-def CreateHomeOwnerAccount(data: CleanerCreateRequest):
+@router.post("/CreateHomeOwner")
+def CreateHomeOwnerAccount(data: HomeOwnerCreateRequest):
     try:
-        controller = CleanerCreationController()
+        controller = HomeOwnerCreationController()
         #print(data)
         # Your login logic here
-        result = controller.CleanerCreationController(data.username,data.email,data.phone,data.experience)
+        result = controller.HomeOwnerCreationController(data.username,data.email,data.phone,data.address)
         #print(result)
         return JSONResponse(Response(True,"Successfully created user").to_json())
     except psycopg2.IntegrityError as e:

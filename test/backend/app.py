@@ -11,3 +11,4 @@ _ = DB()
 
 app.include_router(login_boundary)
 app.include_router(cleaner_boundary)
+app.include_router(home_owner_boundary)

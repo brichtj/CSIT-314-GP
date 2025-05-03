@@ -1,3 +1,4 @@
+import bcrypt
 from Classes.Response import Response
 from Database import DB
 from utils.utils import log_exception
@@ -12,12 +13,12 @@ class Cleaner(User):
     
     def createUser(self):
         try:
-
+            hashed_password = bcrypt.hashpw('123'.encode('utf-8'), bcrypt.gensalt())
             #insert into user table
             Userstatement = """
-                Insert into "user" ("Username","UserProfileID", "Email","Phone","Password","IsActive") values (%s, 'Cleaner', %s,%s,'123',true) RETURNING "UserID"
+                Insert into "user" ("Username","UserProfileID", "Email","Phone","Password","IsActive") values (%s, 'Cleaner', %s,%s,%s,true) RETURNING "UserID"
                 """
-            params = (self.Username,self.Email,self.Phone,)
+            params = (self.Username,self.Email,self.Phone,hashed_password,)
             result =self.db.execute_update(Userstatement, params)
             id = result[0]#SQL statement returns a userID, which is the first argument in a tuple returned by psycopg2
             #insert into cleaner table
@@ -31,6 +32,7 @@ class Cleaner(User):
 
 
         except Exception as e:
+            log_exception(e)
             raise e
 
 

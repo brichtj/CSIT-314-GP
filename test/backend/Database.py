@@ -56,7 +56,9 @@ class DB:
             elif self.cur.rowcount == 1:
                 self.conn.commit()
                 return True
-            raise Exception("No rows were updated. Rolling back.")
+            #in case no updates happened, e.g no rows were updated because username didnt exist, dont have to show error.
+            self.conn.rollback()
+            return False
         except Exception as e:
             self.conn.rollback()
             #print(f"Database error: {e}")

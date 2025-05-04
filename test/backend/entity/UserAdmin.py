@@ -85,7 +85,7 @@ class UserAdmin():
             #create json object based on query results
             print(result)
 
-            if result is not None:
+            if result:
                 return True
             else:               
                 return False

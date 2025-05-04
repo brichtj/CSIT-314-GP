@@ -17,15 +17,11 @@ class LoginRequest(BaseModel):
 def login(data: LoginRequest):
     try:
         controller = UserLoginController()
-        username = data.username
-        password = data.password
-        result = controller.login(username,password)
-        # Your login logic here
-        return JSONResponse(result.to_json())
-
+        result = controller.login(data.username, data.password)
+        return JSONResponse(content=result.to_json())  # ✅ FIXED
     except Exception as e:
         log_exception(e)
         return JSONResponse(
-            content=Response(False,"internal server error"),
+            content=Response(False, "internal server error").to_json(),
             status_code=500
         )

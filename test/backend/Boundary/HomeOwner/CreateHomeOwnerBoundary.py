@@ -2,11 +2,11 @@
 from fastapi.responses import JSONResponse
 from controller.Homeowner.HomeOwnerCreationController import HomeOwnerCreationController
 from fastapi import APIRouter, Request
+
 from pydantic import BaseModel
 from utils.utils import log_exception
 from Classes.Response import Response
 import psycopg2
-
 
 router = APIRouter()
 
@@ -49,3 +49,4 @@ def CreateHomeOwnerAccount(data: HomeOwnerCreateRequest):
             content=Response(False,"internal server error").to_json(),
             status_code=505
         )
+

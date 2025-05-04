@@ -1,8 +1,12 @@
 from entity.Cleaner import Cleaner
 
 class CleanerCreationController:
-
-    def CleanerCreationController(self,username,email,phone,experience):
-        cleaner = Cleaner(username, email,phone,experience)
-        return cleaner.createUser()
-    
+    def register(self, username, password, email, phone, experience):
+        cleaner = Cleaner(
+            username=username,
+            email=email,
+            phone=phone,
+            Experience=experience,
+            input_password=password
+        )
+        return cleaner.create_account()

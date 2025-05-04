@@ -12,19 +12,27 @@ router = APIRouter()
 
 class CleanerCreateRequest(BaseModel):
     username: str
+    password: str
     email: str
     phone: str
     experience: float
+
 
 @router.post("/CreateCleanerAccount")
 def CreateHomeOwnerAccount(data: CleanerCreateRequest):
     try:
         controller = CleanerCreationController()
-        #print(data)
-        # Your login logic here
-        result = controller.CleanerCreationController(data.username,data.email,data.phone,data.experience)
-        #print(result)
-        return JSONResponse(Response(True,"Successfully created user").to_json())
+
+        # controller method
+        result = controller.register(
+            username=data.username,
+            password=data.password,
+            email=data.email,
+            phone=data.phone,
+            experience=data.experience
+        )
+
+        return JSONResponse(Response(True, "Successfully created user").to_json())
     except psycopg2.IntegrityError as e:
         print(f"Integrity error (maybe duplicate user?): {e}")
         #log_exception(e)

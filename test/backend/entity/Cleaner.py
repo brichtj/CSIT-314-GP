@@ -11,7 +11,6 @@ class Cleaner(User):
         super().__init__(username, None, email, phone, "Cleaner", is_active)   
 
         self.Experience = Experience
-        self.input_Password = input_password 
         self.db = DB()
 
     

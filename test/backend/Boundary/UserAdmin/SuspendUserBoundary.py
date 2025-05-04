@@ -1,6 +1,6 @@
 
 from fastapi.responses import JSONResponse
-from controller.Homeowner.HomeOwnerCreationController import HomeOwnerCreationController
+from controller.UserAdmin.SuspendUserController import SuspendUserController
 from fastapi import APIRouter, Request
 
 from pydantic import BaseModel
@@ -10,33 +10,36 @@ import psycopg2
 
 router = APIRouter()
 
-class HomeOwnerCreateRequest(BaseModel):
+class ViewUserRequest(BaseModel):
     username: str
-    email: str
-    phone: str
-    address: str
-@router.post("/CreateHomeOwner")
-def CreateHomeOwnerAccount(data: HomeOwnerCreateRequest):
+
+
+@router.post("/SuspendUserAccount")
+def SuspendUserAccount(data: ViewUserRequest):
     try:
-        controller = HomeOwnerCreationController()
+        controller = SuspendUserController()
         #print(data)
         # Your login logic here
-        result = controller.HomeOwnerCreationController(data.username,data.email,data.phone,data.address)
-        #print(result)
-        return JSONResponse(Response(True,"Successfully created user").to_json())
+        result = controller.suspendUserController(data.username)
+        #controller returns true if updated, false if not updated(in the case of no such user)
+        if result:
+            return JSONResponse(Response(True,"User Successfully suspended").to_json())
+        else:
+            return JSONResponse(Response(False,"No Such User").to_json())
+
     except psycopg2.IntegrityError as e:
-        print(f"Integrity error (maybe duplicate user?): {e}")
+        print(f"Integrity error: {e}")
         #log_exception(e)
         # maybe raise a custom DuplicateUserError()
         return JSONResponse(
-            content=Response(False,"Username already exists").to_json(),
+            content=Response(False,"database error").to_json(),
             status_code=409
         )
     except psycopg2.Error as e:
         #log_exception(e)
         print(f"Database error: {e}")       
         return JSONResponse(
-            content=Response(False,"Error creating user").to_json(),
+            content=Response(False,"database error").to_json(),
             status_code=400
         )
 

@@ -1,6 +1,6 @@
 
 from fastapi.responses import JSONResponse
-from controller.UserAdmin.CreateUserController import UserCreationController
+from controller.UserAdmin.ViewUserAccountController import ViewUserController
 from fastapi import APIRouter, Request
 
 from pydantic import BaseModel
@@ -10,32 +10,23 @@ import psycopg2
 
 router = APIRouter()
 
-class UserCreateRequest(BaseModel):
+class ViewUserRequest(BaseModel):
     username: str
-    email: str
-    phone: str
-    address: str
-    Experience:float
-    UserType:str
 
-#   if userType == "Cleaner":
-#                 UserprofileID = 1
-#             elif userType == "HomeOwner":
-#                 UserprofileID = 2
-#             elif userType == "UserAdmin":
-#                 UserprofileID = 3
-#             elif userType == "PlatformManagement":
-#                 UserprofileID = 4
 
-@router.post("/CreateUser")
-def CreateUserAccount(data: UserCreateRequest):
+@router.post("/ViewUserAccount")
+def ViewUserAccount(data: ViewUserRequest):
     try:
-        controller = UserCreationController()
+        controller = ViewUserController()
         #print(data)
         # Your login logic here
-        result = controller.UserCreationController(data.username,data.email,data.phone,data.Experience,data.address,data.UserType)
-        #print(result)
-        return JSONResponse(Response(True,"Successfully created user").to_json())
+        result = controller.viewUserController(data.username)
+        if result is not None:
+            return JSONResponse(Response(True,result).to_json())
+        else:
+            print(result)
+            return JSONResponse(Response(False,None).to_json())
+
     except psycopg2.IntegrityError as e:
         print(f"Integrity error (maybe duplicate user?): {e}")
         #log_exception(e)

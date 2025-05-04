@@ -27,4 +27,5 @@ app.include_router(login_boundary)
 app.include_router(cleaner_boundary)
 app.include_router(user_admin_boundary)
 app.include_router(home_owner_boundary)
+app.include_router(view_user_account)
 

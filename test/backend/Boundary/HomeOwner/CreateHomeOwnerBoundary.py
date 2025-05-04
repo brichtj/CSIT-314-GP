@@ -15,7 +15,6 @@ class HomeOwnerCreateRequest(BaseModel):
     email: str
     phone: str
     address: str
-
 @router.post("/CreateHomeOwner")
 def CreateHomeOwnerAccount(data: HomeOwnerCreateRequest):
     try:

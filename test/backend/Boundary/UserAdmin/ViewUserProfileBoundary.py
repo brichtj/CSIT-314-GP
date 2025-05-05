@@ -1,6 +1,6 @@
 
 from fastapi.responses import JSONResponse
-from controller.UserAdmin.ViewUserAccountController import ViewUserController
+from controller.UserAdmin.ViewUserProfileController import ViewUserProfileController
 from fastapi import APIRouter, Request
 
 from pydantic import BaseModel
@@ -10,36 +10,29 @@ import psycopg2
 
 router = APIRouter()
 
-class ViewUserRequest(BaseModel):
-    username: str
+class ViewUserProfileRequest(BaseModel):
+    name: str
 
 
-@router.get("/ViewUserAccount")
-def ViewUserAccount(data: ViewUserRequest):
+@router.get("/ViewUserProfile")
+def ViewUserProfile(data: ViewUserProfileRequest):
     try:
-        controller = ViewUserController()
+        controller = ViewUserProfileController()
         #print(data)
         # Your login logic here
-        result = controller.viewUserController(data.username)
+        result = controller.viewUserProfileController(data.name)
         if result is not None:
             return JSONResponse(Response(True,result).to_json())
         else:
             print(result)
             return JSONResponse(Response(False,None).to_json())
 
-    except psycopg2.IntegrityError as e:
-        print(f"Integrity error (maybe duplicate user?): {e}")
-        #log_exception(e)
-        # maybe raise a custom DuplicateUserError()
-        return JSONResponse(
-            content=Response(False,"Username already exists").to_json(),
-            status_code=409
-        )
+   
     except psycopg2.Error as e:
         #log_exception(e)
         print(f"Database error: {e}")       
         return JSONResponse(
-            content=Response(False,"Error creating user").to_json(),
+            content=Response(False,"Error finding profile").to_json(),
             status_code=400
         )
 

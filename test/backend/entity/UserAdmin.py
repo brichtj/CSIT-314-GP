@@ -130,7 +130,26 @@ class UserAdmin(User):
         except Exception as e:
             log_exception(e)
             raise e
+    #req 1.2 view
+    def viewUserProfile(self,userProfileName):
+        try:
+            query = """
+                        SELECT *
+                        FROM "UserProfile"
+                        WHERE LOWER("Name") = LOWER(%s)
+                    """
+            params = (userProfileName,)
+            # formatted_query = query % tuple(map(lambda x: f"'{x}'", params))
+            # print(f"Formatted query: {formatted_query}")
 
+            result = self.db.fetch_one_by_key(query, params)
+            #create json object based on query results
+           
+
+            return result
+        except Exception as e:
+            log_exception(e)
+            raise (e)
 
 
     def pullExperience(self):

@@ -51,7 +51,24 @@ class DB:
         except Exception as e:
             print(f"Database error: {e}")
             return (e)
+    def fetch_one_by_key(self, query: str, params) -> dict:
+    # """
+    # Fetch a single row from the table where `key` = value.
+    # Returns the result as a dictionary with column names as keys.
+    # """
+        try:
+            self.cur.execute(query, (params,))
+            row = self.cur.fetchone()
 
+            if row is None:
+                return None
+
+            # Get column names
+            colnames = [desc[0] for desc in self.cur.description]
+            return dict(zip(colnames, row))
+        except Exception as e:
+            print(f"Database error: {e}")
+            return None
     def execute_update(self, query, params=()) -> bool:
         try:
             self.cur.execute(query, params)

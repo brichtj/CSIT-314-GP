@@ -36,8 +36,18 @@ class DB:
 
     def execute_fetchone(self, query, params=()) -> tuple:
         try:
+            
             self.cur.execute(query, params)
             return self.cur.fetchone()
+        except Exception as e:
+            print(f"Database error: {e}")
+            return (e)
+        
+    #fetch an array of results
+    def execute_fetchall(self, query, params=()) -> list:
+        try:
+            self.cur.execute(query, params)
+            return self.cur.fetchall()
         except Exception as e:
             print(f"Database error: {e}")
             return (e)

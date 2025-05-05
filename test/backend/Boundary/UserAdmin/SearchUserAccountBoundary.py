@@ -8,14 +8,13 @@ import psycopg2
 
 router = APIRouter()
 
-class SearchUserRequest(BaseModel):
-    searchTerm: str
 
-@router.post("/AdminSearchUserAccount")
-def AdminSearchUserAccount(data: SearchUserRequest):
+
+@router.get("/AdminSearchUserAccount")
+def AdminSearchUserAccount(searchTerm:str):
     try:
         controller = AdminSearchUserController()
-        result = controller.adminSearchUserController(data.searchTerm)
+        result = controller.adminSearchUserController(searchTerm)
         if result is not None:
             return JSONResponse(Response(True,result).to_json())
         else:

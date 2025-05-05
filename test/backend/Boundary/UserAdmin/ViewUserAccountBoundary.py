@@ -10,17 +10,15 @@ import psycopg2
 
 router = APIRouter()
 
-class ViewUserRequest(BaseModel):
-    username: str
 
 
 @router.get("/ViewUserAccount")
-def ViewUserAccount(data: ViewUserRequest):
+def ViewUserAccount(username:str):
     try:
         controller = ViewUserController()
         #print(data)
         # Your login logic here
-        result = controller.viewUserController(data.username)
+        result = controller.viewUserController(username)
         if result is not None:
             return JSONResponse(Response(True,result).to_json())
         else:

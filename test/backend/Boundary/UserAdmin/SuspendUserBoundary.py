@@ -14,7 +14,7 @@ class ViewUserRequest(BaseModel):
     username: str
 
 
-@router.post("/SuspendUserAccount")
+@router.put("/SuspendUserAccount")
 def SuspendUserAccount(data: ViewUserRequest):
     try:
         controller = SuspendUserController()

@@ -15,5 +15,5 @@ class Response():
         # Convert the Response object to a dictionary
         return {
             "success": self.success,
-            "message": str(self.message)
+            "message": self.message
         }

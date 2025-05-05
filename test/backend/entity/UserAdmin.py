@@ -1,13 +1,14 @@
 import bcrypt
 from Classes.Response import Response
 from Database import DB
+from entity.User import User
 from utils.utils import log_exception
 import psycopg2
 #make cleaner class, inherits from user.py
-class UserAdmin():
+class UserAdmin(User):
     def __init__(self):
         self.db = DB()
-    
+    #req 1.1 create
     def createUser(self,username,email,phone,experience,address,userType):
         try:
             hashed_password = bcrypt.hashpw('123'.encode('utf-8'), bcrypt.gensalt())
@@ -38,6 +39,7 @@ class UserAdmin():
         except Exception as e:
             log_exception(e)
             raise e
+    #req 1.1 view
     def viewUser(self,username):
         try:
             query = """
@@ -70,6 +72,7 @@ class UserAdmin():
         except Exception as e:
             log_exception(e)
             raise (e)
+    #req 1.1 suspend
     def suspendUser(self,username):
         try:
             query = """
@@ -92,6 +95,43 @@ class UserAdmin():
         except Exception as e:
             log_exception(e)
             raise (e)
+    #req 1.1 search
+    def searchByUserID(self, searchTerm):#overwrite User.searchByUserID 
+        try:
+
+            query = """
+                SELECT "UserID", "Username", "UserProfileID", "Email", "Phone", "IsActive"
+                FROM "user"
+                WHERE "Username" ILIKE %s 
+            """
+
+            params = (f"{searchTerm}%",)
+            #print("Full SQL:", query % params)
+            result = self.db.execute_fetchall(query, params)
+            #print(result)
+            return result
+
+        except Exception as e:
+            log_exception(e)
+            raise (e)
+    #req 1.2 Create
+    def createUserProfile(self,name,privilege):
+        try:
+            #insert into user table
+            Userstatement = """
+                Insert into "UserProfile" ("Name","Privilege") values (%s, %s) 
+                """
+            params = (name,privilege)
+            result =self.db.execute_update(Userstatement, params)
+            
+            return True
+
+
+        except Exception as e:
+            log_exception(e)
+            raise e
+
+
 
     def pullExperience(self):
         query = """

@@ -30,4 +30,4 @@ app.include_router(home_owner_boundary)
 app.include_router(view_user_account)
 app.include_router(suspend_user_boundary)
 app.include_router(search_user_account)
-
+app.include_router(create_user_profile)

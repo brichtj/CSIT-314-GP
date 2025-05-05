@@ -4,7 +4,7 @@ import bcrypt
 from utils.utils import log_exception
 
 
-class User:
+class User():
     # Password =  input_Password
     def __init__(self, username=None, input_password=None, email=None, phone=None, user_profile=None, is_active=True):
         self.UserID = None
@@ -38,22 +38,13 @@ class User:
         except Exception as e:
             log_exception(e)
             raise (e)
-    def searchByUserID(self, searchTerm,privilege):
+    def searchByUserID(self, searchTerm):
         try:
-            query  =''
-            if privilege == "admin":
-
-                query = """
-                    SELECT "UserID", "Username", "UserProfileID", "Email", "Phone", "Password", "IsActive"
-                    FROM "user"
-                    WHERE "Username" ILIKE %s 
-                """
-            else:
-                query = """
-                    SELECT "UserID", "Username", "UserProfileID", "Email", "Phone", "Password", "IsActive"
-                    FROM "user"
-                    WHERE "Username" ILIKE %s AND ("UserProfileID" =1 OR "UserProfileID" =2 )
-                """
+            query = """
+                SELECT "UserID", "Username", "UserProfileID", "Email", "Phone", "IsActive"
+                FROM "user"
+                WHERE "Username" ILIKE %s AND ("UserProfileID" =1 OR "UserProfileID" =2 )
+            """
 
             params = (f"{searchTerm}%",)
             print("Full SQL:", query % params)

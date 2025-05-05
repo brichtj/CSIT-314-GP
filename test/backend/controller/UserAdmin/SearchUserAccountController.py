@@ -1,8 +1,8 @@
-from entity.User import User
+from entity.UserAdmin import UserAdmin
 
 class AdminSearchUserController:
 
     def adminSearchUserController(self,searchTerm):
         
-        return User().searchByUserID(searchTerm,'admin')
+        return UserAdmin().searchByUserID(searchTerm)
     

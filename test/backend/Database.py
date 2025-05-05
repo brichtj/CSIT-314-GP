@@ -44,16 +44,25 @@ class DB:
             return (e)
         
     #fetch an array of results
-    def execute_fetchall(self, query, params=()) -> list:
+    def execute_fetchall(self, query: str, params=()) -> list[dict]:
+        """
+        Returns all results as a list of dictionaries with column names as keys.
+        """
         try:
             self.cur.execute(query, params)
-            return self.cur.fetchall()
+            rows = self.cur.fetchall()
+
+            if not rows:
+                return []
+
+            colnames = [desc[0] for desc in self.cur.description]
+            return [dict(zip(colnames, row)) for row in rows]
+
         except Exception as e:
             print(f"Database error: {e}")
-            return (e)
+            return []
     def fetch_one_by_key(self, query: str, params) -> dict:
     # """
-    # Fetch a single row from the table where `key` = value.
     # Returns the result as a dictionary with column names as keys.
     # """
         try:

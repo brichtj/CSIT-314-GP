@@ -150,8 +150,48 @@ class UserAdmin(User):
         except Exception as e:
             log_exception(e)
             raise (e)
+    #req 1.1 suspendUserprofile
+    def suspendUserProfile(self,name):
+        try:
+            query = """
+                        UPDATE "UserProfile"
+                        SET "Is_Active" = false
+                        WHERE LOWER("Name") = LOWER(%s)
+                    """
+            params = (name,)
+            # formatted_query = query % tuple(map(lambda x: f"'{x}'", params))
+            # print(f"Formatted query: {formatted_query}")
 
+            result = self.db.execute_update(query, params)
+            #create json object based on query results
+            #print(result)
 
+            if result:
+                return True
+            else:               
+                return False
+        except Exception as e:
+            log_exception(e)
+            raise (e)
+    #req 1.2 search user profile
+    def searchUserProfile(self, searchTerm):#overwrite User.searchByUserID 
+        try:
+
+            query = """
+                SELECT *
+                FROM "UserProfile"
+                WHERE "Name" ILIKE %s 
+            """
+
+            params = (f"{searchTerm}%",)
+            #print("Full SQL:", query % params)
+            result = self.db.execute_fetchall(query, params)
+            #print(result)
+            return result
+
+        except Exception as e:
+            log_exception(e)
+            raise (e)
     def pullExperience(self):
         query = """
                 SELECT "Experience"

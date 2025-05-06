@@ -1,6 +1,6 @@
 
 from fastapi.responses import JSONResponse
-from controller.HomeOwner.HomeOwnerCreationController import HomeOwnerCreationController
+from controller.UserAdmin.ViewUserAccountController import ViewUserController
 from fastapi import APIRouter, Request
 
 from pydantic import BaseModel
@@ -10,20 +10,23 @@ import psycopg2
 
 router = APIRouter()
 
-class HomeOwnerCreateRequest(BaseModel):
+class ViewUserRequest(BaseModel):
     username: str
-    email: str
-    phone: str
-    address: str
-@router.post("/CreateHomeOwner")
-def CreateHomeOwnerAccount(data: HomeOwnerCreateRequest):
+
+
+@router.post("/ViewUserAccount")
+def ViewUserAccount(data: ViewUserRequest):
     try:
-        controller = HomeOwnerCreationController()
+        controller = ViewUserController()
         #print(data)
         # Your login logic here
-        result = controller.HomeOwnerCreationController(data.username,data.email,data.phone,data.address)
-        #print(result)
-        return JSONResponse(Response(True,"Successfully created user").to_json())
+        result = controller.viewUserController(data.username)
+        if result is not None:
+            return JSONResponse(Response(True,result).to_json())
+        else:
+            print(result)
+            return JSONResponse(Response(False,None).to_json())
+
     except psycopg2.IntegrityError as e:
         print(f"Integrity error (maybe duplicate user?): {e}")
         #log_exception(e)

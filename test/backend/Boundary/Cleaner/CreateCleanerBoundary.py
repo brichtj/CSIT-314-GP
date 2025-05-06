@@ -19,7 +19,7 @@ class CleanerCreateRequest(BaseModel):
 
 
 @router.post("/CreateCleanerAccount")
-def CreateAccount(data: CleanerCreateRequest):
+def CreateHomeOwnerAccount(data: CleanerCreateRequest):
     try:
         controller = CleanerCreationController()
 

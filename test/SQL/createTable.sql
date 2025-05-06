@@ -1,21 +1,25 @@
-DROP TABLE IF EXISTS "ServiceLikes";
-DROP TABLE IF EXISTS "Views";
-DROP TABLE IF EXISTS "Matches";
-DROP TABLE IF EXISTS "Service";
-DROP TABLE IF EXISTS "Category";
-DROP TABLE IF EXISTS "HomeOwner";
-DROP TABLE IF EXISTS "Cleaner";
-DROP TABLE IF EXISTS "UserAdmin";
-DROP TABLE IF EXISTS "PlatformManagement";
-DROP TABLE IF EXISTS "User";
-DROP TYPE IF EXISTS "UserProfile";
+DROP TABLE IF EXISTS "ServiceLikes" CASCADE;
+DROP TABLE IF EXISTS "Views" CASCADE;
+DROP TABLE IF EXISTS "Matches" CASCADE;
+DROP TABLE IF EXISTS "Service" CASCADE;
+DROP TABLE IF EXISTS "Category" CASCADE;
+DROP TABLE IF EXISTS "HomeOwner" CASCADE;
+DROP TABLE IF EXISTS "Cleaner" CASCADE;
+DROP TABLE IF EXISTS "UserAdmin" CASCADE;
+DROP TABLE IF EXISTS "PlatformManagement" CASCADE;
+DROP TABLE IF EXISTS "user" CASCADE;
+DROP TABLE IF EXISTS "UserProfile" CASCADE;
 
-CREATE TYPE "UserProfile" AS ENUM( 'Admin', 'Cleaner', 'HomeOwner','Manager');
+CREATE TABLE "UserProfile"(
+  "UserProfileID" integer PRIMARY KEY,
+  "Name" varchar,
+  "Privilages" varchar
+);
 
 CREATE TABLE "user" (
   "UserID" integer PRIMARY KEY,
   "Username" varchar NOT NULL,
-  "UserProfileID" "UserProfile" NOT NULL,
+  "UserProfileID" integer NOT NULL,
   "Email" varchar NOT NULL,
   "Phone" varchar,
   "Password" varchar NOT NULL,
@@ -81,11 +85,11 @@ CREATE UNIQUE INDEX ON "ServiceLikes" ("ServiceID", "HomeOwnerID");
 
 CREATE UNIQUE INDEX ON "Views" ("ServiceID", "HomeOwnerID");
 
-CREATE UNIQUE INDEX ON "Matches" ("ServiceID", "HomeOwnerID");
-
 COMMENT ON TABLE "Service" IS 'Service can only be listed by Cleaners, so limit to UserID that has userprofileID of cleaner, LikeCount is so we dont have to aggregate for every service post';
 
 COMMENT ON TABLE "ServiceLikes" IS 'AutoIncremented LikeID, ServiceLikes can only be owned by homeowner';
+
+ALTER TABLE "user" ADD FOREIGN KEY ("UserProfileID") REFERENCES "UserProfile" ("UserProfileID") ON DELETE CASCADE;
 
 ALTER TABLE "HomeOwner" ADD FOREIGN KEY ("HomeOwnerID") REFERENCES "user" ("UserID") ON DELETE CASCADE;
 

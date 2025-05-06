@@ -3,10 +3,10 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware  # ✅ Added CORS import
 
 from Database import DB
-from Boundary import *
+from boundary import *
 
-from Boundary.Cleaner.CreateCleanerBoundary import router as cleaner_boundary
-from Boundary.HomeOwner.CreateHomeOwnerBoundary import router as homeowner_boundary
+from boundary.Cleaner.CreateCleanerBoundary import router as cleaner_boundary
+from boundary.HomeOwner.CreateHomeOwnerBoundary import router as homeowner_boundary
 
 app = FastAPI()
 

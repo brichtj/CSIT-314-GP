@@ -13,74 +13,110 @@ from utils.utils import log_exception
 class Matches:
     def __init__(self):
         self.db = DB()
-        self.Date = None
-        self.SerivceID = None
-        self.HomeOwnerID = None
 
-    def searchByServiceID(self, ServiceID):
+    def SearchByServiceID(self, ServiceID):
         try:
-            self.SerivceID = ServiceID
-            self.pullDetails
-            if not self.Date or not hasattr(self, 'Date'):
-                return MatchesResponse(False, 'Matches not found', None)
-            return MatchesResponse(True, 'Matches found', self.to_dict)
-        except Exception as e:
-            log_exception(e)
-            raise (e)
-
-    def searchByHomeOwnerID(self, HomeOwnerID):
-        try:
-            self.HomeOwnerID = HomeOwnerID
-            self.pullDetails()
-            if not self.Date or not hasattr(self, 'Date'):
-                return MatchesResponse(False, 'Matches not found', None)
-            return MatchesResponse(True, 'Matches found', self.to_dict)
-        except Exception as e:
-            log_exception(e)
-            raise (e)
-
-    def pullDetails(self):
-        query: str
-        params: tuple
-
-        if self.SerivceID or hasattr(self, 'ServiceID'):
             query = """
-                    SELECT "ServiceID", "HomeOwnerID", "Price", "Date", "Rating"
+                    SELECT *
                     FROM "Matches"
                     WHERE "ServiceID" = %s
                     """
-            params = (self.SerivceID,)
+            params = (ServiceID,)
 
-        if self.HomeOwnerID or hasattr(self, 'HomeOwnerID'):
+            result = self.db.fetch_one_by_key(query, params)
+
+            return result
+
+        except Exception as e:
+            log_exception(e)
+            raise (e)
+
+    def SearchByHomeOwnerID(self, HomeOwnerID):
+        try:
             query = """
-                    SELECT "ServiceID", "HomeOwnerID", "Price", "Date", "Rating"
+                    SELECT *
                     FROM "Matches"
                     WHERE "HomeOwnerID" = %s
                     """
             params = (self.HomeOwnerID,)
 
-        if not query or not params:
-            print(f"error: Nothing pass in while querying database")
-            return
+            result = self.db.fetch_one_by_key(query, params)
 
-        result = self.db.execute_fetchone(query, params)
+            return result
 
-        if result:
-            self.SerivceID = result[0]
-            self.HomeOwnerID = result[1]
-            self.Price = result[2]
-            self.Date = result[3]
-            self.Rating = result[4]
-            print(f"Matches: Matches found")
-            return
+        except Exception as e:
+            log_exception(e)
+            raise (e)
 
-        print("Matches: Matches not found")
 
-    def to_dict(self):
-        return {
-            'ServiecID': self.SerivceID,
-            'HomeOwnerID': self.HomeOwnerID,
-            'Price': self.Price,
-            'Date': self.Date,
-            'Rating': self.Rating
-        }
+##################################################################################
+# View History
+##################################################################################
+
+
+    def ViewCleanerHistory(self, CleanerID):
+        try:
+            query = """
+                    SELECT *
+                    FROM "Matches"
+                    WHERE "ServiceID" IN(
+                        SELECT "ServiceID"
+                        FROM "Service"
+                        WHERE "CleanerID" = %s
+                    )
+                    """
+            params = (CleanerID,)
+            result = self.db.execute_fetchall(query, params)
+            return result
+        except Exception as e:
+            log_exception(e)
+            raise e
+        
+    def ViewHomeOwnerHistory(self, HomeOwnerID):
+        try:
+            query = """
+                    SELECT *
+                    FROM "Matches"
+                    WHERE "HomeOwnerID" = %s
+                    """
+            params = (HomeOwnerID,)
+            result = self.db.execute_fetchall(query, params)
+            return result
+        except Exception as e:
+            log_exception(e)
+            raise e
+
+##################################################################################
+# Search History
+##################################################################################
+
+    def SearchCleanerHistoryByServiceID(self, CleanerID, ServiceID):
+        try:
+            query = """
+                    SELECT m.*
+                    FROM "Matches" m
+                    JOIN "Service" s ON m."ServiceID" = s."ServiceID"
+                    WHERE s."CleanerID" = %s
+                    AND m."ServiceID" = %s
+                    """
+            params = (CleanerID, ServiceID)
+            result = self.db.execute_fetchall(query, params)
+            return result
+        except Exception as e:
+            log_exception(e)
+            raise e
+
+    def SearchHomeOwnerHistoryByServiceID(self, HomeOwnerID, ServiceID):
+        try:
+            query = """
+                    SELECT *
+                    FROM "Matches"
+                    WHERE "HomeOwnerID" = %s
+                    AND "ServiceID" = %s
+                    """
+            params = (HomeOwnerID, ServiceID)
+            result = self.db.execute_fetchall(query, params)
+            return result
+        except Exception as e:
+            log_exception(e)
+            raise e

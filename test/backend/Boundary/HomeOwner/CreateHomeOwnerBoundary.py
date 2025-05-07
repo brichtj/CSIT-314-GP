@@ -1,6 +1,6 @@
 
 from fastapi.responses import JSONResponse
-from controller.HomeOwner.HomeOwnerController import *
+from controller.Homeowner.HomeOwnerController import *
 from fastapi import APIRouter, Request
 
 from pydantic import BaseModel

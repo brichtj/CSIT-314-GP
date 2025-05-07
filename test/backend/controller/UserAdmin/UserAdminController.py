@@ -18,7 +18,7 @@ class AdminSearchUserController:
 
     def adminSearchUserController(self,searchTerm):
         
-        return UserAdmin().searchByUserID(searchTerm)
+        return UserAdmin().searchByUserName(searchTerm)
 
 
 class SuspendUserController:

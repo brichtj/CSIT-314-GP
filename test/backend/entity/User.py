@@ -38,24 +38,6 @@ class User():
         except Exception as e:
             log_exception(e)
             raise (e)
-    def searchByUserID(self, searchTerm):
-        try:
-            query = """
-                SELECT "UserID", "Username", "UserProfileID", "Email", "Phone", "IsActive"
-                FROM "user"
-                WHERE "Username" ILIKE %s AND ("UserProfileID" =1 OR "UserProfileID" =2 )
-            """
-
-            params = (f"{searchTerm}%",)
-            print("Full SQL:", query % params)
-            result = self.db.execute_fetchall(query, params)
-            print(result)
-            return result
-
-        except Exception as e:
-            log_exception(e)
-            raise (e)
-
 
     def pullDetails(self):
         try:

@@ -96,7 +96,7 @@ class UserAdmin(User):
             log_exception(e)
             raise (e)
     #req 1.1 search
-    def searchByUserID(self, searchTerm):#overwrite User.searchByUserID 
+    def searchByUserName(self, searchTerm):#overwrite User.searchByUserID 
         try:
 
             query = """

@@ -64,10 +64,10 @@ def CreateHomeOwnerAccount(data: CleanerCreateRequest):
 
 
 ##################################################################################
-# View Total Views of Services
+# Req4.1 View Total Views of Services
 ##################################################################################
 
-@router.get("/ViewTotalViewbyID")
+@router.get("/ViewTotalViewByID")
 def ViewTotalViewbyID(ServiceID: str):
     try:
         controller = CleanerViewServiceTotalViewsController()
@@ -89,14 +89,14 @@ def ViewTotalViewbyID(ServiceID: str):
 
 
 ##################################################################################
-# View Total Shortlisted Count of Services
+# Req4.2 View Total Shortlisted Count of Services
 ##################################################################################
 
-@router.get("/ViewTotalShortlistedCount")
-def ViewTotalShortlistedCount(ServiceID: str):
+@router.get("/ViewTotalShortlistedCountByID")
+def ViewTotalShortlistedCountbyID(ServiceID: str):
     try:
         controller = CleanerViewServiceShortlistedCountController()
-        result = controller.ViewTotalShortlistedCount(ServiceID)
+        result = controller.ViewTotalShortlistedCountByID(ServiceID)
         return JSONResponse(DataResponse(True, "Total count found", result).to_json())
     except psycopg2.Error as e:
         message = f"Database Error: {e}"
@@ -113,11 +113,11 @@ def ViewTotalShortlistedCount(ServiceID: str):
         )
 
 ##################################################################################
-# View History
+# Req5.1 View History
 ##################################################################################
 
 
-@router.get("/ViewHistory")
+@router.get("/Cleaner/ViewHistory")
 def ViewHistory(CleanerID: str):
     try:
         controller = CleanerViewHistoryController()
@@ -138,11 +138,11 @@ def ViewHistory(CleanerID: str):
         )
 
 ##################################################################################
-# Search History
+# Req5.2 Search History
 ##################################################################################
 
 
-@router.get("/SearchHistoryByServiceID")
+@router.get("/Cleaner/SearchHistoryByServiceID")
 def SearchHistoryByServiceID(CleanerID: str, ServiceID: str):
     try:
         controller = CleanerSearchHistoryController()

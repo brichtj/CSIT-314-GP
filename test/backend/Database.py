@@ -1,6 +1,7 @@
 # db_singleton.py
 
 import psycopg2
+from datetime import datetime
 
 DATABASE = {
     'user': 'postgres',
@@ -53,11 +54,21 @@ class DB:
             rows = self.cur.fetchall()
 
             if not rows:
-                return []
+                return None
 
             colnames = [desc[0] for desc in self.cur.description]
-            return [dict(zip(colnames, row)) for row in rows]
 
+            result = []
+            for row in rows:
+                row_dict = dict(zip(colnames, row))
+                
+                for key, value in row_dict.items():
+                    if isinstance(value, datetime):
+                        row_dict[key] = value.isoformat()
+                
+                result.append(row_dict)
+
+            return result
         except Exception as e:
             print(f"Database error: {e}")
             return []
@@ -73,9 +84,16 @@ class DB:
             if row is None:
                 return None
 
-            # Get column names
             colnames = [desc[0] for desc in self.cur.description]
-            return dict(zip(colnames, row))
+
+            result = [dict(zip(colnames, row))]
+
+            for entry in result:
+                for key, value in entry.items():
+                    if isinstance(value, datetime):
+                        entry[key] = value.isoformat()
+
+            return result
         except Exception as e:
             print(f"Database error: {e}")
             return None

@@ -15,38 +15,38 @@ class CleanerCreationController:
         return cleaner.create_account()
 
 ##################################################################################
-# View Total Views of Services
+# Req4.1 View Total Views of Services
 ##################################################################################
 
 
 class CleanerViewServiceTotalViewsController:
-    def ViewTotalViewbyID(ServiceID):
-        return Service.ViewTotalViewbyID(ServiceID)
+    def ViewTotalViewbyID(self, ServiceID):
+        return Service().ViewTotalViewbyID(ServiceID)
 
 ##################################################################################
-# View Total Shortlisted Count of Services
+# Req4.2 View Total Shortlisted Count of Services
 ##################################################################################
 
 
 class CleanerViewServiceShortlistedCountController:
 
-    def ViewTotalShortlistedCount(ServiceID):
-        return Service.ViewTotalShortlistedCount(ServiceID)
+    def ViewTotalShortlistedCountByID(self, ServiceID):
+        return Service().ViewTotalShortlistedCountByID(ServiceID)
 
 ##################################################################################
-# View History
+# Req5.1 View History
 ##################################################################################
 
 
 class CleanerViewHistoryController:
-    def ViewHistory(CleanerID):
-        return Matches.ViewCleanerHistory(CleanerID)
+    def ViewHistory(self, CleanerID):
+        return Matches().ViewCleanerHistory(CleanerID)
 
 ##################################################################################
-# Search History
+# Req5.2 Search History
 ##################################################################################
 
 
 class CleanerSearchHistoryController:
-    def SearchHistoryByServiceID(CleanerID, ServiceID):
-        return Matches.SearchCleanerHistoryByServiceID(CleanerID, ServiceID)
+    def SearchHistoryByServiceID(self, CleanerID, ServiceID):
+        return Matches().SearchCleanerHistoryByServiceID(CleanerID, ServiceID)

@@ -20,7 +20,7 @@ class Service:
         self.db = DB()
 
 ##################################################################################
-# Search Service
+# Req3.1 Search Service
 ##################################################################################
 
     def SearchServiceByTitle(self, Title: str):
@@ -93,7 +93,7 @@ class Service:
 
 
 ##################################################################################
-# View Service
+# Req3.2 Req3.5 View Service
 ##################################################################################
 
     def ViewServiceByID(self, ServiceID: str):
@@ -114,7 +114,7 @@ class Service:
             raise (e)
 
 ##################################################################################
-# View Total Views of Services
+# Req4.1 View Total Views of Services
 ##################################################################################
 
     def ViewTotalViewbyID(self, ServiceID):
@@ -155,13 +155,13 @@ class Service:
         return result
 
 ##################################################################################
-# View Total Shortlisted Count of Services
+# Req4.2 View Total Shortlisted Count of Services
 ##################################################################################
 
-    def ViewTotalShortlistedCount(self, ServiceID):
+    def ViewTotalShortlistedCountByID(self, ServiceID):
         try:
             query = """
-                    SELECT "LikeCount""
+                    SELECT "LikeCount"
                     FROM "Service"
                     WHERE "ServiceID" = %s
                     """

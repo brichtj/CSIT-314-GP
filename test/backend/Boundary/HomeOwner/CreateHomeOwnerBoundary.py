@@ -58,14 +58,14 @@ def CreateHomeOwnerAccount(data: HomeOwnerCreateRequest):
 
 
 ##################################################################################
-# Search Service
+# Req3.1 Search Service
 ##################################################################################
 
-@router.get("/SearchServiceByTitle")
-def SearchServiceByTitle(Title: str):
+@router.get("/SearchServiceByMode")
+def SearchServiceByMode(mode: int, data: str):
     try:
         controller = HomeOwnerSearchServiceController()
-        result = controller.SearchServiceByTitle(Title)
+        result = controller.SearchServiceByMode(mode, data)
         return JSONResponse(ServiceResponse(True, "Service(s) found", result).to_json())
     except psycopg2.Error as e:
         message = f"Database Error: {e}"
@@ -80,73 +80,9 @@ def SearchServiceByTitle(Title: str):
             content=Response(False, "internal server error").to_json(),
             status_code=505
         )
-
-
-@router.get("/SearchServiceByCategory")
-def SearchServiceByCategoryName(CategoryName: str):
-    try:
-        controller = HomeOwnerSearchServiceController()
-        result = controller.SearchServiceByCategoryName(CategoryName)
-        return JSONResponse(ServiceResponse(True, "Service(s) found", result).to_json())
-    except psycopg2.Error as e:
-        message = f"Database Error: {e}"
-        print(message)
-        return JSONResponse(
-            content=Response(False, "Database Error").to_json(),
-            status_code=400
-        )
-    except Exception as e:
-        print(f"exception has occured: {e}")
-        return JSONResponse(
-            content=Response(False, "internal server error").to_json(),
-            status_code=505
-        )
-
-
-@router.get("/SearchServiceByCategoryID")
-def SearchServiceByCategoryID(CategoryID: str):
-    try:
-        controller = HomeOwnerSearchServiceController()
-        result = controller.SearchServiceByCategoryID(CategoryID)
-        return JSONResponse(ServiceResponse(True, "Service(s) found", result).to_json())
-    except psycopg2.Error as e:
-        message = f"Database Error: {e}"
-        print(message)
-        return JSONResponse(
-            content=Response(False, "Database Error").to_json(),
-            status_code=400
-        )
-    except Exception as e:
-        print(f"exception has occured: {e}")
-        return JSONResponse(
-            content=Response(False, "internal server error").to_json(),
-            status_code=505
-        )
-
-
-@router.get("/SearchServiceByCleanerID")
-def SearchServiceByCleanerID(CleanerID: str):
-    try:
-        controller = HomeOwnerSearchServiceController()
-        result = controller.SearchServiceByCleanerID(CleanerID)
-        return JSONResponse(ServiceResponse(True, "Service(s) found", result).to_json())
-    except psycopg2.Error as e:
-        message = f"Database Error: {e}"
-        print(message)
-        return JSONResponse(
-            content=Response(False, "Database Error").to_json(),
-            status_code=400
-        )
-    except Exception as e:
-        print(f"exception has occured: {e}")
-        return JSONResponse(
-            content=Response(False, "internal server error").to_json(),
-            status_code=505
-        )
-
-
+    
 ##################################################################################
-# View Service
+# Req3.2 View Service
 ##################################################################################
 
 @router.get("/ViewServiceByID")
@@ -170,7 +106,7 @@ def ViewServiceByID(ServiceID: str):
         )
 
 ##################################################################################
-# Save/Shortlist Service
+# Req3.3 Save/Shortlist Service
 ##################################################################################
 
 
@@ -195,7 +131,7 @@ def ShortlistServiceByID(ServiceID: str, HomeOwnerID: str):
         )
 
 ##################################################################################
-# Search Shortlist Service
+# Req3.4 Search Shortlist Service
 ##################################################################################
 
 
@@ -220,7 +156,7 @@ def ViewShortlistByHomeOwnerID(HomeOwnerID: str):
         )
 
 ##################################################################################
-# View Shortlist Service
+# Req3.5 View Shortlist Service
 ##################################################################################
 
 
@@ -245,7 +181,7 @@ def ViewShortlistedServiceByID(ServiceID: str):
         )
 
 ##################################################################################
-# View Account
+# Req3.7 View Account
 ##################################################################################
 
 
@@ -271,16 +207,21 @@ def ViewAccount(HomeOwnerID: str):
         )
 
 ##################################################################################
-# Update Account
+# Req3.8 Update Account
 ##################################################################################
 
-
+class UpdateAccountRequest(BaseModel):
+    HomeOwnerID: str
+    newUserName: str
+    newEmail: str
+    newPhone: str
+    newAddress: str
 @router.post("/UpdateAccount")
-def UpdateAccount(HomeOwnerID: str, newUserName: str, newEmail: str, newPhone: str, newAddress: str):
+def UpdateAccount(data: UpdateAccountRequest):
     try:
         controller = HomeOwnerUpdateAccountController()
         result = controller.UpdateAccount(
-            HomeOwnerID, newUserName, newEmail, newPhone, newAddress)
+            data.HomeOwnerID, data.newUserName, data.newEmail, data.newPhone, data.newAddress)
 
         return JSONResponse(Response(True, "Account Updated").to_json())
     except psycopg2.Error as e:
@@ -298,7 +239,7 @@ def UpdateAccount(HomeOwnerID: str, newUserName: str, newEmail: str, newPhone: s
         )
 
 ##################################################################################
-# Suspend Account
+# Req3.9 Suspend Account
 ##################################################################################
 
 
@@ -328,7 +269,7 @@ def SuspendAccount(HomeOwnerID: str):
 ##################################################################################
 
 
-@router.get("/ViewHistory")
+@router.get("/HomeOwner/ViewHistory")
 def ViewHistory(HomeOwnerID: str):
     try:
         controller = HomeOwnerViewHistoryController()
@@ -354,7 +295,7 @@ def ViewHistory(HomeOwnerID: str):
 ##################################################################################
 
 
-@router.get("/SearchHistoryByServiceID")
+@router.get("/HomeOwner/SearchHistoryByServiceID")
 def SearchHistoryByServiceID(HomeOwnerID: str, ServiceID: str):
     try:
         controller = HomeOwnerSearchHistoryController()

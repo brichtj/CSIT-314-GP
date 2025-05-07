@@ -10,108 +10,106 @@ class HomeOwnerCreationController:
         return homeOwner.createUser()
 
 ##################################################################################
-# Search Service
+# Req3.1 Search Service
 ##################################################################################
 
 
 class HomeOwnerSearchServiceController:
+    def SearchServiceByMode(self, mode: int, data: str):
+        if (mode == 1):
+            result = Service().SearchServiceByCategoryName(data)
+        if (mode == 2):
+            result = Service().SearchServiceByCategoryID(data)
+        if (mode == 3):
+            result = Service().SearchServiceByCleanerID(data)
 
-    def SearchServiceByTitle(Title: str):
-        return Service.SearchServiceByTitle(Title)
+        result = Service().SearchServiceByTitle(data)
 
-    def SearchServiceByCategoryName(CategoryName: str):
-        return Service.SearchServiceByCategoryName(CategoryName)
-
-    def SearchServiceByCategoryID(CategoryID: str):
-        return Service.SearchServiceByCategoryID(CategoryID)
-
-    def SearchServiceByCleanerID(CleanerID: str):
-        return Service.SearchServiceByCleanerID(CleanerID)
+        return result
 
 ##################################################################################
-# View Service
+# Req3.2 View Service
 ##################################################################################
 
 
 class HomeOwnerViewServiceController:
-
-    def ViewServiceByID(ServiceID: str):
-        return Service.ViewServiceByID(ServiceID)
+    def ViewServiceByID(self, ServiceID: str):
+        return Service().ViewServiceByID(ServiceID)
 
 ##################################################################################
-# Save/Shortlist Service
+# Req3.3 Save/Shortlist Service
 ##################################################################################
 
 
 class HomeOwnerShorlistServiceController:
 
-    def ShortlistServiceByID(ServiceID: str, HomeOwnerID: str):
-        return HomeOwner.ShortlistServiceByID(ServiceID, HomeOwnerID)
+    def ShortlistServiceByID(self, ServiceID: str, HomeOwnerID: str):
+        return HomeOwner().ShortlistServiceByID(ServiceID, HomeOwnerID)
 
 ##################################################################################
-# Search Shortlist Service
+# Req3.4 Search Shortlist Service
 ##################################################################################
 
 
 class HomeOwnerViewShortListController:
 
-    def ViewShortlistByHomeOwnerID(HomeOwnerID: str):
-        return HomeOwner.ViewShortListByHomeOwnerID(HomeOwnerID)
+    def ViewShortlistByHomeOwnerID(self, HomeOwnerID: str):
+        return HomeOwner().ViewShortListByHomeOwnerID(HomeOwnerID)
 
 ##################################################################################
-# View Shortlist Service
+# Req3.5 View Shortlist Service
 ##################################################################################
 
 
 class HomeOwnerViewShortlistedServiceController:
 
-    def ViewShortlistedServiceByID(ServiceID: str):
-        return Service.ViewServiceByID(ServiceID)
+    def ViewShortlistedServiceByID(self, ServiceID: str):
+        return Service().ViewServiceByID(ServiceID)
 
 ##################################################################################
-# View Account
+# Req3.7View Account
 ##################################################################################
 
 
 class HomeOwnerViewAccountController:
 
-    def ViewAccount(HomeOwnerID: str):
-        return HomeOwner.ViewAccount(HomeOwner)
+    def ViewAccount(self, HomeOwnerID: str):
+        return HomeOwner().ViewAccount(HomeOwnerID)
 
 ##################################################################################
-# Update Account
+# Req3.8 Update Account
 ##################################################################################
 
 
 class HomeOwnerUpdateAccountController:
 
-    def UpdateAccount(HomeOwnerID: str, newUserName, newEmail, newPhone, newAddress):
-        return HomeOwner.UpdateAccount(HomeOwnerID, newUserName, newEmail, newPhone, newAddress)
+    def UpdateAccount(self, HomeOwnerID: str, newUserName, newEmail, newPhone, newAddress):
+        return HomeOwner().UpdateAccount(HomeOwnerID, newUserName, newEmail, newPhone, newAddress)
 
 ##################################################################################
-# Suspend Account
+# Req3.9 Suspend Account
 ##################################################################################
 
 
 class HomeOwnerSuspendAccountController:
 
-    def SuspendAccount(HomeOwnerID):
-        return HomeOwner.SuspendAccount(HomeOwnerID)
+    def SuspendAccount(self, HomeOwnerID):
+        return HomeOwner().SuspendAccount(HomeOwnerID)
 
 ##################################################################################
-# View History
+# Req6.1 View History
 ##################################################################################
 
 
 class HomeOwnerViewHistoryController:
-    def ViewHistory(HomeOwnerID):
-        return Matches.ViewHomeOwnerHistory(HomeOwnerID)
+    def ViewHistory(self, HomeOwnerID):
+        return Matches().ViewHomeOwnerHistory(HomeOwnerID)
 
 ##################################################################################
-# Search History
+# Req6.2 Search History
 ##################################################################################
 
 
 class HomeOwnerSearchHistoryController:
-    def SearchHistoryByServiceID(HomeOwnerID, ServiceID):
-        return Matches.SearchHomeOwnerHistoryByServiceID(HomeOwnerID, ServiceID)
+    def SearchHistoryByServiceID(self, HomeOwnerID, ServiceID):
+        return Matches().SearchHomeOwnerHistoryByServiceID(HomeOwnerID, ServiceID)

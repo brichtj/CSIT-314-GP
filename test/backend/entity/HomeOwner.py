@@ -55,13 +55,13 @@ class HomeOwner(User):
             print(f'{self.Username}: Failed to pull Address')
 
 ##################################################################################
-# Save/Shortlist Service
+# Req3.3 Save/Shortlist Service
 ##################################################################################
 
     def ShortlistServiceByID(self, ServiceID: str, HomeOwnerID: str):
         try:
             query = """
-                    INSERT INTO "Shortlist_Record" ("SericeID", "HomeOwnerID")
+                    INSERT INTO "Shortlist_Record" ("ServiceID", "HomeOwnerID")
                     VALUES (%s, %s)
                     """
             params = (ServiceID, HomeOwnerID)
@@ -75,7 +75,7 @@ class HomeOwner(User):
             raise (e)
 
 ##################################################################################
-# Search Shortlist Service
+# Req3.4 Search Shortlist Service
 ##################################################################################
 
     def ViewShortListByHomeOwnerID(self, HomeOwnerID: str):
@@ -95,13 +95,13 @@ class HomeOwner(User):
             raise (e)
 
 ##################################################################################
-# View Shortlist Service
+# Req3.5 View Shortlist Service
 ##################################################################################
 
     # Can use Service.ViewServiceByID() for this user story
 
 ##################################################################################
-# View Account
+# Req3.7 View Account
 ##################################################################################
 
     def ViewAccount(self, HomeOwnerID: str):
@@ -121,7 +121,7 @@ class HomeOwner(User):
             raise (e)
 
 ##################################################################################
-# Update Account
+# Req3.8 Update Account
 ##################################################################################
 
     def UpdateAccount(self, HomeOwnerID: str, newUserName, newEmail, newPhone, newAddress):
@@ -148,7 +148,7 @@ class HomeOwner(User):
             raise (e)
 
 ##################################################################################
-# Suspend Account
+# Req3.9 Suspend Account
 ##################################################################################
 
     def SuspendAccount(self, HomeOwnerID):

@@ -106,3 +106,17 @@ class Cleaner(User):
             print(f'{self.Username}: Experience pulled')
         else:
             print(f'{self.Username}: Failed to pull Experience')
+
+    def deleteMyService(self,cleanerID, serviceID)->bool:
+        try:
+            #insert into user table
+            query = """
+                    delete  from "Service" where "CleanerID" = %s and "ServiceID" = %s
+                """
+            params = (cleanerID,serviceID)
+            result =self.db.execute_delete(query,params)
+            return True
+        
+        except Exception as e:
+            #log_exception(e)
+            raise e

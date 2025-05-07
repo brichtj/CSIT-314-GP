@@ -23,6 +23,14 @@ class ViewMyServiceController:
     def ViewMyService(self, CleanerID):
         return Cleaner().viewMyService(CleanerID)
 ##################################################################################
+# Req2 delete Service
+##################################################################################
+
+
+class DeleteServiceController:
+    def deleteService(self, cleanerID,serviceID):
+        return Cleaner().deleteMyService(cleanerID,serviceID)
+##################################################################################
 # Req4.1 View Total Views of Services
 ##################################################################################
 

@@ -120,7 +120,19 @@ class DB:
             self.conn.rollback()
             #print(f"Database error: {e}")
             raise(e)
-
+    def execute_delete(self, query, params=()) -> bool:
+        try:
+            self.cur.execute(query, params)
+            deleted = self.cur.rowcount
+            if deleted == 0:
+                raise psycopg2.DatabaseError("No rows were deleted. Rolling back.")
+            else:
+                self.conn.commit()
+                return True
+        except Exception as e:
+            self.conn.rollback()
+            #print(f"Database error: {e}")
+            raise(e)
     def execute_bulk_update(self, query, params=()) -> int:
         try:
             self.cur.execute(query, params)

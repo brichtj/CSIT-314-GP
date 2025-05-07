@@ -45,7 +45,7 @@ class DB:
             return (e)
         
     #fetch an array of results
-    def execute_fetchall(self, query: str, params=()) -> list[dict]:
+    def execute_fetchall(self, query: str, params) -> list[dict]:
         """
         Returns all results as a list of dictionaries with column names as keys.
         """

@@ -207,3 +207,26 @@ def DeleteService(cleanerID: int,serviceID:int):
             content=Response(False, "internal server error").to_json(),
             status_code=505
         )
+
+##################################################################################
+# Req2 search My service
+##################################################################################
+@router.get("/SearchMyService")
+def SearchMyService(cleanerID: int,serviceTitle:str):
+    try:
+        controller = SearchMyServiceController()
+        result = controller.searchMyService(cleanerID,serviceTitle)
+        return JSONResponse(MatchesResponse(True, "Match(s) found", result).to_json())
+    except psycopg2.Error as e:
+        message = f"Database Error: {e}"
+        print(message)
+        return JSONResponse(
+            content=Response(False, "Request error").to_json(),
+            status_code=400
+        )
+    except Exception as e:
+        print(f"exception has occured: {e}")
+        return JSONResponse(
+            content=Response(False, "internal server error").to_json(),
+            status_code=505
+        )

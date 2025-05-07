@@ -4,11 +4,11 @@ import psycopg2
 from datetime import datetime
 
 DATABASE = {
-    'user': 'postgres',
-    'password': 'postgres123',
+    'user': 'root',
+    'password': 'root123',
     'host': 'localhost',
     'port': '5432',
-    'database': 'csit314'
+    'database': 'csit314db'
 }
 
 
@@ -51,6 +51,7 @@ class DB:
         """
         try:
             self.cur.execute(query, params)
+            print(query%params)
             rows = self.cur.fetchall()
 
             if not rows:

@@ -10,6 +10,8 @@ import psycopg2
 
 router = APIRouter()
 
+
+#req 2  create
 class CreateServiceRequest(BaseModel):
     CategoryID: int
     Title: str
@@ -17,6 +19,7 @@ class CreateServiceRequest(BaseModel):
     CleanerID: int
     Price: float
     ImageLink: str
+    
 @router.post("/CreateService")
 def CreateService(data: CreateServiceRequest):
     try:
@@ -24,7 +27,7 @@ def CreateService(data: CreateServiceRequest):
         #print(data)
         # Your login logic here
         result = controller.createServiceController(data.CategoryID,data.Title,data.Description,data.CleanerID,data.Price,data.ImageLink)
-        print("fuck you")
+       
         return JSONResponse(Response(True,"Successfully created Service").to_json())
     except psycopg2.IntegrityError as e:
         print(f"Integrity error (maybe duplicate Service?): {e}")

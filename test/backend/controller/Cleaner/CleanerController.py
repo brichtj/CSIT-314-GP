@@ -15,6 +15,14 @@ class CleanerCreationController:
         return cleaner.create_account()
 
 ##################################################################################
+# Req2 View Service
+##################################################################################
+
+
+class ViewMyServiceController:
+    def ViewMyService(self, CleanerID):
+        return Cleaner().viewMyService(CleanerID)
+##################################################################################
 # Req4.1 View Total Views of Services
 ##################################################################################
 

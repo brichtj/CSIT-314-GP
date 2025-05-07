@@ -35,6 +35,21 @@ class Cleaner(User):
             log_exception(e)
             raise e
         
+    def viewMyService(self,cleanerID):
+        try:
+            #insert into user table
+            query = """
+                    select * from "Service" where "CleanerID" = %s
+                """
+            params = (cleanerID,)
+            result =self.db.execute_fetchall(query, params)
+            return result
+        
+        except Exception as e:
+            log_exception(e)
+            raise e
+        
+
     def create_account(self):
         try:
             hashed_password = bcrypt.hashpw(self.input_Password.encode(), bcrypt.gensalt()).decode()

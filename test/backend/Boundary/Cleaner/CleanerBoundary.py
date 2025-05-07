@@ -161,3 +161,26 @@ def SearchHistoryByServiceID(CleanerID: str, ServiceID: str):
             content=Response(False, "internal server error").to_json(),
             status_code=505
         )
+
+##################################################################################
+# Req2 View My service
+##################################################################################
+@router.get("/ViewMyService")
+def ViewMyService(CleanerID: int):
+    try:
+        controller = ViewMyServiceController()
+        result = controller.ViewMyService(CleanerID)
+        return JSONResponse(MatchesResponse(True, "Match(s) found", result).to_json())
+    except psycopg2.Error as e:
+        message = f"Database Error: {e}"
+        print(message)
+        return JSONResponse(
+            content=Response(False, "Database Error").to_json(),
+            status_code=400
+        )
+    except Exception as e:
+        print(f"exception has occured: {e}")
+        return JSONResponse(
+            content=Response(False, "internal server error").to_json(),
+            status_code=505
+        )

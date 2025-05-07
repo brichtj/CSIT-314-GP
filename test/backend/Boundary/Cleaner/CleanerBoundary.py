@@ -230,3 +230,39 @@ def SearchMyService(cleanerID: int,serviceTitle:str):
             content=Response(False, "internal server error").to_json(),
             status_code=505
         )
+
+##################################################################################
+# Req2 update service
+##################################################################################
+class UpdateServiceRequest(BaseModel):
+    categoryID:int
+    title:str
+    description:str
+    cleanerID:int
+    price:float
+    ImageLink:str
+    serviceID:int
+@router.put("/UpdateService")
+def updateService(categoryID:int,title:str,description:str,cleanerID:int,price:float,ImageLink:str,serviceID:int):
+    try:
+        controller = UpdateServiceController()
+        result = controller.updateService(categoryID,title,description,cleanerID,price,ImageLink,serviceID)
+        if result:
+            return JSONResponse(Response(True, "Updated").to_json())
+        else:
+            return JSONResponse(
+            content=Response(False, "ServiceID does not exist").to_json(),
+            status_code=400)
+    except psycopg2.Error as e:
+        message = f"Database Error: {e}"
+        print(message)
+        return JSONResponse(
+            content=Response(False, "Request error").to_json(),
+            status_code=400
+        )
+    except Exception as e:
+        print(f"exception has occured: {e}")
+        return JSONResponse(
+            content=Response(False, "internal server error").to_json(),
+            status_code=505
+        )

@@ -207,3 +207,6 @@ class UserAdmin(User):
             print(f'{self.Username}: Experience pulled')
         else:
             print(f'{self.Username}: Failed to pull Experience')
+    #req 1.1 update User
+    def updateUser(self):
+        pass

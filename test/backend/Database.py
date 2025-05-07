@@ -117,6 +117,29 @@ class DB:
             self.conn.rollback()
             return False
         except Exception as e:
+            print(query%params)
+            self.conn.rollback()
+            #print(f"Database error: {e}")
+            raise(e)
+    #update with error incase no rows returned(e.g the row requested to update does not exist)
+    def execute_update_with_error(self, query, params=()) -> bool:
+        try:
+            self.cur.execute(query, params)
+            
+            # If the query is returning something, fetch the first row
+            if self.cur.description:  # Check if there's a returning column
+                self.conn.commit()
+                result = self.cur.fetchone()  # Only one row should be returned, note this is a TUPLE depending on what you want returned, e.g (1,"other stuff")
+                return result  # You could return the whole row if needed (result[0], etc.)
+            elif self.cur.rowcount > 1:
+                raise Exception("Update affected more than 1 row. Rolling back.")
+            elif self.cur.rowcount == 0:
+                raise Exception("Update affected no rows. Rolling back.")
+            elif self.cur.rowcount == 1:
+                self.conn.commit()
+                return True
+            return True
+        except Exception as e:
             self.conn.rollback()
             #print(f"Database error: {e}")
             raise(e)

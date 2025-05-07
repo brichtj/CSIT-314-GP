@@ -142,3 +142,29 @@ class Cleaner(User):
         except Exception as e:
             #log_exception(e)
             raise e
+    
+    def updateService(self,categoryID:int,title:str,description:str,cleanerID:int,price:float,ImageLink:str,serviceID:int)->bool:
+        
+        try:
+            update_query = """
+            UPDATE "Service"
+            SET "CategoryID" = %s,
+                "Title" = %s,
+                "Description" = %s,
+                "CleanerID" = %s,
+                "price" = %s,
+                "ImageLink" = %s
+            WHERE "ServiceID" = %s
+            """
+            params = (categoryID,title,description,cleanerID,price,ImageLink,serviceID)
+            # formatted_query = query % tuple(map(lambda x: f"'{x}'", params))
+            # print(f"Formatted query: {formatted_query}")
+
+            result = self.db.execute_update(update_query,params)
+            #create json object based on query results
+            
+
+            return result
+        except Exception as e:
+            log_exception(e)
+            raise (e)

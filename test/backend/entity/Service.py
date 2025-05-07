@@ -191,7 +191,7 @@ class Service:
     def createService(self,CategoryID,Title,Description,CleanerID,Price,ImageLink)->bool:
         try:
             query = """
-                    INSERT INTO "Service" ("CategoryID", "Title", "Description", "CleanerID", "Price", "ImageLink")
+                    INSERT INTO "Service" ("CategoryID", "Title", "Description", "CleanerID", "price", "ImageLink")
                     VALUES (%s, %s, %s, %s, %s, %s)
                     RETURNING "ServiceID"
                     """
@@ -202,6 +202,7 @@ class Service:
             return True
 
         except Exception as e:
+            print(e)
             log_exception(e)
             raise (e)
 

@@ -5,8 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware  # ✅ Added CORS import
 from Database import DB
 from Boundary import *
 
-from Boundary.Cleaner.CreateCleanerBoundary import router as cleaner_boundary
-from Boundary.HomeOwner.CreateHomeOwnerBoundary import router as homeowner_boundary
+from Boundary import *
 
 app = FastAPI()
 
@@ -27,3 +26,4 @@ app.include_router(login_boundary)
 app.include_router(cleaner_boundary)
 app.include_router(user_admin_boundary)
 app.include_router(home_owner_boundary)
+app.include_router(service_boundary)

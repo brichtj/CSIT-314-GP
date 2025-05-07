@@ -186,11 +186,11 @@ class DB:
             # Commit the transaction if insertion is successful
             self.conn.commit()
 
-            print("Insert successful")
+            #print("Insert successful")
             return True
         except Exception as e:
             # Rollback in case of an error
             self.conn.rollback()
-            print(f"Error inserting data: {e}")
-            return False
+            #print(f"Error inserting data: {e}")
+            raise(e)
 

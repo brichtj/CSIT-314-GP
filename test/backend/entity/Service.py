@@ -187,3 +187,23 @@ class Service:
             "MatchCount": self.MatchCount,
             "Price": self.Price
         }
+    
+    def createService(self,CategoryID,Title,Description,CleanerID,Price,ImageLink)->bool:
+        try:
+            query = """
+                    INSERT INTO "Service" ("CategoryID", "Title", "Description", "CleanerID", "Price", "ImageLink")
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    RETURNING "ServiceID"
+                    """
+            values = (CategoryID, Title, Description, CleanerID, Price, ImageLink)
+
+            res = self.db.insertFreeStyle(query, values)
+
+            return True
+
+        except Exception as e:
+            log_exception(e)
+            raise (e)
+
+
+        pass

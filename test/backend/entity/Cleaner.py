@@ -13,8 +13,6 @@ class Cleaner(User):
         self.Experience = Experience
         self.db = DB()
 
-    def createService(self,CategoryID,Title,Description,CleanerID,Price):
-        pass
     def createUser(self):
         try:
             hashed_password = bcrypt.hashpw('123'.encode('utf-8'), bcrypt.gensalt())
@@ -77,7 +75,7 @@ class Cleaner(User):
             return Response(False, "Internal server error").to_json()
 
 
-
+    
     def pullExperience(self):
         query = """
                 SELECT "Experience"

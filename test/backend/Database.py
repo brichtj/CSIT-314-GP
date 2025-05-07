@@ -178,3 +178,19 @@ class DB:
             self.conn.rollback()
             print(f"Error inserting data: {e}")
             return False
+        #insert single row to a SINGLE table
+    def insertFreeStyle(self, query, values) -> bool:
+        try:
+            self.cur.execute(query, values)
+
+            # Commit the transaction if insertion is successful
+            self.conn.commit()
+
+            print("Insert successful")
+            return True
+        except Exception as e:
+            # Rollback in case of an error
+            self.conn.rollback()
+            print(f"Error inserting data: {e}")
+            return False
+

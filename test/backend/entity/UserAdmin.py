@@ -207,6 +207,24 @@ class UserAdmin(User):
             print(f'{self.Username}: Experience pulled')
         else:
             print(f'{self.Username}: Failed to pull Experience')
-    #req 1.1 update User
-    def updateUser(self):
-        pass
+    #req 1.1 update User Profile
+    def updateUserProfile(self, name:str,privilege:str,is_active:bool,userprofileID:int)->bool:#overwrite User.searchByUserID 
+        try:
+
+            query = """
+                update "UserProfile"
+                set "Name" = %s,
+                "Privilege" = %s,
+                "Is_Active" = %s
+                where "UserProfileID" = %s
+            """
+
+            params = (name,privilege,is_active,userprofileID,)
+            #print("Full SQL:", query % params)
+            result = self.db.execute_update(query, params)
+            #print(result)
+            return result
+
+        except Exception as e:
+            log_exception(e)
+            raise (e)

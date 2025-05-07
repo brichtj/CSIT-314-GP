@@ -26,6 +26,12 @@ class SuspendUserController:
     def suspendUserController(self,username):
         
         return UserAdmin().suspendUser(username)
+class UpdateUserProfileController:
+
+    def updateUserProfileController(self,name:str,privilege:str,is_active:bool,userprofileID:int):
+        
+        return UserAdmin().updateUserProfile(name,privilege,is_active,userprofileID)
+
 
 class ViewUserController:
 

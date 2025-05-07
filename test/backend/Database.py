@@ -119,7 +119,7 @@ class DB:
         except Exception as e:
             print(query%params)
             self.conn.rollback()
-            #print(f"Database error: {e}")
+            print(f"Database error: {e}")
             raise(e)
     #update with error incase no rows returned(e.g the row requested to update does not exist)
     def execute_update_with_error(self, query, params=()) -> bool:

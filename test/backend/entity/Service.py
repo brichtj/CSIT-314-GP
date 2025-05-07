@@ -233,7 +233,7 @@ class Service:
         result = self.db.execute_update(query, params)
 
         if result:
-            self.MatchCount = data
+            #self.MatchCount = data
             print(f'{self.ServiceID}: MatchCount upated')
             return
 
@@ -270,7 +270,3 @@ class Service:
             print(e)
             log_exception(e)
             raise (e)
-
-
-        pass
-        return result

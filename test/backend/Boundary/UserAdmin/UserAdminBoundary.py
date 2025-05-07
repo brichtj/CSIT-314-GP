@@ -306,3 +306,53 @@ def SearchUserProfile(searchTerm:str):
             content=Response(False,"internal server error").to_json(),
             status_code=505
         )
+#req 1.2 update UserProfile
+class UpdateUserProfileRequest(BaseModel):
+    name:str
+    privilege:str
+    is_active:bool
+    userprofileID:int
+    
+
+
+@router.put("/updateUserProfile")
+def updateUserProfile(data: UpdateUserProfileRequest):
+    try:
+        controller = UpdateUserProfileController()
+        #print(data)
+        # Your login logic here
+        result = controller.updateUserProfileController(data.name,data.privilege,data.is_active,data.userprofileID)
+        #controller returns true if updated, false if not updated(in the case of no such user)
+        if result:
+            return JSONResponse(Response(True,"UserProfile Successfully updated").to_json())
+        else:
+            return JSONResponse(
+            content=Response(False,"No such user Profile").to_json(),
+            status_code=400
+        )
+
+    except psycopg2.IntegrityError as e:
+        print(f"Integrity error: {e}")
+        #log_exception(e)
+        # maybe raise a custom DuplicateUserError()
+        return JSONResponse(
+            content=Response(False,"database error").to_json(),
+            status_code=409
+        )
+    except psycopg2.Error as e:
+        #log_exception(e)
+        print(f"Database error: {e}")       
+        return JSONResponse(
+            content=Response(False,"database error").to_json(),
+            status_code=400
+        )
+
+
+    except Exception as e:
+        print("exception has occured")
+        log_exception(e)
+        return JSONResponse(
+            content=Response(False,"internal server error").to_json(),
+            status_code=505
+        )
+

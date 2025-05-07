@@ -243,10 +243,10 @@ class UpdateServiceRequest(BaseModel):
     ImageLink:str
     serviceID:int
 @router.put("/UpdateService")
-def updateService(categoryID:int,title:str,description:str,cleanerID:int,price:float,ImageLink:str,serviceID:int):
+def updateService(data:UpdateServiceRequest):
     try:
         controller = UpdateServiceController()
-        result = controller.updateService(categoryID,title,description,cleanerID,price,ImageLink,serviceID)
+        result = controller.updateService(data.categoryID,data.title,data.description,data.cleanerID,data.price,data.ImageLink,data.serviceID)
         if result:
             return JSONResponse(Response(True, "Updated").to_json())
         else:

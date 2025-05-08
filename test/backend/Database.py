@@ -75,9 +75,6 @@ class DB:
             return []
         
     def fetch_one_by_key(self, query: str, params) -> dict:
-    # """
-    # Returns the result as a dictionary with column names as keys.
-    # """
         try:
             self.cur.execute(query, (params,))
             row = self.cur.fetchone()
@@ -86,13 +83,11 @@ class DB:
                 return None
 
             colnames = [desc[0] for desc in self.cur.description]
+            result = dict(zip(colnames, row))
 
-            result = [dict(zip(colnames, row))]
-
-            for entry in result:
-                for key, value in entry.items():
-                    if isinstance(value, datetime):
-                        entry[key] = value.isoformat()
+            for key, value in result.items():
+                if isinstance(value, datetime):
+                    result[key] = value.isoformat()
 
             return result
         except Exception as e:

@@ -27,6 +27,11 @@ class ViewUserController:
     def viewUserController(self,UserID:int)->User:
         
         return User.viewUser(UserID)
+class UpdateUserController:
+
+    def updateUserController(self,username:str,email:str,phone:str,IsActive:bool,UserProfileID:int,address:str,experience:float,UserID:int)->bool:
+        
+        return User.updateUser(username,email,phone,IsActive,UserProfileID,address,experience,UserID)
 
 
     

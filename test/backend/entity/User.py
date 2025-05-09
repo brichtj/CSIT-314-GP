@@ -196,3 +196,30 @@ class User():
             "Phone": self.Phone
         }
 
+    #req 1.1 update User 
+    def updateUser(username:str,email:str,phone:str,IsActive:bool,UserProfileID:int,address:str,experience:float,UserID:int)->bool:#overwrite User.searchByUserID 
+        try:
+
+            query = """
+                UPDATE "user"
+                SET
+                    "Username" = %s,
+                    "Email" = %s,
+                    "Phone" = %s,
+                    "IsActive" = %s,
+                    "UserProfileID" = %s,
+                    "Address" = %s,
+                    "Experience" = %s
+                WHERE "UserID" = %s;
+            """
+
+            params = (username,email,phone,IsActive,UserProfileID,address,experience,UserID)
+            #print("Full SQL:", query % params)
+            result = DB().execute_update(query, params)
+            #print(result)
+        
+            return result
+
+        except Exception as e:
+            log_exception(e)
+            raise (e)

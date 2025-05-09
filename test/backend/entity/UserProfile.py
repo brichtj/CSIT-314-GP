@@ -123,7 +123,7 @@ class UserProfile():
             print(f'{self.Username}: Experience pulled')
         else:
             print(f'{self.Username}: Failed to pull Experience')
-    #req 1.1 update User Profile
+    #req 1.2 update User Profile
     def updateUserProfile( name:str,privilege:str,is_active:bool,userprofileID:int)->bool:#overwrite User.searchByUserID 
         try:
 

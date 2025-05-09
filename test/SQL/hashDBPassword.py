@@ -1,11 +1,11 @@
 
 
 DATABASE = {
-    'user': 'root',
-    'password': 'root123',
+    'user': 'postgres',
+    'password': 'postgres123',
     'host': 'localhost',
     'port': '5432',
-    'database': 'csit314db'
+    'database': 'csit314'
 }
 
 import psycopg2

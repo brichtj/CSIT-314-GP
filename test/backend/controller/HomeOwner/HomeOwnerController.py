@@ -15,17 +15,8 @@ class HomeOwnerCreationController:
 
 
 class HomeOwnerSearchServiceController:
-    def SearchServiceByMode(self, mode: int, data: str):
-        if (mode == 1):
-            result = Service().SearchServiceByCategoryName(data)
-        if (mode == 2):
-            result = Service().SearchServiceByCategoryID(data)
-        if (mode == 3):
-            result = Service().SearchServiceByCleanerID(data)
-
-        result = Service().SearchServiceByTitle(data)
-
-        return result
+    def SearchService(self, mode: int, data: str):
+        return Service().SearchService(mode, data)
 
 ##################################################################################
 # Req3.2 View Service

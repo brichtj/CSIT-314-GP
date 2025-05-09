@@ -22,6 +22,17 @@ class Service:
 ##################################################################################
 # Req3.1 Search Service
 ##################################################################################
+    def SearchService(self, mode, data):
+        if (mode == 1):
+            result = self.SearchServiceByCategoryName(data)
+        if (mode == 2):
+            result = self.SearchServiceByCategoryID(data)
+        if (mode == 3):
+            result = self.SearchServiceByCleanerID(data)
+
+        result = self.SearchServiceByTitle(data)
+
+        return result
 
     def SearchServiceByTitle(self, Title: str):
         try:

@@ -25,23 +25,17 @@ app.include_router(cleaner_boundary)
 app.include_router(user_admin_boundary)
 app.include_router(home_owner_boundary)
 
-if __name__ == "__main__":
-    client = TestClient(app)
-    response = client.get("/Cleaner/SearchHistoryByServiceID", params={"CleanerID": "31", "ServiceID" : "5"})
-    print("Status Code:", response.status_code)
-    print("Response JSON:", response.json())
-
 # if __name__ == "__main__":
 #     client = TestClient(app)
-#     response = client.post(
-#         "/UpdateAccount",
-#         json={
-#             "HomeOwnerID": "55",
-#             "newUserName": "New",
-#             "newEmail": "ew@gmail.com",
-#             "newPhone": "9876543210",
-#             "newAddress": "newAddress"
-#         }
-#     )
+#     response = client.get("/login", params={"username": "user1", "password": "password123"})
 #     print("Status Code:", response.status_code)
 #     print("Response JSON:", response.json())
+
+if __name__ == "__main__":
+    client = TestClient(app)
+    response = client.post(
+        "/login",
+        json={"username": "user1", "password": "password1"}
+    )
+    print("Status Code:", response.status_code)
+    print("Response JSON:", response.json())

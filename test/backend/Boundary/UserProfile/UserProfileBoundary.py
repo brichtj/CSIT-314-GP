@@ -12,12 +12,12 @@ router = APIRouter()
 
 
 @router.get("/ViewUserProfile")
-def ViewUserProfile(name:str):
+def ViewUserProfileBoundary(UserProfileID:int):
     try:
         controller = ViewUserProfileController()
         #print(data)
         # Your login logic here
-        result = controller.viewUserProfileController(name)
+        result = controller.viewUserProfileController(UserProfileID)
         print(result)
         if result is not None:
             return JSONResponse(Response(True,result.to_json()).to_json())
@@ -44,50 +44,50 @@ def ViewUserProfile(name:str):
         )
 
 #req 1.2 suspend user profile(entire group of users cannot use anymore)
-# class SuspendUserRequest(BaseModel):
-#     name: str
+class SuspendUserProfileRequest(BaseModel):
+    UserProfileID: str
 
 
-# @router.put("/SuspendUserProfile")
-# def SuspendUserProfile(data: SuspendUserRequest):
-#     try:
-#         controller = SuspendUserProfileController()
-#         #print(data)
-#         # Your login logic here
-#         result = controller.suspendUserProfileController(data.name)
-#         #controller returns true if updated, false if not updated(in the case of no such user)
-#         if result:
-#             return JSONResponse(Response(True,"UserProfile Successfully suspended").to_json())
-#         else:
-#             return JSONResponse(
-#             content=Response(False,"No such user Profile").to_json(),
-#             status_code=400
-#         )
+@router.put("/SuspendUserProfile")
+def SuspendUserProfile(data: SuspendUserProfileRequest):
+    try:
+        controller = SuspendUserProfileController()
+        #print(data)
+        # Your login logic here
+        result = controller.suspendUserProfileController(data.UserProfileID)
+        #controller returns true if updated, false if not updated(in the case of no such user)
+        if result:
+            return JSONResponse(Response(True,"UserProfile Successfully suspended").to_json())
+        else:
+            return JSONResponse(
+            content=Response(False,"No such user Profile").to_json(),
+            status_code=400
+        )
 
-#     except psycopg2.IntegrityError as e:
-#         print(f"Integrity error: {e}")
-#         #log_exception(e)
-#         # maybe raise a custom DuplicateUserError()
-#         return JSONResponse(
-#             content=Response(False,"database error").to_json(),
-#             status_code=409
-#         )
-#     except psycopg2.Error as e:
-#         #log_exception(e)
-#         print(f"Database error: {e}")       
-#         return JSONResponse(
-#             content=Response(False,"database error").to_json(),
-#             status_code=400
-#         )
+    except psycopg2.IntegrityError as e:
+        print(f"Integrity error: {e}")
+        #log_exception(e)
+        # maybe raise a custom DuplicateUserError()
+        return JSONResponse(
+            content=Response(False,"database error").to_json(),
+            status_code=409
+        )
+    except psycopg2.Error as e:
+        #log_exception(e)
+        print(f"Database error: {e}")       
+        return JSONResponse(
+            content=Response(False,"database error").to_json(),
+            status_code=400
+        )
 
 
-#     except Exception as e:
-#         print("exception has occured")
-#         log_exception(e)
-#         return JSONResponse(
-#             content=Response(False,"internal server error").to_json(),
-#             status_code=505
-#         )
+    except Exception as e:
+        print("exception has occured")
+        log_exception(e)
+        return JSONResponse(
+            content=Response(False,"internal server error").to_json(),
+            status_code=505
+        )
 
 
 # #req 1.2 search

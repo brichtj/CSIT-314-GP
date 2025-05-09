@@ -38,14 +38,14 @@ class UserProfile():
             raise e
     #req 1.2 view
     @staticmethod
-    def viewUserProfile(userProfileName:str)->Self:
+    def viewUserProfile(userProfileID:int)->Self:
         try:
             query = """
                         SELECT *
                         FROM "UserProfile"
-                        WHERE LOWER("Name") = LOWER(%s)
+                        WHERE "UserProfileID" = %s
                     """
-            params = (userProfileName,)
+            params = (userProfileID,)
             # formatted_query = query % tuple(map(lambda x: f"'{x}'", params))
             # print(f"Formatted query: {formatted_query}")
 

@@ -17,6 +17,6 @@ class DeleteServiceController:
     def DeleteServiceController(self,ServiceID:int,CleanerID:int)->bool:
         return Service().deleteService(ServiceID,CleanerID)
     
-class SearchServiceController:
-    def SearchServiceController(self,Title:str,CleanerID:int)->list[Service]:
-        return Service().searchService(Title,CleanerID)
+class SearchServiceCleanerIDController:
+    def SearchServiceCleanerIDController(self,Title:str,CleanerID:int)->list[Service]:
+        return Service().searchServiceByCleanerID(Title,CleanerID)

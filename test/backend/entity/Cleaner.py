@@ -34,21 +34,7 @@ class Cleaner(User):
         except Exception as e:
             log_exception(e)
             raise e
-        
-    def viewMyService(self,cleanerID):
-        try:
-            #insert into user table
-            query = """
-                    select * from "Service" where "CleanerID" = %s
-                """
-            params = (cleanerID,)
-            result =self.db.execute_fetchall(query, params)
-            return result
-        
-        except Exception as e:
-            log_exception(e)
-            raise e
-        
+
 
     def create_account(self):
         try:
@@ -120,28 +106,7 @@ class Cleaner(User):
         except Exception as e:
             #log_exception(e)
             raise e
-    def searchMyService(self,cleanerID:int,serviceTitle:str)->list:
-        try:
-            print(len(serviceTitle.strip()))
-            query ='' 
-            params = ()
-            if len(serviceTitle.strip()) == 0:
-            #empty serviceTitle, means want to query all by cleanerID
-                query = """
-                    select * from "Service" where "CleanerID" = %s
-                """
-                params = (cleanerID,)
-            else:
-                query = """
-                    select * from "Service" where "CleanerID" = %s and "Title" ILIKE %s
-                """
-                params = (cleanerID,f"{serviceTitle}%",)
-            result =self.db.execute_fetchall(query,params)
-            return result
-        
-        except Exception as e:
-            #log_exception(e)
-            raise e
+
     
     def updateService(self,categoryID:int,title:str,description:str,cleanerID:int,price:float,ImageLink:str,serviceID:int)->bool:
         

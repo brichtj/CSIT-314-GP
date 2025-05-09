@@ -92,7 +92,7 @@ class UpdateServiceRequest(BaseModel):
     ImageLink: str
 
 @router.put("/UpdateService")
-def updateService(data:UpdateServiceRequest):   
+def UpdateServiceBoundary(data:UpdateServiceRequest):   
     try:
         controller = UpdateServiceController()
         result = controller.UpdateServiceController(data.CategoryID,data.Title,data.Description,data.Price,data.ImageLink,data.ServiceID,data.CleanerID)
@@ -116,7 +116,7 @@ def updateService(data:UpdateServiceRequest):
 
 #delete service
 @router.delete("/DeleteService")
-def DeleteService(ServiceID:int,CleanerID:int):
+def DeleteServiceBoundary(ServiceID:int,CleanerID:int):
     try:
         controller = DeleteServiceController()
         result = controller.DeleteServiceController(ServiceID,CleanerID)
@@ -139,11 +139,11 @@ def DeleteService(ServiceID:int,CleanerID:int):
         )
 
 #search service
-@router.get("/SearchService")
-def SearchService(Title:str,CleanerID:int):
+@router.get("/SearchServiceByCleanerID")
+def SearchServiceByCleanerID(Title:str,CleanerID:int):
     try:
-        controller = SearchServiceController()
-        result = controller.SearchServiceController(Title,CleanerID)
+        controller = SearchServiceCleanerIDController()
+        result = controller.SearchServiceCleanerIDController(Title,CleanerID)
         if result is None:
             return JSONResponse(Response(False,None).to_json())
         else:

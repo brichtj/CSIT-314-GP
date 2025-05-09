@@ -376,7 +376,7 @@ class Service:
             raise e
         
     #req 2 search Service by title and cleanerID(so that cleaner can search his own services)
-    def searchService(self,Title:str,CleanerID:int)->list[Self]:
+    def searchServiceByCleanerID(self,Title:str,CleanerID:int)->list[Self]:
         try:
             query = """
                     SELECT 

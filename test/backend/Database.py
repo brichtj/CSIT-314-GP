@@ -51,7 +51,7 @@ class DB:
         """
         try:
             self.cur.execute(query, params)
-            print(query%params)
+            #print(query%params)
             rows = self.cur.fetchall()
 
             if not rows:

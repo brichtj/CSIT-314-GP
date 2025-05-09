@@ -100,7 +100,7 @@ class UserProfile():
             params = (f"{searchTerm.rstrip()}%",)
             #print("Full SQL:", query % params)
             result = DB().execute_fetchall(query, params)
-            if len(result) == 0:
+            if result is None or len(result) == 0:
                 return []
             else:
                 return [UserProfile(**row)for row in result]

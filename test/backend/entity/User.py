@@ -137,7 +137,7 @@ class User():
             #print("Full SQL:", query % params)
             result = DB().execute_fetchall(query, params)
             print(result)
-            if len(result) == 0:
+            if result is None or len(result) == 0:
                 return []
             else:
                 return [User(row['UserID'],row['Username'],row['Email'],row['Phone'],row['IsActive'],row['UserProfileID'],row['IsActive'])for row in result]

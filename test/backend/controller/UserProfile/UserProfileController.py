@@ -1,18 +1,18 @@
 from entity.UserProfile import UserProfile
 
 class ViewUserProfileController():
-    def viewUserProfileController(self,UserProfileID:int):
+    def viewUserProfileController(self,UserProfileID:int)->UserProfile:
         return UserProfile.viewUserProfile(UserProfileID)
 class UpdateUserProfileController:
 
-    def updateUserProfileController(self,name:str,privilege:str,is_active:bool,userprofileID:int):
+    def updateUserProfileController(self,name:str,privilege:str,is_active:bool,userprofileID:int)->bool:
         
         return UserProfile.updateUserProfile(name,privilege,is_active,userprofileID)
 
 
 class SuspendUserProfileController:
 
-    def suspendUserProfileController(self,userProfileID:int):
+    def suspendUserProfileController(self,userProfileID:int)->bool:
         
         return UserProfile.suspendUserProfile(userProfileID)
     

@@ -1,6 +1,6 @@
 
 from fastapi.responses import JSONResponse
-from controller.UserAdmin.UserAdminController import *
+from controller.User.UserController import *
 from fastapi import APIRouter, Request
 
 from pydantic import BaseModel
@@ -20,12 +20,12 @@ class UserCreateRequest(BaseModel):
 
 
 @router.post("/CreateUser")
-def CreateUserAccount(data: UserCreateRequest):
+def CreateUserBoundary(data: UserCreateRequest):
     try:
-        controller = UserCreationController()
+        controller = CreateUserController()
         #print(data)
         # Your login logic here
-        result = controller.UserCreationController(data.username,data.email,data.phone,data.Experience,data.address,data.UserProfileID)
+        result = controller.CreateUserController(data.username,data.email,data.phone,data.Experience,data.address,data.UserProfileID)
         #print(result)
         return JSONResponse(Response(True,"Successfully created user").to_json())
     except psycopg2.IntegrityError as e:
@@ -47,7 +47,7 @@ def CreateUserAccount(data: UserCreateRequest):
 
     except Exception as e:
         print("exception has occured")
-        #log_exception(e)
+        log_exception(e)
         return JSONResponse(
             content=Response(False,"internal server error").to_json(),
             status_code=505
@@ -55,13 +55,13 @@ def CreateUserAccount(data: UserCreateRequest):
     
 
 #req 1.1 search
-@router.get("/AdminSearchUserAccount")
-def AdminSearchUserAccount(searchTerm:str):
+@router.get("/SearchUserAccount")
+def SearchUserBoundary(searchTerm:str):
     try:
-        controller = AdminSearchUserController()
-        result = controller.adminSearchUserController(searchTerm)
-        if result is not None:
-            return JSONResponse(Response(True,result).to_json())
+        controller = SearchUserController()
+        result = controller.SearchUserController(searchTerm)
+        if result is not None and len(result)>0:
+            return JSONResponse(Response(True,[row.to_json() for row in result]).to_json())
         else:
             return JSONResponse(Response(False,None).to_json())
 
@@ -74,7 +74,7 @@ def AdminSearchUserAccount(searchTerm:str):
         )
     except Exception as e:
         print("exception has occured")
-        #log_exception(e)
+        log_exception(e)
         return JSONResponse(
             content=Response(False,"internal server error").to_json(),
             status_code=505
@@ -82,16 +82,16 @@ def AdminSearchUserAccount(searchTerm:str):
 
 #req 1.1 suspend
 class ViewUserRequest(BaseModel):
-    username: str
+    UserProfileID: int
 
 
 @router.put("/SuspendUserAccount")
-def SuspendUserAccount(data: ViewUserRequest):
+def SuspendUserBoundary(data: ViewUserRequest):
     try:
         controller = SuspendUserController()
         #print(data)
         # Your login logic here
-        result = controller.suspendUserController(data.username)
+        result = controller.suspendUserController(data.UserProfileID)
         #controller returns true if updated, false if not updated(in the case of no such user)
         if result:
             return JSONResponse(Response(True,"User Successfully suspended").to_json())
@@ -129,17 +129,17 @@ def SuspendUserAccount(data: ViewUserRequest):
 
 
 @router.get("/ViewUserAccount")
-def ViewUserAccount(username:str):
+def ViewUserBoundary(userID:int):
     try:
         controller = ViewUserController()
         #print(data)
         # Your login logic here
-        result = controller.viewUserController(username)
+        result = controller.viewUserController(userID)
         if result is not None:
-            return JSONResponse(Response(True,result).to_json())
+            return JSONResponse(Response(True,result.to_json()).to_json())
         else:
-            print(result)
-            return JSONResponse(Response(False,None).to_json())
+            #print(result)
+            return JSONResponse(Response(True,None).to_json())
 
     except psycopg2.IntegrityError as e:
         print(f"Integrity error (maybe duplicate user?): {e}")
@@ -160,7 +160,7 @@ def ViewUserAccount(username:str):
 
     except Exception as e:
         print("exception has occured")
-        #log_exception(e)
+        log_exception(e)
         return JSONResponse(
             content=Response(False,"internal server error").to_json(),
             status_code=505

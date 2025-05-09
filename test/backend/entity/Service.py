@@ -336,3 +336,25 @@ class Service:
             log_exception(e)
             raise e
         
+#req 2 update service by serviceID
+    def updateService(self,CategoryID:int,Title:str,Description:str,price:float,ImageLink:str, ServiceID:int,CleanerID:int)->bool:
+        try:
+            #only cleaner can update his own service, thats why required cleanerID
+            query = """
+                    UPDATE "Service"
+                    SET "CategoryID" = %s,
+                        "Title" = %s,
+                        "Description" = %s,
+                        "price" = %s,
+                        "ImageLink" = %s
+                    WHERE "ServiceID" = %s and "CleanerID" = %s;
+                """
+            params = (CategoryID,Title,Description,price,ImageLink,ServiceID,CleanerID)
+
+            result = self.db.execute_update(query, params)
+            return result
+
+
+        except Exception as e:
+            log_exception(e)
+            raise e

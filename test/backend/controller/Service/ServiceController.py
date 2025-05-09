@@ -9,3 +9,7 @@ class ViewServiceController:
     def ViewServiceController(self,ServiceID:int)->Service:
         return Service().viewService(ServiceID)
     
+class UpdateServiceController:
+    def UpdateServiceController(self,CategoryID:int,Title:str,Description:str,price:float,ImageLink:str, ServiceID:int,CleanerID:int)->bool:
+        return Service().updateService(CategoryID,Title,Description,price,ImageLink,ServiceID,CleanerID)
+    

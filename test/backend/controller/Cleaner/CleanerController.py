@@ -39,14 +39,6 @@ class SearchMyServiceController:
     def searchMyService(self, cleanerID,serviceTitle):
         return Cleaner().searchMyService(cleanerID,serviceTitle)
 ##################################################################################
-# Req2 update Service
-##################################################################################
-
-
-class UpdateServiceController:
-    def updateService(self,categoryID:int,title:str,description:str,cleanerID:int,price:float,ImageLink:str,serviceID:int)->bool:
-        return Cleaner().updateService(categoryID,title,description,cleanerID,price,ImageLink,serviceID)
-##################################################################################
 # Req4.1 View Total Views of Services
 ##################################################################################
 

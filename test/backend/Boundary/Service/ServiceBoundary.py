@@ -80,3 +80,36 @@ def ViewServiceBoundary(ServiceID:int):
             content=Response(False, "internal server error").to_json(),
             status_code=505
         )   
+    
+#req 2 update service
+class UpdateServiceRequest(BaseModel):
+    ServiceID: int
+    CategoryID: int
+    Title: str
+    Description: str
+    CleanerID: int
+    Price: float
+    ImageLink: str
+
+@router.put("/UpdateService")
+def updateService(data:UpdateServiceRequest):   
+    try:
+        controller = UpdateServiceController()
+        result = controller.UpdateServiceController(data.CategoryID,data.Title,data.Description,data.Price,data.ImageLink,data.ServiceID,data.CleanerID)
+        if result:
+            return JSONResponse(Response(True,"Updated").to_json())
+        else:
+            return JSONResponse(Response(False,"ServiceID and CleanerID combination does not exist").to_json())
+    except psycopg2.Error as e:
+        message = f"Database Error: {e}"
+        print(message)
+        return JSONResponse(
+            content=Response(False, "Request error").to_json(),
+            status_code=400
+        )
+    except Exception as e:
+        print(f"exception has occured: {e}")
+        return JSONResponse(
+            content=Response(False, "internal server error").to_json(),
+            status_code=505
+        )

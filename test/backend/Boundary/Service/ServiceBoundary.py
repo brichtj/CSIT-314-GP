@@ -54,3 +54,29 @@ def CreateService(data: CreateServiceRequest):
             status_code=505
         )
     
+
+#req 2 view service
+@router.get("/ViewService")
+def ViewServiceBoundary(ServiceID:int):
+
+    try:
+        controller = ViewServiceController()
+        result = controller.ViewServiceController(ServiceID)
+        if result is None:
+            return JSONResponse(Response(False,None).to_json())
+        else:
+            return JSONResponse(Response(True,result.to_json()).to_json())
+    except psycopg2.Error as e:
+        # log_exception(e)
+        print(f"Database error: {e}")
+        return JSONResponse(
+            content=Response(False, "error searching Service").to_json(),
+            status_code=400
+        )
+    except Exception as e:
+        print("exception has occured")
+        #log_exception(e)
+        return JSONResponse(
+            content=Response(False, "internal server error").to_json(),
+            status_code=505
+        )   

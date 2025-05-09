@@ -134,7 +134,7 @@ def ViewUserBoundary(userID:int):
         controller = ViewUserController()
         #print(data)
         # Your login logic here
-        result = controller.viewUserController(userID)
+        result = controller.ViewUserController(userID)
         if result is not None:
             return JSONResponse(Response(True,result.to_json()).to_json())
         else:

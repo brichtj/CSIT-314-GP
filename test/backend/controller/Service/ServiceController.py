@@ -5,3 +5,7 @@ class CreateServiceController:
         
         return Service().createService(CategoryID,Title,Description,CleanerID,Price,ImageLink)
     
+class ViewServiceController:
+    def ViewServiceController(self,ServiceID:int)->Service:
+        return Service().viewService(ServiceID)
+    

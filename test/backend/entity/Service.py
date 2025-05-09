@@ -1,4 +1,5 @@
 
+from typing import Self
 from Database import DB
 from Classes.ServiceResponse import ServiceResponse
 from utils.utils import log_exception
@@ -16,8 +17,40 @@ from utils.utils import log_exception
 
 
 class Service:
-    def __init__(self):
+
+    #convert all to capital first
+    def __init__(self, ServiceID=None, CategoryID=None, Title=None, Description=None,
+                DatePosted=None, CleanerID=None, LikeCount=None, ViewCount=None,
+                MatchCount=None, price=None, ImageLink=None):
         self.db = DB()
+        self.ServiceID = ServiceID
+        self.CategoryID = CategoryID
+        self.Title = Title
+        self.Description = Description
+        self.DatePosted = DatePosted
+        self.CleanerID = CleanerID
+        self.LikeCount = LikeCount
+        self.ViewCount = ViewCount
+        self.MatchCount = MatchCount
+        self.price = price
+        self.ImageLink = ImageLink
+
+
+    #to json method
+    def to_json(self) -> dict:
+        return {
+            "ServiceID": self.ServiceID,
+            "CategoryID": self.CategoryID,
+            "Title": self.Title,
+            "Description": self.Description,
+            "DatePosted": self.DatePosted,
+            "CleanerID": self.CleanerID,
+            "LikeCount": self.LikeCount,
+            "ViewCount": self.ViewCount,
+            "MatchCount": self.MatchCount,
+            "Price": self.price,
+            "ImageLink": self.ImageLink
+        }
 
 ##################################################################################
 # Req3.1 Search Service
@@ -270,3 +303,36 @@ class Service:
             print(e)
             log_exception(e)
             raise (e)
+        
+#req 2 view service by serviceID
+    def viewService(self,ServiceID:int)->Self:
+        try:
+            query = """
+                    SELECT 
+                        "ServiceID",
+                        "CategoryID",
+                        "Title",
+                        "Description",
+                        "DatePosted",
+                        "CleanerID",
+                        "LikeCount",
+                        "ViewCount",
+                        "MatchCount",
+                        "price",
+                        "ImageLink"
+                    FROM "Service"
+                    WHERE "ServiceID" = %s;
+                """
+            params = (ServiceID,)
+
+            result = self.db.fetch_one_by_key(query, params)
+
+            if result:
+                return Service(**result) 
+            else:
+                return None
+        
+        except Exception as e:
+            log_exception(e)
+            raise e
+        

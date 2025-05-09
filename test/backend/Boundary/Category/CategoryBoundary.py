@@ -130,7 +130,7 @@ def SuspendCategoryBoundary(data: CategorySuspendRequest):
         # log_exception(e)
         print(f"Database error: {e}")
         return JSONResponse(
-            content=Response(False, "error suspen category").to_json(),
+            content=Response(False, "error suspending category").to_json(),
             status_code=400
         )
     except Exception as e:
@@ -148,6 +148,13 @@ def SearchCategoryBoundary(keyword:str):
         controller = SearchCategoryController()
         result = controller.SearchCategoryController(keyword)
         return JSONResponse(Response(True,[row.to_json() for row in result]).to_json())
+    except psycopg2.Error as e:
+        # log_exception(e)
+        print(f"Database error: {e}")
+        return JSONResponse(
+            content=Response(False, "error searching category").to_json(),
+            status_code=400
+        )
     except Exception as e:
         print("exception has occured")
         log_exception(e)

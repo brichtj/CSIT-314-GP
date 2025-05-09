@@ -6,12 +6,6 @@ class UserCreationController:
         
         return UserAdmin().createUser(username, email,phone,  experience, address, userType)
 
-
-class UserProfileCreateController:
-
-    def createUserProfile(self,name,privilege):
-        
-        return UserAdmin().createUserProfile(name,privilege)
     
 
 class AdminSearchUserController:

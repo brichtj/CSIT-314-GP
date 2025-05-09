@@ -21,3 +21,10 @@ class SearchUserProfileController:
     def searchUserProfileController(self,name)->list[UserProfile]:
         
         return UserProfile.searchUserProfile(name)
+    
+
+class UserProfileCreateController:
+
+    def createUserProfileController(self,name,privilege)->bool:
+        
+        return UserProfile.createUserProfile(name,privilege)

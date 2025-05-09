@@ -30,8 +30,10 @@ class UserProfile():
                 """
             params = (name,privilege)
             result =DB().execute_update(Userstatement, params)
-            
-            return True
+            if result is None:
+                return False
+            else:
+                return True
 
 
         except Exception as e:

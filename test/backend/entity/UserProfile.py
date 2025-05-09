@@ -21,7 +21,8 @@ class UserProfile():
             "Is_Active": self.Is_Active
         }
     #req 1.2 Create
-    def createUserProfile(self,name,privilege)->bool:
+    @staticmethod
+    def createUserProfile(name,privilege)->bool:
         try:
             #insert into user table
             Userstatement = """
@@ -60,14 +61,15 @@ class UserProfile():
             log_exception(e)
             raise (e)
     #req 1.1 suspendUserprofile
-    def suspendUserProfile(self,name):
+    @staticmethod
+    def suspendUserProfile(userProfileID:int)->bool:
         try:
             query = """
                         UPDATE "UserProfile"
                         SET "Is_Active" = false
-                        WHERE LOWER("Name") = LOWER(%s)
+                        WHERE "UserProfileID" = %s
                     """
-            params = (name,)
+            params = (userProfileID,)
             # formatted_query = query % tuple(map(lambda x: f"'{x}'", params))
             # print(f"Formatted query: {formatted_query}")
 
@@ -83,7 +85,8 @@ class UserProfile():
             log_exception(e)
             raise (e)
     #req 1.2 search user profile
-    def searchUserProfile(self, searchTerm):#overwrite User.searchByUserID 
+    @staticmethod
+    def searchUserProfile( searchTerm:str)->list[Self]:#overwrite User.searchByUserID 
         try:
 
             query = """
@@ -91,12 +94,14 @@ class UserProfile():
                 FROM "UserProfile"
                 WHERE "Name" ILIKE %s 
             """
-
-            params = (f"{searchTerm}%",)
+            #if empty string is passed in, its equivalent to retrieving all user profiles
+            params = (f"{searchTerm.rstrip()}%",)
             #print("Full SQL:", query % params)
             result = DB().execute_fetchall(query, params)
-            #print(result)
-            return result
+            if len(result) == 0:
+                return []
+            else:
+                return [UserProfile(**row)for row in result]
 
         except Exception as e:
             log_exception(e)
@@ -117,7 +122,7 @@ class UserProfile():
         else:
             print(f'{self.Username}: Failed to pull Experience')
     #req 1.1 update User Profile
-    def updateUserProfile(self, name:str,privilege:str,is_active:bool,userprofileID:int)->bool:#overwrite User.searchByUserID 
+    def updateUserProfile( name:str,privilege:str,is_active:bool,userprofileID:int)->bool:#overwrite User.searchByUserID 
         try:
 
             query = """

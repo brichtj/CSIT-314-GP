@@ -185,28 +185,6 @@ def ViewMyService(CleanerID: int):
             status_code=505
         )
     
-##################################################################################
-# Req2 delete My service
-##################################################################################
-@router.delete("/DeleteService")
-def DeleteService(cleanerID: int,serviceID:int):
-    try:
-        controller = DeleteServiceController()
-        result = controller.deleteService(cleanerID,serviceID)
-        return JSONResponse(Response(True, "Deleted").to_json())
-    except psycopg2.Error as e:
-        message = f"Database Error: {e}"
-        #print(message)
-        return JSONResponse(
-            content=Response(False, "No rows were deleted").to_json(),
-            status_code=400
-        )
-    except Exception as e:
-        print(f"exception has occured: {e}")
-        return JSONResponse(
-            content=Response(False, "internal server error").to_json(),
-            status_code=505
-        )
 
 ##################################################################################
 # Req2 search My service

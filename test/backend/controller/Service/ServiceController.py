@@ -12,4 +12,11 @@ class ViewServiceController:
 class UpdateServiceController:
     def UpdateServiceController(self,CategoryID:int,Title:str,Description:str,price:float,ImageLink:str, ServiceID:int,CleanerID:int)->bool:
         return Service().updateService(CategoryID,Title,Description,price,ImageLink,ServiceID,CleanerID)
+
+class DeleteServiceController:
+    def DeleteServiceController(self,ServiceID:int,CleanerID:int)->bool:
+        return Service().deleteService(ServiceID,CleanerID)
     
+class SearchServiceController:
+    def SearchServiceController(self,Title:str,CleanerID:int)->list[Service]:
+        return Service().searchService(Title,CleanerID)

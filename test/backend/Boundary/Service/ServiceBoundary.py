@@ -21,7 +21,7 @@ class CreateServiceRequest(BaseModel):
     ImageLink: str
     
 @router.post("/CreateService")
-def CreateService(data: CreateServiceRequest):
+def CreateServiceBoundary(data: CreateServiceRequest):
     try:
         controller = CreateServiceController()
         #print(data)
@@ -30,7 +30,7 @@ def CreateService(data: CreateServiceRequest):
        
         return JSONResponse(Response(True,"Successfully created Service").to_json())
     except psycopg2.IntegrityError as e:
-        print(f"Integrity error (maybe duplicate Service?): {e}")
+        print(f"Integrity error (maybe duplicate Title?): {e}")
         #log_exception(e)
         # maybe raise a custom DuplicateUserError()
         return JSONResponse(
@@ -109,6 +109,55 @@ def updateService(data:UpdateServiceRequest):
         )
     except Exception as e:
         print(f"exception has occured: {e}")
+        return JSONResponse(
+            content=Response(False, "internal server error").to_json(),
+            status_code=505
+        )
+
+#delete service
+@router.delete("/DeleteService")
+def DeleteService(ServiceID:int,CleanerID:int):
+    try:
+        controller = DeleteServiceController()
+        result = controller.DeleteServiceController(ServiceID,CleanerID)
+        if result:
+            return JSONResponse(Response(True,"Deleted").to_json())
+        else:
+            return JSONResponse(Response(False,"ServiceID does not exist").to_json())
+    except psycopg2.Error as e:
+        message = f"Database Error: {e}"
+        print(message)
+        return JSONResponse(
+            content=Response(False, "Delete Request error, maybe ServiceID and cleanerID combination does not exist").to_json(),
+            status_code=400
+        )
+    except Exception as e:
+        print(f"exception has occured: {e}")
+        return JSONResponse(
+            content=Response(False, "internal server error").to_json(),
+            status_code=505
+        )
+
+#search service
+@router.get("/SearchService")
+def SearchService(Title:str,CleanerID:int):
+    try:
+        controller = SearchServiceController()
+        result = controller.SearchServiceController(Title,CleanerID)
+        if result is None:
+            return JSONResponse(Response(False,None).to_json())
+        else:
+            return JSONResponse(Response(True,[row.to_json() for row in result]).to_json())
+    except psycopg2.Error as e:
+        # log_exception(e)
+        print(f"Database error: {e}")
+        return JSONResponse(
+            content=Response(False, "error searching Service").to_json(),
+            status_code=400
+        )
+    except Exception as e:
+        print("exception has occured")
+        log_exception(e)
         return JSONResponse(
             content=Response(False, "internal server error").to_json(),
             status_code=505

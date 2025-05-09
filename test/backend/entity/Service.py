@@ -358,3 +358,49 @@ class Service:
         except Exception as e:
             log_exception(e)
             raise e
+        
+    #req 2 delete service by serviceID
+    def deleteService(self,ServiceID:int,CleanerID:int)->bool:
+        try:
+            query = """
+                    DELETE FROM "Service"
+                    WHERE "ServiceID" = %s and "CleanerID" = %s;
+                """
+            params = (ServiceID,CleanerID,)
+
+            result = self.db.execute_delete(query, params)
+            return result
+
+        except Exception as e:
+            log_exception(e)
+            raise e
+        
+    #req 2 search Service by title and cleanerID(so that cleaner can search his own services)
+    def searchService(self,Title:str,CleanerID:int)->list[Self]:
+        try:
+            query = """
+                    SELECT 
+                        "ServiceID",
+                        "CategoryID",
+                        "Title",
+                        "Description",
+                        "DatePosted",
+                        "CleanerID",
+                        "LikeCount",
+                        "ViewCount",
+                        "MatchCount",
+                        "price",
+                        "ImageLink"
+                    FROM "Service"
+                    WHERE "Title" ILIKE %s and "CleanerID" = %s;
+                """
+            params = ('%'+Title+'%',CleanerID,)
+
+            result = self.db.execute_fetchall(query, params)
+            if result is None or len(result) == 0:
+                return []
+            else:
+                return [Service(**row)for row in result]
+        except Exception as e:
+            log_exception(e)
+            raise e

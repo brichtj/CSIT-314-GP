@@ -125,26 +125,6 @@ class Service:
             raise e
 
 
-##################################################################################
-# Req3.2 Req3.5 View Service
-##################################################################################
-    @staticmethod
-    def ViewServiceByID(self, ServiceID: str):
-        try:
-            query = """
-                    SELECT *
-                    FROM "Service"
-                    WHERE "ServiceID" = %s
-                    """
-            params = (ServiceID,)
-
-            result = self.db.fetch_one_by_key(query, params)
-
-            return result
-
-        except Exception as e:
-            log_exception(e)
-            raise (e)
 
 ##################################################################################
 # Req4.1 View Total Views of Services
@@ -168,26 +148,6 @@ class Service:
 
 
 ##################################################################################
-# Update Total Views of Services
-##################################################################################
-    @staticmethod
-    def UpdateTotalViewByID(self, ServiceID):
-        query = """
-                UPDATE "Service"
-                SET "ViewCount" = (
-                    SELECT COUNT(*)
-                    FROM "Views"
-                    WHERE "ServiceID" = %s
-                )
-                WHERE "ServiceID" = %s
-                """
-        params = (ServiceID, ServiceID)
-
-        result = self.db.execute_update(query, params)
-
-        return result
-
-##################################################################################
 # Req4.2 View Total Shortlisted Count of Services
 ##################################################################################
     @staticmethod
@@ -195,46 +155,6 @@ class Service:
         try:
             query = """
                     SELECT "LikeCount"
-                    FROM "Service"
-                    WHERE "ServiceID" = %s
-                    """
-            params = (ServiceID,)
-
-            result = self.db.fetch_one_by_key(query, params)
-
-            return result
-        except Exception as e:
-            log_exception(e)
-            raise e
-
-# ##################################################################################
-# # Update Total Shortlisted Count of Services(this is a helper entity method, when user shortlist service, we have to increase the count )
-# ##################################################################################
-
-#     def UpdateTotalShortlistedCountViewByID(self, ServiceID):
-#         query = """
-#                 UPDATE "Service"
-#                 SET "LikeCount" = (
-#                     SELECT COUNT(*)
-#                     FROM "ServiceLikes"
-#                     WHERE "ServiceID" = %s
-#                 )
-#                 WHERE "ServiceID" = %s
-#                 """
-#         params = (ServiceID, ServiceID)
-
-#         result = self.db.execute_update(query, params)
-
-#         return result
-
-##################################################################################
-# View Total Matches Count of Services
-##################################################################################
-    @staticmethod
-    def ViewTotalShortlistedCount(self, ServiceID):
-        try:
-            query = """
-                    SELECT "MatchCount"
                     FROM "Service"
                     WHERE "ServiceID" = %s
                     """
@@ -281,7 +201,7 @@ class Service:
             raise (e)
         
 #req 2, req 3.2,req 3.3 view service by serviceID
-    def viewService(self,ServiceID:int)->Self:
+    def viewService(self,ServiceID:int,updateViewCount:bool)->Self:
         try:
             query = """
                     SELECT 
@@ -302,6 +222,14 @@ class Service:
             params = (ServiceID,)
 
             result = self.db.fetch_one_by_key(query, params)
+            if updateViewCount == True:
+                updateServiceViewCount = """
+                        UPDATE "Service"
+                        SET "ViewCount" = "ViewCount" + 1
+                        WHERE "ServiceID" = %s;
+                    """
+                
+                self.db.execute_update(updateServiceViewCount, params)
 
             if result:
                 return Service(**result) 

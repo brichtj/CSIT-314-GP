@@ -6,8 +6,8 @@ class CreateServiceController:
         return Service().createService(CategoryID,Title,Description,CleanerID,Price,ImageLink)
     
 class ViewServiceController:
-    def ViewServiceController(self,ServiceID:int)->Service:
-        return Service().viewService(ServiceID)
+    def ViewServiceController(self,ServiceID:int,updateViewCount:bool)->Service:
+        return Service().viewService(ServiceID,updateViewCount)
     
 class UpdateServiceController:
     def UpdateServiceController(self,CategoryID:int,Title:str,Description:str,price:float,ImageLink:str, ServiceID:int,CleanerID:int)->bool:
@@ -21,15 +21,6 @@ class SearchServiceCleanerIDController:
     def SearchServiceCleanerIDController(self,Title:str,CleanerID:int)->list[Service]:
         return Service().searchServiceByCleanerID(Title,CleanerID)
     
-##################################################################################
-# Req3.4 Search Shortlist Service
-##################################################################################
-
-
-class HomeOwnerViewShortListController:
-
-    def ViewShortlistByHomeOwnerID(self, HomeOwnerID: str):
-        return HomeOwner.ViewShortListByHomeOwnerID(HomeOwnerID)
 ##################################################################################
 # Req3.1 Search Service
 ##################################################################################
@@ -55,7 +46,7 @@ class HomeOwnerSearchServiceController:
 
 class HomeOwnerViewServiceController:
     def ViewServiceByID(self, ServiceID: str):
-        return Service().ViewServiceByID(ServiceID)
+        return Service.ViewServiceByID(ServiceID)
 
 ##################################################################################
 # Req3.3 Save/Shortlist Service

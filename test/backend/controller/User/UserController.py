@@ -1,11 +1,12 @@
 
 from entity.User import User
+from Classes import LoginResponse
 
 
 class UserLoginController:
-    def login(self,Username, Password):
-        user = User(Username, Password)
-        return user.login()
+    def login(self,username:str, password:str)->LoginResponse:
+        
+        return User.login(username,password)
 
 class CreateUserController:
 

@@ -112,7 +112,7 @@ class Service:
 # Req4.1 View Total Views of Services
 ##################################################################################
     @staticmethod
-    def ViewTotalViewbyID(self, ServiceID):
+    def ViewTotalViewbyID(ServiceID:int)->int:
         try:
             query = """
                     SELECT "ViewCount"
@@ -121,9 +121,12 @@ class Service:
                     """
             params = (ServiceID,)
 
-            result = self.db.fetch_one_by_key(query, params)
-
-            return result
+            result = DB().fetch_one_by_key(query, params)
+            if result is not None:
+                return result["ViewCount"]
+            else:
+                return None
+            
         except Exception as e:
             log_exception(e)
             raise e
@@ -133,7 +136,7 @@ class Service:
 # Req4.2 View Total Shortlisted Count of Services
 ##################################################################################
     @staticmethod
-    def ViewTotalShortlistedCountByID(self, ServiceID):
+    def ViewTotalShortlistedCountByID(ServiceID:int)->int:
         try:
             query = """
                     SELECT "LikeCount"
@@ -142,7 +145,11 @@ class Service:
                     """
             params = (ServiceID,)
 
-            result = self.db.fetch_one_by_key(query, params)
+            result = DB().fetch_one_by_key(query, params)
+            if result is not None:
+                return result["LikeCount"]
+            else:
+                return None
 
             return result
         except Exception as e:

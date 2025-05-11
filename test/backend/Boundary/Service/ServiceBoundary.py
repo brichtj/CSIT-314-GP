@@ -327,6 +327,54 @@ def SuspendAccount(HomeOwnerID: str):
             status_code=505
         )
 
+
+#req 4.1 view views of service
+@router.get("/ViewTotalViewbyID")
+def ViewTotalViewbyIDBoundary(ServiceID:int)->int:    
+    try:
+        controller = ViewTotalViewbyIDController()
+        result = controller.ViewTotalViewbyIDController(ServiceID)
+        if result is None:
+            return JSONResponse(Response(False,None).to_json())
+        else:
+            return JSONResponse(Response(True,result).to_json())
+    except psycopg2.Error as e:
+        message = f"Database Error: {e}"
+        print(message)
+        return JSONResponse(
+            content=Response(False, "Database Error").to_json(),
+            status_code=400
+        )
+    except Exception as e:
+        print(f"exception has occured: {e}")
+        return JSONResponse(
+            content=Response(False, "internal server error").to_json(),
+            status_code=505
+        )
+#req 4.2 view total Like count of service
+@router.get("/ViewTotalshortlistedCountbyID")
+def ViewTotalShortlistedCountbyIDBoundary(ServiceID:int)->int:    
+    try:
+        controller = ViewTotalShortlistedCountByIDController()
+        result = controller.ViewTotalShortlistedCountByIDController(ServiceID)
+        if result is None:
+            return JSONResponse(Response(False,None).to_json())
+        else:
+            return JSONResponse(Response(True,result).to_json())
+    except psycopg2.Error as e:
+        message = f"Database Error: {e}"
+        print(message)
+        return JSONResponse(
+            content=Response(False, "Database Error").to_json(),
+            status_code=400
+        )
+    except Exception as e:
+        print(f"exception has occured: {e}")
+        return JSONResponse(
+            content=Response(False, "internal server error").to_json(),
+            status_code=505
+        )
+
 ##################################################################################
 # View History req 6.1
 ##################################################################################

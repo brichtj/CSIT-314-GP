@@ -22,7 +22,6 @@ app.add_middleware(
 _ = DB()
 
 # Register routers
-app.include_router(login_boundary)
 app.include_router(service_boundary)
 app.include_router(user_boundary)
 app.include_router(user_profile_boundary)

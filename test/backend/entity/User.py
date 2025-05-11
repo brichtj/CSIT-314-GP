@@ -31,24 +31,27 @@ class User():
             "Address": self.Address,
             "Experience": float(self.Experience) if self.Experience is not None else self.Experience
         }
-
-    def login(self):
+    @staticmethod
+    def login(username:str,password:str)->LoginResponse:
         try:
-            self.pullDetails()
-            if not hasattr(self, 'UserID') or self.UserID is None:
+            query = """
+                SELECT "UserID", "Username",  "Email", "Phone", "IsActive","UserProfileID", "Address", "Experience","Password"
+                 
+                   FROM "user" WHERE "Username" = %s
+            """
+            params = (username,)
+            result = DB().fetch_one_by_key(query, params)
+            if result is None:
                 return LoginResponse(False, "User does not exist", None)
-            if not self.IsActive:
-                return LoginResponse(False, "User suspended", None)
-            if not self.checkPassword():
+            input_password_bytes = password.encode('utf-8')
+            hash_password_bytes = result["Password"].encode('utf-8')
+            if not bcrypt.checkpw(input_password_bytes, hash_password_bytes):
                 return LoginResponse(False, "Password false", None)
-
-            if self.UserProfile == "Cleaner":
-                pass
-                #self.pullExperience()
-            if self.UserProfile == "HomeOwner":
-                self.pullAddress()
-
-            return LoginResponse(True, "welcome", self.to_dict())
+            elif result["IsActive"] == False:
+                return LoginResponse(False, "User suspended", None)
+            else:
+                user = User(result["UserID"],result["Username"],result["Email"],result["Phone"],result["IsActive"],result["UserProfileID"],result["Address"],result["Experience"])
+                return LoginResponse(True, "welcome", user)
 
         except Exception as e:
             log_exception(e)
@@ -57,7 +60,7 @@ class User():
     @staticmethod
     def createUser(username:str,email:str,phone:str,experience:float,address:str,UserprofileID:int)->bool:
         try:
-            hashed_password = bcrypt.hashpw('123'.encode('utf-8'), bcrypt.gensalt())
+            hashed_password = bcrypt.hashpw('123'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
             #insert into user table
             Userstatement = """
                 Insert into "user" ("Username","UserProfileID", "Email","Phone","Password","IsActive","Address","Experience") values (%s, %s, %s,%s,%s,true,%s,%s) RETURNING "UserID"
@@ -161,14 +164,14 @@ class User():
     #         print(f'{self.Username}: Address pulled')
     #     else:
     #         print(f'{self.Username}: Failed to pull Address')
-    """
+    
     def checkPassword(self) -> bool:
         input_password_bytes = self.input_Password.encode('utf-8')
         hash_password_bytes = self.Password.encode('utf-8')
 
         print(f"{self.Username}: Authenticating")
         return bcrypt.checkpw(input_password_bytes, hash_password_bytes)
-    """
+    
 
     def checkPassword(self) -> bool:
         input_password_bytes = self.input_Password.encode('utf-8')

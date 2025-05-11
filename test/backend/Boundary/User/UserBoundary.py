@@ -10,6 +10,33 @@ import psycopg2
 
 router = APIRouter()
 
+
+# req login
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+@router.post("/login")
+def login(data: LoginRequest):
+    try:
+        controller = UserLoginController()
+        result = controller.login(data.username, data.password)
+        if result.success:
+            return JSONResponse(Response(True, result.user.to_json()).to_json())
+        else:
+            return JSONResponse(
+                content=Response(False, result.message).to_json(),
+                status_code=400
+            )
+    except Exception as e:
+        log_exception(e)
+        return JSONResponse(
+            content=Response(False, "internal server error").to_json(),
+            status_code=500
+        )
+
+
+#req 1.1
 class UserCreateRequest(BaseModel):
     username: str
     email: str
@@ -17,7 +44,6 @@ class UserCreateRequest(BaseModel):
     address: str
     Experience:float
     UserProfileID:int
-
 
 @router.post("/CreateUser")
 def CreateUserBoundary(data: UserCreateRequest):
@@ -127,14 +153,14 @@ def SuspendUserBoundary(data: ViewUserRequest):
         )
 
 
-
+#req 1.2
 @router.get("/ViewUserAccount")
-def ViewUserBoundary(userID:int):
+def ViewUserBoundary(UserID:int):
     try:
         controller = ViewUserController()
         #print(data)
         # Your login logic here
-        result = controller.ViewUserController(userID)
+        result = controller.ViewUserController(UserID)
         if result is not None:
             return JSONResponse(Response(True,result.to_json()).to_json())
         else:
@@ -165,6 +191,8 @@ def ViewUserBoundary(userID:int):
             content=Response(False,"internal server error").to_json(),
             status_code=505
         )
+    
+#req 1.3
 class UpdateUserRequest(BaseModel):
     username: str
     email: str

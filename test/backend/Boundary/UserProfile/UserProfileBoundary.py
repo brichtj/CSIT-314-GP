@@ -65,7 +65,7 @@ def ViewUserProfileBoundary(UserProfileID:int):
         #print(data)
         # Your login logic here
         result = controller.viewUserProfileController(UserProfileID)
-        print(result)
+        #print(result)
         if result is not None:
             return JSONResponse(Response(True,result.to_json()).to_json())
         else:

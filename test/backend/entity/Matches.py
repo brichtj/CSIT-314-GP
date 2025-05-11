@@ -87,7 +87,7 @@ class Matches:
             raise e
 
 ##################################################################################
-# Req5.2 Req3.6.2 Search History
+# Req5.2 Req.6.2 Search History
 ##################################################################################
 
     def SearchCleanerHistoryByServiceID(self, CleanerID, ServiceID):
@@ -116,6 +116,26 @@ class Matches:
                     """
             params = (HomeOwnerID, ServiceID)
             result = self.db.execute_fetchall(query, params)
+            return result
+        except Exception as e:
+            log_exception(e)
+            raise e
+# req 3 extra create
+    def CreateMatch(self, HomeOwnerID:int, ServiceID:int, Price:float,)->bool:
+        try:
+            query = """
+                    INSERT INTO "Matches" ("ServiceID","HomeOwnerID", "Price")
+                    VALUES (%s, %s, %s)
+                    """
+            UpdateMatch = """
+                    UPDATE "Service"
+                    SET "MatchCount" = "MatchCount" + 1
+                    WHERE "ServiceID" = %s
+
+                """
+            params = (ServiceID,HomeOwnerID, Price,)
+            param2  = (ServiceID,)
+            result = DB().update_two_tables(query,params,UpdateMatch,param2)
             return result
         except Exception as e:
             log_exception(e)

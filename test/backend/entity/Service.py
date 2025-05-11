@@ -128,7 +128,7 @@ class Service:
 ##################################################################################
 # Req3.2 Req3.5 View Service
 ##################################################################################
-
+    @staticmethod
     def ViewServiceByID(self, ServiceID: str):
         try:
             query = """
@@ -149,7 +149,7 @@ class Service:
 ##################################################################################
 # Req4.1 View Total Views of Services
 ##################################################################################
-
+    @staticmethod
     def ViewTotalViewbyID(self, ServiceID):
         try:
             query = """
@@ -170,7 +170,7 @@ class Service:
 ##################################################################################
 # Update Total Views of Services
 ##################################################################################
-
+    @staticmethod
     def UpdateTotalViewByID(self, ServiceID):
         query = """
                 UPDATE "Service"
@@ -190,7 +190,7 @@ class Service:
 ##################################################################################
 # Req4.2 View Total Shortlisted Count of Services
 ##################################################################################
-
+    @staticmethod
     def ViewTotalShortlistedCountByID(self, ServiceID):
         try:
             query = """
@@ -230,7 +230,7 @@ class Service:
 ##################################################################################
 # View Total Matches Count of Services
 ##################################################################################
-
+    @staticmethod
     def ViewTotalShortlistedCount(self, ServiceID):
         try:
             query = """
@@ -247,30 +247,6 @@ class Service:
             log_exception(e)
             raise e
 
-##################################################################################
-# Update Total Matches Count of Services
-##################################################################################
-
-    def UpdateTotalShortlistedCountViewByID(self, ServiceID):
-        query = """
-                UPDATE "Service"
-                SET "MatchCount" = (
-                    SELECT COUNT(*)
-                    FROM "Matches"
-                    WHERE "ServiceID" = %s
-                )
-                WHERE "ServiceID" = %s
-                """
-        params = (ServiceID, ServiceID)
-
-        result = self.db.execute_update(query, params)
-
-        if result:
-            #self.MatchCount = data
-            print(f'{self.ServiceID}: MatchCount upated')
-            return
-
-        print("Failed to update MatchCount")
 
     def to_dict(self) -> dict:
         return {
@@ -304,7 +280,7 @@ class Service:
             log_exception(e)
             raise (e)
         
-#req 2 view service by serviceID
+#req 2, req 3.2,req 3.3 view service by serviceID
     def viewService(self,ServiceID:int)->Self:
         try:
             query = """

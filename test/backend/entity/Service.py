@@ -55,8 +55,8 @@ class Service:
 ##################################################################################
 # Req3.1 Search Service
 ##################################################################################
-
-    def SearchServiceByTitle(self, Title: str):
+    @staticmethod
+    def SearchServiceByTitle(Title: str):
         try:
             query = """
                     SELECT *
@@ -65,14 +65,14 @@ class Service:
                     """
             params = (f"%{Title}%",)
 
-            result = self.db.execute_fetchall(query, params)
+            result = DB().execute_fetchall(query, params)
 
             return result
         except Exception as e:
             log_exception(e)
             raise e
-
-    def SearchServiceByCategoryName(self, CategoryName: str):
+    @staticmethod
+    def SearchServiceByCategoryName(CategoryName: str):
         try:
             query = """
                     SELECT * 
@@ -85,13 +85,13 @@ class Service:
                     """
             params = (CategoryName,)
 
-            result = self.db.execute_fetchall(query, params)
+            result = DB().execute_fetchall(query, params)
 
             return result
         except Exception as e:
             log_exception(e)
             raise e
-
+    @staticmethod
     def SearchServiceByCategoryID(self, CategoryID: str):
         try:
             query = """
@@ -101,13 +101,13 @@ class Service:
                     """
             params = (CategoryID,)
 
-            result = self.db.execute_fetchall(query, params)
+            result = DB().execute_fetchall(query, params)
 
             return result
         except Exception as e:
             log_exception(e)
             raise e
-
+    @staticmethod
     def SearchServiceByCleanerID(self, CleanerID: str):
         try:
             query = """
@@ -117,7 +117,7 @@ class Service:
                     """
             params = (CleanerID,)
 
-            result = self.db.execute_fetchall(query, params)
+            result = DB().execute_fetchall(query, params)
 
             return result
         except Exception as e:
@@ -130,7 +130,7 @@ class Service:
 # Req4.1 View Total Views of Services
 ##################################################################################
     @staticmethod
-    def ViewTotalViewbyID(self, ServiceID):
+    def ViewTotalViewbyID( ServiceID):
         try:
             query = """
                     SELECT "ViewCount"

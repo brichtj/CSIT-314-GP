@@ -26,18 +26,10 @@ class SearchServiceCleanerIDController:
 ##################################################################################
 
 
+
 class HomeOwnerSearchServiceController:
-    def SearchServiceByMode(self, mode: int, data: str):
-        if (mode == 1):
-            result = Service().SearchServiceByCategoryName(data)
-        if (mode == 2):
-            result = Service().SearchServiceByCategoryID(data)
-        if (mode == 3):
-            result = Service().SearchServiceByCleanerID(data)
-
-        result = Service().SearchServiceByTitle(data)
-
-        return result
+    def SearchService(self, mode: int, data: str):
+        return Service.SearchService(mode, data)
 
 ##################################################################################
 # Req3.2 View Service
@@ -48,15 +40,6 @@ class HomeOwnerViewServiceController:
     def ViewServiceByID(self, ServiceID: str):
         return Service.ViewServiceByID(ServiceID)
 
-##################################################################################
-# Req3.3 Save/Shortlist Service
-##################################################################################
-
-
-class HomeOwnerShorlistServiceController:
-
-    def ShortlistServiceByID(self, ServiceID: str, HomeOwnerID: str):
-        return HomeOwner().ShortlistServiceByID(ServiceID, HomeOwnerID)
 
 
 ##################################################################################

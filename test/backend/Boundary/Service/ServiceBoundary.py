@@ -20,6 +20,7 @@ class CreateServiceRequest(BaseModel):
     Price: float
     ImageLink: str
     
+#req 2 create
 @router.post("/CreateService")
 def CreateServiceBoundary(data: CreateServiceRequest):
     try:
@@ -55,13 +56,13 @@ def CreateServiceBoundary(data: CreateServiceRequest):
         )
     
 
-#req 2, 3.3, 3.5 view service
+#req 2, 3.3, 3.5 view service==================
 @router.get("/ViewServiceCleaner")
 def ViewServiceCleanerBoundary(ServiceID:int):
 
     try:
         controller = ViewServiceController()
-        result = controller.ViewServiceController(ServiceID)
+        result = controller.ViewServiceController(ServiceID,False)
         if result is None:
             return JSONResponse(Response(False,None).to_json())
         else:
@@ -80,12 +81,14 @@ def ViewServiceCleanerBoundary(ServiceID:int):
             content=Response(False, "internal server error").to_json(),
             status_code=505
         )  
-@router.get("/ViewServiceHomeOwner")
+    
+
+@router.get("/ViewServiceHomeOwner")#only when homeowner view service, should the view count be updated
 def ViewServiceHomeownerBoundary(ServiceID:int):
 
     try:
         controller = ViewServiceController()
-        result = controller.ViewServiceController(ServiceID)
+        result = controller.ViewServiceController(ServiceID,True)
         if result is None:
             return JSONResponse(Response(False,None).to_json())
         else:
@@ -109,7 +112,7 @@ def ViewServiceShortlistBoundary(ServiceID:int):
 
     try:
         controller = ViewServiceController()
-        result = controller.ViewServiceController(ServiceID)
+        result = controller.ViewServiceController(ServiceID,False)
         if result is None:
             return JSONResponse(Response(False,None).to_json())
         else:
@@ -129,7 +132,7 @@ def ViewServiceShortlistBoundary(ServiceID:int):
             status_code=505
         )   
     
-    
+#==========================
 #req 2 update service
 class UpdateServiceRequest(BaseModel):
     ServiceID: int
@@ -217,12 +220,12 @@ def SearchServiceByCleanerID(Title:str,CleanerID:int):
 # Req3.1 Search Service
 ##################################################################################
 
-@router.get("/SearchServiceByMode")
-def SearchServiceByMode(mode: int, data: str):
+@router.get("/SearchService")
+def SearchService(mode: int, searchTerm: str):
     try:
         controller = HomeOwnerSearchServiceController()
-        result = controller.SearchServiceByMode(mode, data)
-        return JSONResponse(Response(True, result).to_json())
+        result = controller.SearchService(mode, searchTerm)
+        return JSONResponse(Response(True, [row.to_json() for row in result]).to_json())
     except psycopg2.Error as e:
         message = f"Database Error: {e}"
         print(message)
@@ -237,79 +240,8 @@ def SearchServiceByMode(mode: int, data: str):
             status_code=505
         )
     
-##################################################################################
-# Req3.2 View Service
-##################################################################################
-
-@router.get("/ViewServiceByID")
-def ViewServiceByID(ServiceID: str):
-    try:
-        controller = HomeOwnerViewServiceController()
-        result = controller.ViewServiceByID(ServiceID)
-        return JSONResponse(ServiceResponse(True, "Service(s) found", result).to_json())
-    except psycopg2.Error as e:
-        message = f"Database Error: {e}"
-        print(message)
-        return JSONResponse(
-            content=Response(False, "Database Error").to_json(),
-            status_code=400
-        )
-    except Exception as e:
-        print(f"exception has occured: {e}")
-        return JSONResponse(
-            content=Response(False, "internal server error").to_json(),
-            status_code=505
-        )
-
-##################################################################################
-# Req3.3 Save/Shortlist Service
-##################################################################################
 
 
-@router.get("/ShortlistServiceByID")
-def ShortlistServiceByID(ServiceID: str, HomeOwnerID: str):
-    try:
-        controller = HomeOwnerShorlistServiceController()
-        result = controller.ShortlistServiceByID(ServiceID, HomeOwnerID)
-        return JSONResponse(Response(True, "Service Shortlisted").to_json())
-    except psycopg2.Error as e:
-        message = f"Database Error: {e}"
-        print(message)
-        return JSONResponse(
-            content=Response(False, "Database Error").to_json(),
-            status_code=400
-        )
-    except Exception as e:
-        print(f"exception has occured: {e}")
-        return JSONResponse(
-            content=Response(False, "internal server error").to_json(),
-            status_code=505
-        )
-
-##################################################################################
-# Req3.5 View Shortlist Service
-##################################################################################
-
-
-@router.get("/ViewShortlistedServiceByID")
-def ViewShortlistedServiceByID(ServiceID: str):
-    try:
-        controller = HomeOwnerViewShortlistedServiceController()
-        result = controller.ViewShortlistedServiceByID(ServiceID)
-        return JSONResponse(ServiceResponse(True, "Service(s) found", result).to_json())
-    except psycopg2.Error as e:
-        message = f"Database Error: {e}"
-        print(message)
-        return JSONResponse(
-            content=Response(False, "Database Error").to_json(),
-            status_code=400
-        )
-    except Exception as e:
-        print(f"exception has occured: {e}")
-        return JSONResponse(
-            content=Response(False, "internal server error").to_json(),
-            status_code=505
-        )
 
 ##################################################################################
 # Req3.7 View Account
@@ -322,7 +254,7 @@ def ViewAccount(HomeOwnerID: str):
         controller = HomeOwnerViewAccountController()
         result = controller.ViewAccount(HomeOwnerID)
 
-        return JSONResponse(UserResponse(True, "User(s) found", result).to_json())
+        return JSONResponse(Response(True,  result).to_json())
     except psycopg2.Error as e:
         message = f"Database Error: {e}"
         print(message)
@@ -406,7 +338,7 @@ def ViewHistory(HomeOwnerID: str):
         controller = HomeOwnerViewHistoryController()
         result = controller.ViewHistory(HomeOwnerID)
 
-        return JSONResponse(MatchesResponse(True, "Match(s) found", result).to_json())
+        return JSONResponse(Response(True,result).to_json())
     except psycopg2.Error as e:
         message = f"Database Error: {e}"
         print(message)
@@ -422,7 +354,7 @@ def ViewHistory(HomeOwnerID: str):
         )
 
 ##################################################################################
-# Search History
+# Search History req 6.2
 ##################################################################################
 
 
@@ -432,7 +364,7 @@ def SearchHistoryByServiceID(HomeOwnerID: str, ServiceID: str):
         controller = HomeOwnerSearchHistoryController()
         result = controller.SearchHistoryByServiceID(HomeOwnerID, ServiceID)
 
-        return JSONResponse(MatchesResponse(True, "Match(s) found", result).to_json())
+        return JSONResponse(Response(True,  result).to_json())
     except psycopg2.Error as e:
         message = f"Database Error: {e}"
         print(message)
@@ -447,28 +379,3 @@ def SearchHistoryByServiceID(HomeOwnerID: str, ServiceID: str):
             status_code=505
         )
 
-
-##################################################################################
-# Req3.4 Search Shortlist Service
-##################################################################################
-
-
-@router.get("/ViewShortlistByHomeOwnerID")
-def ViewShortlistByHomeOwnerID(HomeOwnerID: str):
-    try:
-        controller = HomeOwnerViewShortListController()
-        result = controller.ViewShortlistByHomeOwnerID(HomeOwnerID)
-        return JSONResponse(ShortlistResponse(True, "Shortlist found", result).to_json())
-    except psycopg2.Error as e:
-        message = f"Database Error: {e}"
-        print(message)
-        return JSONResponse(
-            content=Response(False, "Database Error").to_json(),
-            status_code=400
-        )
-    except Exception as e:
-        print(f"exception has occured: {e}")
-        return JSONResponse(
-            content=Response(False, "internal server error").to_json(),
-            status_code=505
-        )

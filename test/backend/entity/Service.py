@@ -56,81 +56,63 @@ class Service:
 # Req3.1 Search Service
 ##################################################################################
     @staticmethod
-    def SearchServiceByTitle(Title: str):
+    def SearchService(mode: int, searchTerm: str):
         try:
-            query = """
-                    SELECT *
-                    FROM "Service"
-                    WHERE "Title" ILIKE %s
-                    """
-            params = (f"%{Title}%",)
 
-            result = DB().execute_fetchall(query, params)
-
-            return result
-        except Exception as e:
-            log_exception(e)
-            raise e
-    @staticmethod
-    def SearchServiceByCategoryName(CategoryName: str):
-        try:
-            query = """
-                    SELECT * 
-                    FROM "Service"
-                    WHERE "CategoryID" IN(
-                        SELECT "CategoryID"
-                        FROM "Category"
+            query = ''
+            if mode == 1:#by title
+                query = """
+                        SELECT 
+                        "ServiceID",
+                        "CategoryID",
+                        "Title",
+                        "Description",
+                        "DatePosted",
+                        "CleanerID",
+                        "LikeCount",
+                        "ViewCount",
+                        "MatchCount",
+                        "price",
+                        "ImageLink"
+                        FROM "Service"
                         WHERE "Title" ILIKE %s
-                    )
-                    """
-            params = (CategoryName,)
+                        """
+            elif mode == 2:#by category name
+                query = """
+                        SELECT 
+                        "ServiceID",
+                        "CategoryID",
+                        "Title",
+                        "Description",
+                        "DatePosted",
+                        "CleanerID",
+                        "LikeCount",
+                        "ViewCount",
+                        "MatchCount",
+                        "price",
+                        "ImageLink"
+                        FROM "Service"
+                        WHERE "CategoryID" IN(
+                            SELECT "CategoryID"
+                            FROM "Category"
+                            WHERE "Title" ILIKE %s
+                        )
+                        """
+            params = (f"%{searchTerm}%",)
 
             result = DB().execute_fetchall(query, params)
 
-            return result
+            return [Service(**row) for row in result]
+
         except Exception as e:
             log_exception(e)
             raise e
-    @staticmethod
-    def SearchServiceByCategoryID(self, CategoryID: str):
-        try:
-            query = """
-                    SELECT *
-                    FROM "Service"
-                    WHERE "CategoryID" = %s
-                    """
-            params = (CategoryID,)
-
-            result = DB().execute_fetchall(query, params)
-
-            return result
-        except Exception as e:
-            log_exception(e)
-            raise e
-    @staticmethod
-    def SearchServiceByCleanerID(self, CleanerID: str):
-        try:
-            query = """
-                    SELECT *
-                    FROM "Service"
-                    WHERE "CleanerID" = %s
-                    """
-            params = (CleanerID,)
-
-            result = DB().execute_fetchall(query, params)
-
-            return result
-        except Exception as e:
-            log_exception(e)
-            raise e
-
-
 
 ##################################################################################
 # Req4.1 View Total Views of Services
 ##################################################################################
     @staticmethod
-    def ViewTotalViewbyID( ServiceID):
+    def ViewTotalViewbyID(self, ServiceID):
         try:
             query = """
                     SELECT "ViewCount"

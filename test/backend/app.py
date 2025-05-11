@@ -23,7 +23,6 @@ _ = DB()
 
 # Register routers
 app.include_router(login_boundary)
-app.include_router(cleaner_boundary)
 app.include_router(service_boundary)
 app.include_router(user_boundary)
 app.include_router(user_profile_boundary)

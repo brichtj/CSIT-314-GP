@@ -28,29 +28,14 @@ class SearchServiceCleanerIDController:
 
 
 class HomeOwnerSearchServiceController:
-    def SearchService(self, mode: int, data: str):
-        return Service.SearchService(mode, data)
-
-##################################################################################
-# Req3.2 View Service
-##################################################################################
-
-
-class HomeOwnerViewServiceController:
-    def ViewServiceByID(self, ServiceID: str):
-        return Service.ViewServiceByID(ServiceID)
+    def SearchService(self, mode: int, searchTerm: str)->list[Service]:
+        return Service.SearchService(mode, searchTerm)
 
 
 
-##################################################################################
-# Req3.5 View Shortlist Service
-##################################################################################
 
 
-class HomeOwnerViewShortlistedServiceController:
 
-    def ViewShortlistedServiceByID(self, ServiceID: str):
-        return Service().ViewServiceByID(ServiceID)
 
 ##################################################################################
 # Req3.7View Account

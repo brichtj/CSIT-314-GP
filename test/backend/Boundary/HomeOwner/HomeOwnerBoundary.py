@@ -131,31 +131,6 @@ def ShortlistServiceByID(ServiceID: str, HomeOwnerID: str):
         )
 
 ##################################################################################
-# Req3.4 Search Shortlist Service
-##################################################################################
-
-
-@router.get("/ViewShortlistByHomeOwnerID")
-def ViewShortlistByHomeOwnerID(HomeOwnerID: str):
-    try:
-        controller = HomeOwnerViewShortListController()
-        result = controller.ViewShortlistByHomeOwnerID(HomeOwnerID)
-        return JSONResponse(ShortlistResponse(True, "Shortlist found", result).to_json())
-    except psycopg2.Error as e:
-        message = f"Database Error: {e}"
-        print(message)
-        return JSONResponse(
-            content=Response(False, "Database Error").to_json(),
-            status_code=400
-        )
-    except Exception as e:
-        print(f"exception has occured: {e}")
-        return JSONResponse(
-            content=Response(False, "internal server error").to_json(),
-            status_code=505
-        )
-
-##################################################################################
 # Req3.5 View Shortlist Service
 ##################################################################################
 
@@ -265,7 +240,7 @@ def SuspendAccount(HomeOwnerID: str):
         )
 
 ##################################################################################
-# View History
+# View History req 6.1
 ##################################################################################
 
 

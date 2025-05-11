@@ -20,3 +20,13 @@ class DeleteServiceController:
 class SearchServiceCleanerIDController:
     def SearchServiceCleanerIDController(self,Title:str,CleanerID:int)->list[Service]:
         return Service().searchServiceByCleanerID(Title,CleanerID)
+    
+##################################################################################
+# Req3.4 Search Shortlist Service
+##################################################################################
+
+
+class HomeOwnerViewShortListController:
+
+    def ViewShortlistByHomeOwnerID(self, HomeOwnerID: str):
+        return HomeOwner().ViewShortListByHomeOwnerID(HomeOwnerID)

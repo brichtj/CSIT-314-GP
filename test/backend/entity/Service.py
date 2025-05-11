@@ -207,25 +207,25 @@ class Service:
             log_exception(e)
             raise e
 
-##################################################################################
-# Update Total Shortlisted Count of Services
-##################################################################################
+# ##################################################################################
+# # Update Total Shortlisted Count of Services(this is a helper entity method, when user shortlist service, we have to increase the count )
+# ##################################################################################
 
-    def UpdateTotalShortlistedCountViewByID(self, ServiceID):
-        query = """
-                UPDATE "Service"
-                SET "LikeCount" = (
-                    SELECT COUNT(*)
-                    FROM "ServiceLikes"
-                    WHERE "ServiceID" = %s
-                )
-                WHERE "ServiceID" = %s
-                """
-        params = (ServiceID, ServiceID)
+#     def UpdateTotalShortlistedCountViewByID(self, ServiceID):
+#         query = """
+#                 UPDATE "Service"
+#                 SET "LikeCount" = (
+#                     SELECT COUNT(*)
+#                     FROM "ServiceLikes"
+#                     WHERE "ServiceID" = %s
+#                 )
+#                 WHERE "ServiceID" = %s
+#                 """
+#         params = (ServiceID, ServiceID)
 
-        result = self.db.execute_update(query, params)
+#         result = self.db.execute_update(query, params)
 
-        return result
+#         return result
 
 ##################################################################################
 # View Total Matches Count of Services
@@ -285,7 +285,7 @@ class Service:
             "MatchCount": self.MatchCount,
             "Price": self.Price
         }
-    
+    #req 2 create service
     def createService(self,CategoryID,Title,Description,CleanerID,Price,ImageLink)->bool:
         try:
             query = """

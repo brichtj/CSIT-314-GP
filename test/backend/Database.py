@@ -138,6 +138,40 @@ class DB:
             self.conn.rollback()
             #print(f"Database error: {e}")
             raise(e)
+            
+    def update_two_tables(
+            self,
+        update1_query, update1_params,
+        update2_query, update2_params,
+        require_rows=True  # If True, require at least one row to be updated
+    ):
+        try:
+            self.conn.autocommit = False
+            cur = self.conn.cursor()
+
+            cur.execute(update1_query, update1_params)
+            if require_rows and cur.rowcount == 0:
+                raise Exception("First update matched no rows.")
+
+            cur.execute(update2_query, update2_params)
+            if require_rows and cur.rowcount == 0:
+                raise Exception("Second update matched no rows.")
+
+            self.conn.commit()
+            return True
+
+        except Exception as e:
+            print("Transaction failed:", e)
+            if self.conn:
+                self.conn.rollback()
+            return False
+
+        finally:
+            if 'cur' in locals():
+                cur.close()
+            if 'conn' in locals():
+                self.conn.close()
+
     def execute_delete(self, query, params=()) -> bool:
         try:
             self.cur.execute(query, params)

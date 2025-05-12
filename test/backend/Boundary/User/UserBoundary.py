@@ -165,7 +165,7 @@ def ViewUserBoundary(UserID:int):
             return JSONResponse(Response(True,result.to_json()).to_json())
         else:
             #print(result)
-            return JSONResponse(Response(True,None).to_json())
+            return JSONResponse(Response(False,None).to_json())
 
     except psycopg2.IntegrityError as e:
         print(f"Integrity error (maybe duplicate user?): {e}")

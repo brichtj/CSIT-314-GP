@@ -1,5 +1,6 @@
 from typing import Self
 from Classes.LoginResponse import LoginResponse
+from .UserProfile import UserProfile
 from Database import DB
 import bcrypt
 from utils.utils import log_exception
@@ -7,7 +8,7 @@ from utils.utils import log_exception
 
 class User():
     # Password =  input_Password
-    def __init__(self, user_id,username=None, email=None, phone=None,is_active=True,userProfileID=None,Address=None,Experience=None):
+    def __init__(self, user_id,username=None, email=None, phone=None,is_active=True,userProfileID=None,Address=None,Experience=None,UserProfile = None):
         self.UserID = user_id
         self.Username = username
         self.Email = email
@@ -16,11 +17,10 @@ class User():
         self.UserProfile = userProfileID
         self.Address = Address
         self.Experience = Experience
-        self.db = DB()
+        self.UserProfile = UserProfile
 
     #to json method
     def to_json(self):
-        print(self.Experience)
         return {
             "UserID": self.UserID,
             "Username": self.Username,
@@ -29,15 +29,19 @@ class User():
             "IsActive": self.IsActive,
             "UserProfile": self.UserProfile,
             "Address": self.Address,
-            "Experience": float(self.Experience) if self.Experience is not None else self.Experience
+            "Experience": float(self.Experience) if self.Experience is not None else self.Experience,
+            "UserProfile": self.UserProfile.to_json()
         }
     @staticmethod
     def login(username:str,password:str)->LoginResponse:
         try:
             query = """
-                SELECT "UserID", "Username",  "Email", "Phone", "IsActive","UserProfileID", "Address", "Experience","Password"
-                 
-                   FROM "user" WHERE "Username" = %s
+                SELECT "UserID", "Username",  "Email", "Phone", "IsActive","user"."UserProfileID", "Address", "Experience","Password"
+                ,"Name","Privilege","IsActive"
+                FROM "user"
+                Left join "UserProfile" on "UserProfile"."UserProfileID" = "user"."UserProfileID"    
+                            
+                WHERE "Username" = %s
             """
             params = (username,)
             result = DB().fetch_one_by_key(query, params)
@@ -50,7 +54,8 @@ class User():
             elif result["IsActive"] == False:
                 return LoginResponse(False, "User suspended", None)
             else:
-                user = User(result["UserID"],result["Username"],result["Email"],result["Phone"],result["IsActive"],result["UserProfileID"],result["Address"],result["Experience"])
+                userProfile = UserProfile(result["UserProfileID"],result["Name"],result["Privilege"],result["IsActive"])
+                user = User(result["UserID"],result["Username"],result["Email"],result["Phone"],result["IsActive"],result["UserProfileID"],result["Address"],result["Experience"],userProfile)
                 return LoginResponse(True, "welcome", user)
 
         except Exception as e:
@@ -81,20 +86,26 @@ class User():
     def viewUser(UserID:int)->Self:
         try:
             query = """
-                        SELECT "UserID", "Username", "UserProfileID", "Email", "Phone", "IsActive", "Address", "Experience"
-                        FROM "user"
+                        
+                SELECT "UserID", "Username",  "Email", "Phone", "IsActive","user"."UserProfileID", "Address", "Experience","Password"
+                ,"Name","Privilege","IsActive"
+                FROM "user"
+                Left join "UserProfile" on "UserProfile"."UserProfileID" = "user"."UserProfileID"    
                         WHERE "UserID" = %s
+                           
                     """
             params = (UserID,)
             # formatted_query = query % tuple(map(lambda x: f"'{x}'", params))
             # print(f"Formatted query: {formatted_query}")
 
-            result = DB().execute_fetchone(query, params)
+            result = DB().fetch_one_by_key(query, params)
             #create json object based on query results
            
 
-            if result is not None:
-                user = User(result[0],result[1],result[3],result[4],result[5],result[2],result[6],result[7])
+            if result is not None:     
+                userProfile = UserProfile(result["UserProfileID"],result["Name"],result["Privilege"],result["IsActive"])
+                user = User(result["UserID"],result["Username"],result["Email"],result["Phone"],result["IsActive"],result["UserProfileID"],result["Address"],result["Experience"],userProfile)
+           
                 return user
             else:               
                 return None

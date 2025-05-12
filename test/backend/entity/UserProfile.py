@@ -108,21 +108,6 @@ class UserProfile():
         except Exception as e:
             log_exception(e)
             raise (e)
-    def pullExperience(self):
-        query = """
-                SELECT "Experience"
-                FROM "Cleaner"
-                WHERE "CleanerID" = %s
-                """
-        params = (self.UserID,)
-
-        result = DB().execute_fetchone(query, params)
-
-        if result:
-            self.Experience = result[0]
-            print(f'{self.Username}: Experience pulled')
-        else:
-            print(f'{self.Username}: Failed to pull Experience')
     #req 1.2 update User Profile
     def updateUserProfile( name:str,privilege:str,is_active:bool,userprofileID:int)->bool:#overwrite User.searchByUserID 
         try:

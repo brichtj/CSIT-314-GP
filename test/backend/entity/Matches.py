@@ -11,8 +11,10 @@ from utils.utils import log_exception
 
 
 class Matches:
-    def __init__(self):
+    def __init__(self,ServiceID:int,HomeOwnerID:int):
         self.db = DB()
+        self.ServiceID = ServiceID
+        self.HomeOwnerID = HomeOwnerID
 
     def SearchByServiceID(self, ServiceID):
         try:

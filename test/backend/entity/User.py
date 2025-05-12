@@ -86,6 +86,9 @@ class User():
     def viewUser(UserID:int)->Self:
         try:
             query = """
+                        SELECT "UserID", "Username", "UserProfileID", "Email", "Phone", "IsActive", "Address", "Experience"
+                        FROM "user"
+                        WHERE "UserID" = %s
                         
                 SELECT "UserID", "Username",  "Email", "Phone", "IsActive","user"."UserProfileID", "Address", "Experience","Password"
                 ,"Name","Privilege","IsActive"
@@ -159,57 +162,7 @@ class User():
         except Exception as e:
             log_exception(e)
             raise (e)
-    # put into homeowner class
-    # def pullAddress(self):
-    #     query = """
-    #             SELECT "Address"
-    #             FROM "HomeOwner"
-    #             WHERE "HomeOwnerID" = %s
-    #             """
-    #     params = (self.UserID,)
-
-    #     result = self.db.execute_fetchone(query, params)
-
-    #     if result:
-    #         self.Address = result[0]
-    #         print(f'{self.Username}: Address pulled')
-    #     else:
-    #         print(f'{self.Username}: Failed to pull Address')
-    
-    def checkPassword(self) -> bool:
-        input_password_bytes = self.input_Password.encode('utf-8')
-        hash_password_bytes = self.Password.encode('utf-8')
-
-        print(f"{self.Username}: Authenticating")
-        return bcrypt.checkpw(input_password_bytes, hash_password_bytes)
-    
-
-    def checkPassword(self) -> bool:
-        input_password_bytes = self.input_Password.encode('utf-8')
-        hash_password_bytes = self.Password.encode('utf-8')
-
-        is_match = bcrypt.checkpw(input_password_bytes, hash_password_bytes)
-        print(f"{self.Username}: Password match = {is_match}")
-        return is_match
-    """
-    def to_dict(self) -> dict:
-        dict = {
-            "UserID": self.UserID,
-            "Username": self.Username,
-            "UserProfile": self.UserProfile,
-            "Email": self.Email,
-            "Phone": self.Phone
-        }
-    """
-    def to_dict(self) -> dict:
-        return {
-            "id": self.UserID,
-            "name": self.Username,
-            "UserProfile": self.UserProfile,
-            "Email": self.Email,
-            "Phone": self.Phone
-        }
-
+        
     #req 1.1 update User 
     def updateUser(username:str,email:str,phone:str,IsActive:bool,UserProfileID:int,address:str,experience:float,UserID:int)->bool:#overwrite User.searchByUserID 
         try:

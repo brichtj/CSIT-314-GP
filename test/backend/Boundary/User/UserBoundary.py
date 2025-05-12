@@ -11,7 +11,7 @@ import psycopg2
 router = APIRouter()
 
 
-# req login
+# misc req login
 class LoginRequest(BaseModel):
     username: str
     password: str

@@ -56,7 +56,7 @@ class Service:
 # Req3.1 Search Service
 ##################################################################################
     @staticmethod
-    def SearchService(mode: int, searchTerm: str):
+    def SearchService(mode: int, searchTerm: str)->Self:
         try:
 
             query = ''
@@ -156,22 +156,8 @@ class Service:
             log_exception(e)
             raise e
 
-
-    def to_dict(self) -> dict:
-        return {
-            "ServiceID": self.ServiceID,
-            "CategoryID": self.CategoryID,
-            "Title": self.Title,
-            "Description": self.Description,
-            "DatePosted": self.DatePosted,
-            "CleanerID": self.CleanerID,
-            "LikeCount": self.LikeCount,
-            "ViewCount": self.ViewCount,
-            "MatchCount": self.MatchCount,
-            "Price": self.Price
-        }
     #req 2 create service
-    def createService(self,CategoryID,Title,Description,CleanerID,Price,ImageLink)->bool:
+    def createService(self,CategoryID:int ,Title:str ,Description:str ,CleanerID:int ,Price:float ,ImageLink:str)->bool:
         try:
             query = """
                     INSERT INTO "Service" ("CategoryID", "Title", "Description", "CleanerID", "price", "ImageLink")

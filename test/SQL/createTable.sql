@@ -1,116 +1,189 @@
-DROP TABLE IF EXISTS "ServiceLikes" CASCADE;
-DROP TABLE IF EXISTS "Views" CASCADE;
-DROP TABLE IF EXISTS "Matches" CASCADE;
-DROP TABLE IF EXISTS "Service" CASCADE;
-DROP TABLE IF EXISTS "Category" CASCADE;
-DROP TABLE IF EXISTS "HomeOwner" CASCADE;
-DROP TABLE IF EXISTS "Cleaner" CASCADE;
-DROP TABLE IF EXISTS "UserAdmin" CASCADE;
-DROP TABLE IF EXISTS "PlatformManagement" CASCADE;
-DROP TABLE IF EXISTS "user" CASCADE;
-DROP TABLE IF EXISTS "UserProfile" CASCADE;
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
 
-CREATE TABLE "UserProfile"(
-  "UserProfileID" integer PRIMARY KEY,
-  "Name" varchar,
-  "Privilages" varchar
+DROP SCHEMA IF EXISTS public CASCADE;
+CREATE SCHEMA public;
+ALTER SCHEMA public OWNER TO pg_database_owner;
+
+CREATE TYPE public.user_profile_enum AS ENUM (
+    'UserAdmin',
+    'Cleaner',
+    'HomeOwner',
+    'PlatformManagement'
 );
 
-CREATE TABLE "user" (
-  "UserID" integer PRIMARY KEY,
-  "Username" varchar NOT NULL,
-  "UserProfileID" integer NOT NULL,
-  "Email" varchar NOT NULL,
-  "Phone" varchar,
-  "Password" varchar NOT NULL,
-  "IsActive" boolean NOT NULL
+ALTER TYPE public.user_profile_enum OWNER TO postgres;
+
+SET default_tablespace = '';
+SET default_table_access_method = heap;
+
+CREATE TABLE public."Category" (
+    "CategoryID" integer NOT NULL,
+    "Title" text,
+    "Description" text,
+    "Is_Active" boolean DEFAULT true NOT NULL
 );
 
-CREATE TABLE "HomeOwner" (
-  "HomeOwnerID" integer PRIMARY KEY,
-  "Address" varchar NOT NULL
+ALTER TABLE public."Category" OWNER TO postgres;
+
+CREATE SEQUENCE public."CategoryID"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public."CategoryID" OWNER TO postgres;
+
+CREATE TABLE public."Matches" (
+    "ServiceID" integer NOT NULL,
+    "HomeOwnerID" integer NOT NULL,
+    "Price" double precision,
+    "Date" timestamp with time zone DEFAULT now() NOT NULL,
+    "Rating" integer
 );
 
-CREATE TABLE "Cleaner" (
-  "CleanerID" integer PRIMARY KEY,
-  "Experience" float NOT NULL
+ALTER TABLE public."Matches" OWNER TO postgres;
+
+CREATE TABLE public."Service" (
+    "ServiceID" integer NOT NULL,
+    "CategoryID" integer NOT NULL,
+    "Title" character varying NOT NULL,
+    "Description" text NOT NULL,
+    "DatePosted" timestamp with time zone DEFAULT now() NOT NULL,
+    "CleanerID" integer NOT NULL,
+    "LikeCount" integer DEFAULT 0 NOT NULL,
+    "ViewCount" integer DEFAULT 0 NOT NULL,
+    "MatchCount" integer DEFAULT 0 NOT NULL,
+    price double precision NOT NULL,
+    "ImageLink" text
 );
 
-CREATE TABLE "UserAdmin" (
-  "AdminID" integer PRIMARY KEY
+ALTER TABLE public."Service" OWNER TO postgres;
+
+CREATE SEQUENCE public."ServiceID_Seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public."ServiceID_Seq" OWNER TO postgres;
+
+CREATE TABLE public."Shortlist_Record" (
+    "ServiceID" integer NOT NULL,
+    "HomeOwnerID" integer NOT NULL
 );
 
-CREATE TABLE "PlatformManagement" (
-  "ManagerID" integer PRIMARY KEY
+ALTER TABLE public."Shortlist_Record" OWNER TO postgres;
+
+CREATE TABLE public."UserProfile" (
+    "UserProfileID" integer NOT NULL,
+    "Name" text NOT NULL,
+    "Privilege" text NOT NULL,
+    "Is_Active" boolean DEFAULT true NOT NULL
 );
 
-CREATE TABLE "Service" (
-  "ServiceID" integer PRIMARY KEY,
-  "CategoryID" integer NOT NULL,
-  "Title" varchar NOT NULL,
-  "Description" text,
-  "DatePosted" timestamp NOT NULL,
-  "CleanerID" integer NOT NULL,
-  "LikeCount" integer NOT NULL,
-  "ViewCount" integer NOT NULL,
-  "MatchCount" integer NOT NULL,
-  "Price" float NOT NULL
+ALTER TABLE public."UserProfile" OWNER TO postgres;
+
+CREATE SEQUENCE public."UserProfile_UserProfileID_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public."UserProfile_UserProfileID_seq" OWNER TO postgres;
+
+CREATE TABLE public."Views" (
+    "HomeOwnerID" integer NOT NULL,
+    "ServiceID" integer NOT NULL
 );
 
-CREATE TABLE "ServiceLikes" (
-  "ServiceID" integer NOT NULL,
-  "HomeOwnerID" integer NOT NULL
+ALTER TABLE public."Views" OWNER TO postgres;
+
+CREATE TABLE public."user" (
+    "UserID" integer NOT NULL,
+    "Username" character varying,
+    "Email" character varying,
+    "Phone" character varying,
+    "Password" character varying,
+    "IsActive" boolean,
+    "UserProfileID" integer NOT NULL,
+    "Address" text,
+    "Experience" numeric
 );
 
-CREATE TABLE "Category" (
-  "CategoryID" integer PRIMARY KEY,
-  "Title" varchar NOT NULL,
-  "Description" text
-);
+ALTER TABLE public."user" OWNER TO postgres;
 
-CREATE TABLE "Views" (
-  "HomeOwnerID" integer NOT NULL,
-  "ServiceID" integer NOT NULL
-);
+CREATE SEQUENCE public."user_UserID_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
-CREATE TABLE "Matches" (
-  "ServiceID" integer NOT NULL,
-  "HomeOwnerID" integer NOT NULL,
-  "Price" float NOT NULL,
-  "Date" timestamp NOT NULL,
-  "Rating" Integer
-);
+ALTER SEQUENCE public."user_UserID_seq" OWNER TO postgres;
 
-CREATE UNIQUE INDEX ON "ServiceLikes" ("ServiceID", "HomeOwnerID");
+ALTER TABLE ONLY public."Category"
+    ADD CONSTRAINT "Category_pkey" PRIMARY KEY ("CategoryID");
 
-CREATE UNIQUE INDEX ON "Views" ("ServiceID", "HomeOwnerID");
+ALTER TABLE ONLY public."Service"
+    ADD CONSTRAINT "Service_pkey" PRIMARY KEY ("ServiceID");
 
-COMMENT ON TABLE "Service" IS 'Service can only be listed by Cleaners, so limit to UserID that has userprofileID of cleaner, LikeCount is so we dont have to aggregate for every service post';
+ALTER TABLE ONLY public."Category"
+    ADD CONSTRAINT "Unique Title" UNIQUE ("Title");
 
-COMMENT ON TABLE "ServiceLikes" IS 'AutoIncremented LikeID, ServiceLikes can only be owned by homeowner';
+ALTER TABLE ONLY public."UserProfile"
+    ADD CONSTRAINT "Unique UserProfileName" UNIQUE ("Name");
 
-ALTER TABLE "user" ADD FOREIGN KEY ("UserProfileID") REFERENCES "UserProfile" ("UserProfileID") ON DELETE CASCADE;
+ALTER TABLE ONLY public."Service"
+    ADD CONSTRAINT "Unique_Title_service" UNIQUE ("Title");
 
-ALTER TABLE "HomeOwner" ADD FOREIGN KEY ("HomeOwnerID") REFERENCES "user" ("UserID") ON DELETE CASCADE;
+ALTER TABLE ONLY public."UserProfile"
+    ADD CONSTRAINT "UserProfile_pkey" PRIMARY KEY ("UserProfileID");
 
-ALTER TABLE "Cleaner" ADD FOREIGN KEY ("CleanerID") REFERENCES "user" ("UserID") ON DELETE CASCADE;
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT "user_Username_key" UNIQUE ("Username");
 
-ALTER TABLE "UserAdmin" ADD FOREIGN KEY ("AdminID") REFERENCES "user" ("UserID") ON DELETE CASCADE;
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_pkey PRIMARY KEY ("UserID");
 
-ALTER TABLE "PlatformManagement" ADD FOREIGN KEY ("ManagerID") REFERENCES "user" ("UserID") ON DELETE CASCADE;
+CREATE UNIQUE INDEX "Shortlist_Record_ServiceID_HomeOwnerID_idx" ON public."Shortlist_Record" USING btree ("ServiceID", "HomeOwnerID");
 
-ALTER TABLE "Matches" ADD FOREIGN KEY ("HomeOwnerID") REFERENCES "HomeOwner" ("HomeOwnerID") ON DELETE CASCADE;
+GRANT USAGE ON SCHEMA public TO root;
 
-ALTER TABLE "Views" ADD FOREIGN KEY ("HomeOwnerID") REFERENCES "HomeOwner" ("HomeOwnerID") ON DELETE CASCADE;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public."Category" TO root;
 
-ALTER TABLE "ServiceLikes" ADD FOREIGN KEY ("HomeOwnerID") REFERENCES "HomeOwner" ("HomeOwnerID") ON DELETE CASCADE;
+GRANT ALL ON SEQUENCE public."CategoryID" TO root;
 
-ALTER TABLE "Service" ADD FOREIGN KEY ("CleanerID") REFERENCES "Cleaner" ("CleanerID") ON DELETE CASCADE;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public."Matches" TO root;
 
-ALTER TABLE "ServiceLikes" ADD FOREIGN KEY ("ServiceID") REFERENCES "Service" ("ServiceID") ON DELETE CASCADE;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public."Service" TO root;
 
-ALTER TABLE "Matches" ADD FOREIGN KEY ("ServiceID") REFERENCES "Service" ("ServiceID") ON DELETE CASCADE;
+GRANT ALL ON SEQUENCE public."ServiceID_Seq" TO root;
 
-ALTER TABLE "Views" ADD FOREIGN KEY ("ServiceID") REFERENCES "Service" ("ServiceID") ON DELETE CASCADE;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public."Shortlist_Record" TO root;
 
-ALTER TABLE "Service" ADD FOREIGN KEY ("CategoryID") REFERENCES "Category" ("CategoryID") ON DELETE CASCADE;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public."UserProfile" TO root;
+
+GRANT SELECT,USAGE ON SEQUENCE public."UserProfile_UserProfileID_seq" TO root;
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public."Views" TO root;
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public."user" TO root;
+
+GRANT ALL ON SEQUENCE public."user_UserID_seq" TO root;
+
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT SELECT,INSERT,DELETE,UPDATE ON TABLES TO root;

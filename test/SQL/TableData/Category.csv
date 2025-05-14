@@ -1,0 +1,101 @@
+CategoryID,Title,Description,Is_Active
+1,General Cleaning,"Standard cleaning for homes, offices, and other spaces.",true
+2,Washing,"Includes washing of clothes, linens, and other fabric items.",true
+3,Laundry Services,"Complete laundry services including washing, drying, and folding.",true
+4,Polishing,"Polishing of furniture, floors, and other surfaces to restore shine.",true
+5,Sanitization,Sanitizing high-touch areas and surfaces to prevent the spread of germs.,true
+6,Deep Cleaning,"Thorough cleaning of all surfaces, including hard-to-reach areas.",true
+7,Disinfection,Applying disinfectants to kill germs and viruses on all surfaces.,true
+8,Surface Cleaning,"General cleaning of all types of surfaces including tables, counters, and shelves.",true
+9,Upholstery Cleaning,"Cleaning and maintaining sofas, chairs, and other fabric-covered furniture.",true
+10,Floor Care,"Cleaning, waxing, and polishing of all floor types (wood, tile, carpet).",true
+11,Window Cleaning,Exterior and interior window cleaning to remove dirt and smudges.,true
+12,Dusting,"Removing dust from all surfaces, including furniture, shelves, and baseboards.",true
+13,Trash Removal,Disposing of trash and recyclables from homes or offices.,true
+14,Pressure Washing,Using high-pressure water to clean exterior surfaces like driveways and walls.,true
+15,Organizing & Decluttering,"Sorting, organizing, and decluttering spaces such as closets and rooms.",true
+16,Home Maintenance Cleaning,"General upkeep cleaning of homes, ensuring everything stays tidy and organized.",true
+17,Carpet and Rug Care,"Vacuuming, shampooing, and restoring carpets and rugs to their original state.",true
+18,Gutter Cleaning,Cleaning and clearing debris from roof gutters to prevent blockages.,true
+19,Post-Construction Cleaning,"Removing dust, debris, and materials left behind after construction work.",true
+20,Move-In/Move-Out Cleaning,Thorough cleaning services for homes when moving in or out.,true
+21,Fridge Cooler Cleaning,Cleans and deodorizes refrigerator coolers.,true
+22,Oven Deep Cleaning,Removes grease buildup inside ovens.,false
+23,Tile Grout Scrubbing,Cleans tile lines to restore shine.,true
+24,Wall-Mounted Fan Cleaning,Removes marks and dirt from wall mounted fans.,true
+25,Light Fixture Cleaning,Sanitizes and dusts chandeliers and lamps.,true
+26,Pool Cleaning,Cleans and balances chemicals in pools.,true
+27,Trash Bin Sanitation,Disinfects garbage and recycle bins.,false
+28,Power Washing,"Deep cleaning for outdoor surfaces, including driveways and patios, using high-pressure water.",true
+29,Basement Cleaning,Clears clutter and disinfects basement spaces.,true
+30,Staircase Polishing,Polishes stair treads and railings.,false
+31,Desk Disinfection,Sanitizes office and home desks.,true
+32,Mirror Cleaning,Polishes mirrors to remove smudges.,true
+33,Home Office Cleaning,Cleans electronic and desk areas.,true
+34,Laundry Room Cleaning,"Cleans washers, dryers, and surrounding area.",true
+35,Driveway Pressure Wash,Cleans oil stains and dirt from driveways.,true
+36,Gutter Clearing,Removes debris from rooftop gutters.,false
+37,Fan Cleaning,Dusts and sanitizes ceiling and stand fans.,true
+38,Closet Organization,Sorts and arranges closet items.,false
+39,Baby Room Cleaning,Sanitizes toys and baby furniture.,true
+40,Allergy Cleaning,Removes allergens with special vacuums.,true
+41,Steam Cleaning,Sterilizes surfaces using hot steam.,true
+42,Tile Sealing,Seals and protects newly cleaned tiles.,false
+43,Deck Scrubbing,Cleans and polishes wooden decks.,true
+44,Wallpaper Cleaning,Removes dust from delicate wallpaper.,true
+45,Doormat Cleaning,Washes and disinfects doormats.,true
+46,Furniture Dusting,Removes dust from wooden furniture.,true
+47,Lamp Shade Cleaning,Cleans fabric and glass lamp shades.,false
+48,Refrigerator Coil Cleaning,Cleans coils for better energy efficiency.,true
+49,Grease Trap Cleaning,Cleans traps in commercial kitchens.,false
+50,Chimney Cleaning,Removes soot buildup from chimneys.,true
+51,Attic Cleaning,Cleans dusty and unused attic spaces.,true
+52,Tabletop Polishing,Polishes wooden and marble tables.,false
+53,Microwave Cleaning,Removes spills and food splatters.,true
+54,Pet Hair Removal,Vacuums pet hair from surfaces.,true
+55,Toilet Bowl Descaling,Removes lime buildup from toilets.,false
+56,Garage Floor Degreasing,Cleans oil and grime from garage floors.,true
+57,Fence Cleaning,Cleans metal or wooden fences.,true
+58,BBQ Grill Cleaning,Cleans grates and exterior of grills.,true
+59,Bike Cleaning,Cleans and polishes bicycles.,false
+60,Window Frame Cleaning,Sanitizes and dusts window frames.,true
+61,Shower Glass Cleaning,Removes soap scum and water stains.,true
+62,Baseboard Cleaning,Cleans hard-to-reach baseboards.,true
+63,Patio Cleaning,Maintains patio tiles and furniture.,true
+64,Tableware Polishing,Shines silverware and glassware.,false
+65,TV Screen Cleaning,Cleans LED and OLED screens gently.,true
+66,Vacuum Filter Cleaning,Cleans reusable vacuum filters.,true
+67,Bookshelf Dusting,Organizes and dusts bookshelf areas.,true
+68,Air Duct Cleaning,"Thorough cleaning of HVAC ducts to improve air quality and prevent allergens.",true
+69,Tool Organization,Organizes household toolboxes and garages.,false
+70,Shutter Cleaning,Dusts and wipes wooden or metal shutters.,true
+71,Rug Beating,Cleans rugs using traditional techniques.,true
+72,Elevator Panel Cleaning,Cleans and disinfects lift panels.,true
+73,Door Handle Disinfection,Cleans frequently touched handles.,true
+74,Toaster Cleaning,Removes crumbs and burns from toaster.,false
+75,Light Switch Disinfection,Cleans and sanitizes switches.,true
+76,Keyboard Cleaning,Disinfects and vacuums keyboard surfaces.,true
+77,Mouse Pad Cleaning,Cleans fabric or rubber pads.,true
+78,Ceiling Dusting,Removes cobwebs and dust from ceilings.,true
+79,Window Screen Washing,Washes mesh screens without damage.,false
+80,Furniture Polishing,"Polishing and restoring wooden furniture to bring back its shine.",true
+81,Tool Sanitization,Disinfects frequently used tools.,false
+82,Air Vent Cleaning,Cleans HVAC air vents thoroughly.,true
+83,Cabinet Cleaning,Removes crumbs and wipes inside cabinets.,true
+84,Entryway Cleaning,Keeps entrances tidy and safe.,true
+85,Glass Table Cleaning,Cleans streaks from glass tables.,true
+86,Tile Waxing,Applies shine wax to floors.,false
+87,Bath Mat Washing,Cleans and dries bathroom mats.,true
+88,Plant Area Cleaning,Cleans and arranges indoor plant areas.,true
+89,Trash Sorting,Aids in proper waste sorting.,false
+90,Dog Kennel Cleaning,Cleans and disinfects pet cages.,true
+91,Shoe Rack Cleaning,Cleans and organizes shoe racks.,true
+92,Towel Rack Wiping,Wipes and sanitizes towel holders.,true
+93,Toilet Tank Cleaning,Cleans interior of toilet tanks.,false
+94,Remote Control Sanitization,Disinfects all TV or AC remotes.,true
+95,Light Bulb Cleaning,Wipes bulbs for brighter lighting.,true
+96,Bathroom Mirror Polishing,Removes streaks from mirrors.,true
+97,Water Dispenser Cleaning,Cleans and descales dispensers.,true
+98,Plastic Bin Cleaning,Cleans plastic storage containers.,false
+99,Mobile Charging Area Cleaning,Organizes and wipes device zones.,true
+100,Chopping Board Sanitization,Disinfects wooden and plastic boards.,true

@@ -1,0 +1,5 @@
+UserProfileID,Name,Privilege,Is_Active
+3,HomeOwner,HomeOwnerPage,true
+1,UserAdmin,UserAdminPage,true
+4,PlatformManagement,PlatformManagementPage,true
+2,Cleaner,CleanerPage,true

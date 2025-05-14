@@ -1,0 +1,101 @@
+ServiceID,CategoryID,Title,Description,DatePosted,CleanerID,LikeCount,ViewCount,MatchCount,price,ImageLink
+1,5,Complete Sanitization,Sanitizing high-touch areas and surfaces to prevent the spread of germs,2021-03-17,166,0,0,0,62.35,https://example.com/images/sanitization.jpg
+2,19,Deluxe Post-Construction Cleaning,"Removing dust, debris, and materials left behind after construction work",2023-03-12,198,0,0,0,101.01,https://example.com/images/post-construction_cleaning.jpg
+3,17,Affordable Carpet and Rug Care,"Vacuuming, shampooing, and restoring carpets and rugs to their original state",2016-09-30,30,0,0,0,86.34,https://example.com/images/carpet_and_rug_care.jpg
+4,18,Intensive Gutter Cleaning,Cleaning and clearing debris from roof gutters to prevent blockages,2022-06-24,162,0,0,0,106.99,https://example.com/images/gutter_cleaning.jpg
+5,10,Express Floor Care,"Cleaning, waxing, and polishing of all floor types (wood, tile, carpet)",2017-12-27,70,0,0,0,51.48,https://example.com/images/floor_care.jpg
+6,6,Eco-Friendly Deep Cleaning,"Thorough cleaning of all surfaces, including hard-to-reach areas",2016-02-29,82,0,0,0,89.71,https://example.com/images/deep_cleaning.jpg
+7,5,Eco-Friendly Sanitization,Sanitizing high-touch areas and surfaces to prevent the spread of germs,2024-07-13,166,0,0,0,90.0,https://example.com/images/sanitization.jpg
+8,5,Reliable Sanitization,Sanitizing high-touch areas and surfaces to prevent the spread of germs,2015-04-21,82,0,0,0,31.61,https://example.com/images/sanitization.jpg
+9,5,Top-Rated Sanitization,Sanitizing high-touch areas and surfaces to prevent the spread of germs,2023-11-13,118,0,0,0,100.77,https://example.com/images/sanitization.jpg
+10,2,Complete Washing,"Includes washing of clothes, linens, and other fabric items",2022-11-14,138,0,0,0,92.29,https://example.com/images/washing.jpg
+11,1,Complete General Cleaning,"Standard cleaning for homes, offices, and other spaces",2017-03-21,22,0,0,0,44.22,https://example.com/images/general_cleaning.jpg
+12,1,Reliable General Cleaning,"Standard cleaning for homes, offices, and other spaces",2021-08-09,2,0,0,0,51.29,https://example.com/images/general_cleaning.jpg
+13,19,Complete Post-Construction Cleaning,"Removing dust, debris, and materials left behind after construction work",2020-03-03,178,0,0,0,87.46,https://example.com/images/post-construction_cleaning.jpg
+14,20,Thorough Move-In/Move-Out Cleaning,Thorough cleaning services for homes when moving in or out,2017-07-07,146,0,0,0,100.55,https://example.com/images/move-in/move-out_cleaning.jpg
+15,20,Eco-Friendly Move-In/Move-Out Cleaning,Thorough cleaning services for homes when moving in or out,2022-04-25,106,0,0,0,140.76,https://example.com/images/move-in/move-out_cleaning.jpg
+16,6,Express Deep Cleaning,"Thorough cleaning of all surfaces, including hard-to-reach areas",2020-08-07,106,0,0,0,90.06,https://example.com/images/deep_cleaning.jpg
+17,6,Thorough Deep Cleaning,"Thorough cleaning of all surfaces, including hard-to-reach areas",2021-08-30,54,0,0,0,137.62,https://example.com/images/deep_cleaning.jpg
+18,3,Deluxe Laundry Services,"Complete laundry services including washing, drying, and folding",2024-04-05,138,0,0,0,88.84,https://example.com/images/laundry_services.jpg
+19,1,Basic General Cleaning,"Standard cleaning for homes, offices, and other spaces",2020-07-25,70,0,0,0,135.75,https://example.com/images/general_cleaning.jpg
+20,10,Affordable Floor Care,"Cleaning, waxing, and polishing of all floor types (wood, tile, carpet)",2020-02-17,50,0,0,0,29.22,https://example.com/images/floor_care.jpg
+21,19,Gentle Post-Construction Cleaning,"Removing dust, debris, and materials left behind after construction work",2020-06-27,150,0,0,0,48.92,https://example.com/images/post-construction_cleaning.jpg
+22,6,Affordable Deep Cleaning,"Thorough cleaning of all surfaces, including hard-to-reach areas",2022-04-02,58,0,0,0,143.72,https://example.com/images/deep_cleaning.jpg
+23,18,Basic Gutter Cleaning,Cleaning and clearing debris from roof gutters to prevent blockages,2023-11-09,38,0,0,0,67.34,https://example.com/images/gutter_cleaning.jpg
+24,4,Complete Polishing,"Polishing of furniture, floors, and other surfaces to restore shine",2015-01-30,154,0,0,0,45.48,https://example.com/images/polishing.jpg
+25,14,Intensive Pressure Washing,Using high-pressure water to clean exterior surfaces like driveways and walls,2025-06-28,190,0,0,0,57.59,https://example.com/images/pressure_washing.jpg
+26,4,Deluxe Polishing,"Polishing of furniture, floors, and other surfaces to restore shine",2016-04-04,82,0,0,0,76.84,https://example.com/images/polishing.jpg
+27,16,Affordable Home Maintenance Cleaning,"General upkeep cleaning of homes, ensuring everything stays tidy and organized",2024-09-11,86,0,0,0,122.04,https://example.com/images/home_maintenance_cleaning.jpg
+28,8,Quick Surface Cleaning,"General cleaning of all types of surfaces including tables, counters, and shelves",2021-08-02,94,0,0,0,122.19,https://example.com/images/surface_cleaning.jpg
+29,17,Basic Carpet and Rug Care,"Vacuuming, shampooing, and restoring carpets and rugs to their original state",2024-10-02,158,0,0,0,49.84,https://example.com/images/carpet_and_rug_care.jpg
+30,11,Thorough Window Cleaning,Exterior and interior window cleaning to remove dirt and smudges,2023-06-23,66,0,0,0,47.5,https://example.com/images/window_cleaning.jpg
+31,6,Premium Deep Cleaning,"Thorough cleaning of all surfaces, including hard-to-reach areas",2024-11-09,26,0,0,0,27.31,https://example.com/images/deep_cleaning.jpg
+32,16,Top-Rated Home Maintenance Cleaning,"General upkeep cleaning of homes, ensuring everything stays tidy and organized",2022-10-07,122,0,0,0,104.7,https://example.com/images/home_maintenance_cleaning.jpg
+33,11,Reliable Window Cleaning,Exterior and interior window cleaning to remove dirt and smudges,2018-06-17,146,0,0,0,131.54,https://example.com/images/window_cleaning.jpg
+34,12,Express Dusting,"Removing dust from all surfaces, including furniture, shelves, and baseboards",2015-06-14,86,0,0,0,22.47,https://example.com/images/dusting.jpg
+35,9,Thorough Upholstery Cleaning,"Cleaning and maintaining sofas, chairs, and other fabric-covered furniture",2019-02-16,38,0,0,0,29.58,https://example.com/images/upholstery_cleaning.jpg
+36,15,Deluxe Organizing & Decluttering,"Sorting, organizing, and decluttering spaces such as closets and rooms",2023-07-01,78,0,0,0,22.32,https://example.com/images/organizing_&_decluttering.jpg
+37,12,Thorough Dusting,"Removing dust from all surfaces, including furniture, shelves, and baseboards",2025-06-08,166,0,0,0,69.62,https://example.com/images/dusting.jpg
+38,12,Premium Dusting,"Removing dust from all surfaces, including furniture, shelves, and baseboards",2025-11-15,126,0,0,0,60.66,https://example.com/images/dusting.jpg
+39,9,Eco-Friendly Upholstery Cleaning,"Cleaning and maintaining sofas, chairs, and other fabric-covered furniture",2023-07-16,6,0,0,0,117.74,https://example.com/images/upholstery_cleaning.jpg
+40,5,Thorough Sanitization,Sanitizing high-touch areas and surfaces to prevent the spread of germs,2019-08-06,114,0,0,0,124.16,https://example.com/images/sanitization.jpg
+41,13,Express Trash Removal,Disposing of trash and recyclables from homes or offices,2021-06-22,182,0,0,0,134.69,https://example.com/images/trash_removal.jpg
+42,4,Express Polishing,"Polishing of furniture, floors, and other surfaces to restore shine",2017-10-11,110,0,0,0,73.0,https://example.com/images/polishing.jpg
+43,4,Eco-Friendly Polishing,"Polishing of furniture, floors, and other surfaces to restore shine",2023-04-18,198,0,0,0,84.16,https://example.com/images/polishing.jpg
+44,7,Top-Rated Disinfection,Applying disinfectants to kill germs and viruses on all surfaces,2022-02-15,42,0,0,0,58.28,https://example.com/images/disinfection.jpg
+45,19,Intensive Post-Construction Cleaning,"Removing dust, debris, and materials left behind after construction work",2023-09-10,110,0,0,0,53.55,https://example.com/images/post-construction_cleaning.jpg
+46,10,Reliable Floor Care,"Cleaning, waxing, and polishing of all floor types (wood, tile, carpet)",2015-08-24,6,0,0,0,27.31,https://example.com/images/floor_care.jpg
+47,5,Affordable Sanitization,Sanitizing high-touch areas and surfaces to prevent the spread of germs,2022-12-10,90,0,0,0,86.47,https://example.com/images/sanitization.jpg
+48,19,Thorough Post-Construction Cleaning,"Removing dust, debris, and materials left behind after construction work",2016-07-06,170,0,0,0,149.48,https://example.com/images/post-construction_cleaning.jpg
+49,17,Premium Carpet and Rug Care,"Vacuuming, shampooing, and restoring carpets and rugs to their original state",2024-02-09,134,0,0,0,42.29,https://example.com/images/carpet_and_rug_care.jpg
+50,4,Intensive Polishing,"Polishing of furniture, floors, and other surfaces to restore shine",2021-04-03,122,0,0,0,30.35,https://example.com/images/polishing.jpg
+51,5,Intensive Sanitization,Sanitizing high-touch areas and surfaces to prevent the spread of germs,2021-10-27,26,0,0,0,20.53,https://example.com/images/sanitization.jpg
+52,18,Deep Gutter Cleaning,Cleaning and clearing debris from roof gutters to prevent blockages,2025-11-14,66,0,0,0,32.06,https://example.com/images/gutter_cleaning.jpg
+53,2,Deep Washing,"Includes washing of clothes, linens, and other fabric items",2023-09-11,42,0,0,0,131.13,https://example.com/images/washing.jpg
+54,18,Gentle Gutter Cleaning,Cleaning and clearing debris from roof gutters to prevent blockages,2016-12-23,154,0,0,0,76.56,https://example.com/images/gutter_cleaning.jpg
+55,13,Top-Rated Trash Removal,Disposing of trash and recyclables from homes or offices,2024-07-30,26,0,0,0,35.48,https://example.com/images/trash_removal.jpg
+56,2,Reliable Washing,"Includes washing of clothes, linens, and other fabric items",2016-08-15,66,0,0,0,130.58,https://example.com/images/washing.jpg
+57,15,Reliable Organizing & Decluttering,"Sorting, organizing, and decluttering spaces such as closets and rooms",2021-08-23,30,0,0,0,106.25,https://example.com/images/organizing_&_decluttering.jpg
+58,12,Affordable Dusting,"Removing dust from all surfaces, including furniture, shelves, and baseboards",2016-01-09,178,0,0,0,31.18,https://example.com/images/dusting.jpg
+59,13,Deluxe Trash Removal,Disposing of trash and recyclables from homes or offices,2020-06-19,34,0,0,0,79.9,https://example.com/images/trash_removal.jpg
+60,19,Quick Post-Construction Cleaning,"Removing dust, debris, and materials left behind after construction work",2015-08-17,6,0,0,0,75.21,https://example.com/images/post-construction_cleaning.jpg
+61,12,Gentle Dusting,"Removing dust from all surfaces, including furniture, shelves, and baseboards",2019-10-13,150,0,0,0,27.28,https://example.com/images/dusting.jpg
+62,12,Intensive Dusting,"Removing dust from all surfaces, including furniture, shelves, and baseboards",2020-06-30,170,0,0,0,77.18,https://example.com/images/dusting.jpg
+63,15,Eco-Friendly Organizing & Decluttering,"Sorting, organizing, and decluttering spaces such as closets and rooms",2015-04-06,154,0,0,0,46.59,https://example.com/images/organizing_&_decluttering.jpg
+64,3,Gentle Laundry Services,"Complete laundry services including washing, drying, and folding",2022-08-12,18,0,0,0,146.96,https://example.com/images/laundry_services.jpg
+65,20,Deluxe Move-In/Move-Out Cleaning,Thorough cleaning services for homes when moving in or out,2021-07-04,154,0,0,0,53.96,https://example.com/images/move-in/move-out_cleaning.jpg
+66,14,Eco-Friendly Pressure Washing,Using high-pressure water to clean exterior surfaces like driveways and walls,2021-05-05,138,0,0,0,42.83,https://example.com/images/pressure_washing.jpg
+67,15,Quick Organizing & Decluttering,"Sorting, organizing, and decluttering spaces such as closets and rooms",2017-05-05,122,0,0,0,147.91,https://example.com/images/organizing_&_decluttering.jpg
+68,9,Affordable Upholstery Cleaning,"Cleaning and maintaining sofas, chairs, and other fabric-covered furniture",2016-07-03,126,0,0,0,41.26,https://example.com/images/upholstery_cleaning.jpg
+69,11,Express Window Cleaning,Exterior and interior window cleaning to remove dirt and smudges,2020-09-14,2,0,0,0,89.88,https://example.com/images/window_cleaning.jpg
+70,13,Quick Trash Removal,Disposing of trash and recyclables from homes or offices,2024-10-01,106,0,0,0,39.15,https://example.com/images/trash_removal.jpg
+71,14,Premium Pressure Washing,Using high-pressure water to clean exterior surfaces like driveways and walls,2022-06-22,122,0,0,0,142.05,https://example.com/images/pressure_washing.jpg
+72,16,Deep Home Maintenance Cleaning,"General upkeep cleaning of homes, ensuring everything stays tidy and organized",2022-10-31,134,0,0,0,147.2,https://example.com/images/home_maintenance_cleaning.jpg
+73,20,Complete Move-In/Move-Out Cleaning,Thorough cleaning services for homes when moving in or out,2015-03-19,166,0,0,0,86.23,https://example.com/images/move-in/move-out_cleaning.jpg
+74,1,Gentle General Cleaning,"Standard cleaning for homes, offices, and other spaces",2018-05-02,186,0,0,0,139.19,https://example.com/images/general_cleaning.jpg
+75,10,Deep Floor Care,"Cleaning, waxing, and polishing of all floor types (wood, tile, carpet)",2015-07-13,198,0,0,0,105.95,https://example.com/images/floor_care.jpg
+76,16,Complete Home Maintenance Cleaning,"General upkeep cleaning of homes, ensuring everything stays tidy and organized",2019-11-05,70,0,0,0,116.42,https://example.com/images/home_maintenance_cleaning.jpg
+77,1,Deluxe General Cleaning,"Standard cleaning for homes, offices, and other spaces",2017-09-21,194,0,0,0,109.27,https://example.com/images/general_cleaning.jpg
+78,5,Premium Sanitization,Sanitizing high-touch areas and surfaces to prevent the spread of germs,2015-09-21,78,0,0,0,123.89,https://example.com/images/sanitization.jpg
+79,6,Deluxe Deep Cleaning,"Thorough cleaning of all surfaces, including hard-to-reach areas",2018-09-18,50,0,0,0,71.64,https://example.com/images/deep_cleaning.jpg
+80,2,Thorough Washing,"Includes washing of clothes, linens, and other fabric items",2023-09-01,46,0,0,0,72.04,https://example.com/images/washing.jpg
+81,17,Complete Carpet and Rug Care,"Vacuuming, shampooing, and restoring carpets and rugs to their original state",2017-08-21,138,0,0,0,136.45,https://example.com/images/carpet_and_rug_care.jpg
+82,10,Gentle Floor Care,"Cleaning, waxing, and polishing of all floor types (wood, tile, carpet)",2020-12-15,106,0,0,0,69.6,https://example.com/images/floor_care.jpg
+83,11,Complete Window Cleaning,Exterior and interior window cleaning to remove dirt and smudges,2025-04-29,30,0,0,0,107.9,https://example.com/images/window_cleaning.jpg
+84,1,Top-Rated General Cleaning,"Standard cleaning for homes, offices, and other spaces",2023-02-03,138,0,0,0,115.88,https://example.com/images/general_cleaning.jpg
+85,18,Affordable Gutter Cleaning,Cleaning and clearing debris from roof gutters to prevent blockages,2025-01-26,34,0,0,0,148.93,https://example.com/images/gutter_cleaning.jpg
+86,17,Express Carpet and Rug Care,"Vacuuming, shampooing, and restoring carpets and rugs to their original state",2018-04-18,162,0,0,0,85.57,https://example.com/images/carpet_and_rug_care.jpg
+87,13,Premium Trash Removal,Disposing of trash and recyclables from homes or offices,2016-12-27,146,0,0,0,42.04,https://example.com/images/trash_removal.jpg
+88,15,Top-Rated Organizing & Decluttering,"Sorting, organizing, and decluttering spaces such as closets and rooms",2024-07-19,30,0,0,0,39.28,https://example.com/images/organizing_&_decluttering.jpg
+89,14,Affordable Pressure Washing,Using high-pressure water to clean exterior surfaces like driveways and walls,2015-04-29,154,0,0,0,24.52,https://example.com/images/pressure_washing.jpg
+90,13,Complete Trash Removal,Disposing of trash and recyclables from homes or offices,2025-06-24,170,0,0,0,32.17,https://example.com/images/trash_removal.jpg
+91,4,Premium Polishing,"Polishing of furniture, floors, and other surfaces to restore shine",2021-05-07,34,0,0,0,139.39,https://example.com/images/polishing.jpg
+92,1,Affordable General Cleaning,"Standard cleaning for homes, offices, and other spaces",2025-02-14,134,0,0,0,40.28,https://example.com/images/general_cleaning.jpg
+93,12,Reliable Dusting,"Removing dust from all surfaces, including furniture, shelves, and baseboards",2015-08-12,110,0,0,0,90.75,https://example.com/images/dusting.jpg
+94,5,Deluxe Sanitization,Sanitizing high-touch areas and surfaces to prevent the spread of germs,2024-02-07,10,0,0,0,98.15,https://example.com/images/sanitization.jpg
+95,6,Basic Deep Cleaning,"Thorough cleaning of all surfaces, including hard-to-reach areas",2023-03-15,186,0,0,0,129.73,https://example.com/images/deep_cleaning.jpg
+96,5,Gentle Sanitization,Sanitizing high-touch areas and surfaces to prevent the spread of germs,2018-09-02,170,0,0,0,139.39,https://example.com/images/sanitization.jpg
+97,20,Reliable Move-In/Move-Out Cleaning,Thorough cleaning services for homes when moving in or out,2020-01-05,106,0,0,0,116.12,https://example.com/images/move-in/move-out_cleaning.jpg
+98,2,Basic Washing,"Includes washing of clothes, linens, and other fabric items",2021-01-09,34,0,0,0,76.93,https://example.com/images/washing.jpg
+99,13,Intensive Trash Removal,Disposing of trash and recyclables from homes or offices,2016-12-07,22,0,0,0,45.24,https://example.com/images/trash_removal.jpg
+100,19,Basic Post-Construction Cleaning,"Removing dust, debris, and materials left behind after construction work",2020-03-15,126,0,0,0,34.28,https://example.com/images/post-construction_cleaning.jpg

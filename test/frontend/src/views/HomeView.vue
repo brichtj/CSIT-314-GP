@@ -52,7 +52,11 @@ const popup = ref()
 const service = ref<CustomService | null>(null)
 async function handleBookClick(serviceID: number) {
   try {
-    service.value = await serviceStore.viewService(serviceID, 'HomeOwner')
+    service.value = await serviceStore.viewService(
+      serviceID,
+      'HomeOwner',
+      authStore.user?.UserID ?? 1,
+    )
     popup.value.openPopup()
   } catch (err) {
     console.log(err)

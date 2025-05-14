@@ -21,10 +21,9 @@ export const useAuthenticationStore = defineStore('authentication', () => {
     UserProfileName: 'HomeOwner',
     Username: '',
   })
-  const token = ref<string | null>(null)
 
   // Login action
-  async function login(username: string, password: string): Promise<boolean | any> {
+  async function login(username: string, password: string): Promise<string> {
     const credentials = { username: username, password: password }
     try {
       const response = await http.post('/login', credentials)
@@ -33,7 +32,7 @@ export const useAuthenticationStore = defineStore('authentication', () => {
       //console.log(user.value)
       //user.value = response.data.user
       //return response
-      return true
+      return user.value!.UserProfileName
     } catch (err: any) {
       //console.log(err.response.data.message)
 
@@ -44,7 +43,6 @@ export const useAuthenticationStore = defineStore('authentication', () => {
   // Logout action
   function logout(): void {
     user.value = null
-    token.value = null
   }
 
   return { user, login, logout }

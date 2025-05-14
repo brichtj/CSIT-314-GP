@@ -8,8 +8,8 @@ class CreateMatchController:
         return Matches.CreateMatch(HomeOwnerID, ServiceID, Price,)
 
 class ViewMatchController:
-    def ViewMatchController(self, serviceID: int)->CustomMatch:
-        return Matches.ViewMatch(serviceID)
+    def ViewMatchController(self, matchID: int)->CustomMatch:
+        return Matches.ViewMatch(matchID)
     
 class SearchMatchCleanerController:
     def SearchMatchCleanerController(self, searchTerm:str,CleanerID:int)->list[SimpleMatch]:

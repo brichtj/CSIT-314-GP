@@ -61,7 +61,7 @@ import Card from 'primevue/card'
 import Button from 'primevue/button'
 import { computed, ref } from 'vue'
 import type { Service } from '@/types/interfaces'
-
+import { getRandomImgurLink } from '@/types/interfaces'
 const props = defineProps<{ service: Service; viewOnly: boolean }>()
 
 const emit = defineEmits<{
@@ -69,7 +69,7 @@ const emit = defineEmits<{
   (e: 'shortList', serviceID: number): void
 }>()
 
-const defaultImage = 'https://www.purevpn.com/wp-content/uploads/2023/03/What-is-IMGUR_.png' // 👈 Update with your actual default path
+const defaultImage = getRandomImgurLink() // 👈 Update with your actual default path
 const imageSrc = ref(props.service.ImageLink)
 function handleImageError(event: Event) {
   imageSrc.value = defaultImage

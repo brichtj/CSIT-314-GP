@@ -10,7 +10,8 @@
 import { useRouter, useRoute } from 'vue-router'
 import { computed } from 'vue'
 import Menubar from 'primevue/menubar'
-
+import { useAuthenticationStore } from '@/stores/authentication'
+const auth = useAuthenticationStore()
 // Simulated user logic (replace this with real auth logic)
 
 const router = useRouter()
@@ -33,8 +34,11 @@ const menuItems = [
     command: () => router.push('/shortList'),
   },
   {
-    label: 'Profile',
-    command: () => router.push('/profile'),
+    label: 'logout',
+    command: () => {
+      auth.logout()
+      router.push('/')
+    },
   },
 ]
 </script>

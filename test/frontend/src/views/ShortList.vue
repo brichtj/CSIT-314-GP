@@ -53,7 +53,7 @@ const popup = ref()
 const service = ref<CustomService | null>(null)
 async function handleBookClick(serviceID: number) {
   try {
-    service.value = await serviceStore.viewService(serviceID, 'shortlist')
+    service.value = await serviceStore.viewService(serviceID, 'shortlist', null)
     popup.value.openPopup()
   } catch (err) {
     console.log(err)

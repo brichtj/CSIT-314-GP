@@ -6,8 +6,8 @@ class CreateServiceController:
         return Service().createService(CategoryID,Title,Description,CleanerID,Price,ImageLink)
     
 class ViewServiceController:
-    def ViewServiceController(self,ServiceID:int,updateViewCount:bool)->customService:
-        return Service().viewService(ServiceID,updateViewCount)
+    def ViewServiceController(self,ServiceID:int,updateViewCount:bool,HomeOwnerID:int = None)->customService:
+        return Service().viewService(ServiceID,updateViewCount,HomeOwnerID)
     
 class UpdateServiceController:
     def UpdateServiceController(self,CategoryID:int,Title:str,Description:str,price:float,ImageLink:str, ServiceID:int,CleanerID:int)->bool:

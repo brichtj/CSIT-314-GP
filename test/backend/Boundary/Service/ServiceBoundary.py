@@ -84,11 +84,11 @@ def ViewServiceCleanerBoundary(ServiceID:int):
     
 
 @router.get("/ViewServiceHomeOwner")#only when homeowner view service, should the view count be updated
-def ViewServiceHomeownerBoundary(ServiceID:int):
+def ViewServiceHomeownerBoundary(ServiceID:int,HomeOwnerID:int):
 
     try:
         controller = ViewServiceController()
-        result = controller.ViewServiceController(ServiceID,True)
+        result = controller.ViewServiceController(ServiceID,True,HomeOwnerID)
         if result is None:
             return JSONResponse(Response(False,None).to_json())
         else:

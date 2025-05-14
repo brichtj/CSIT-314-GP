@@ -1,7 +1,12 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import http from '../../globals.ts' // use the global axios instance
-import { type CustomMatch, type CustomService, type Service } from '@/types/interfaces'
+import {
+  type CustomMatch,
+  type CustomService,
+  type Service,
+  type SimpleMatch,
+} from '@/types/interfaces'
 
 // Define the User type
 
@@ -10,7 +15,7 @@ export const useServiceStore = defineStore('service', () => {
   // Auth state with types
   const services = ref<Service[]>([])
   const shortListedServices = ref<Service[]>([])
-  const matches = ref<Service[]>([])
+  const matches = ref<SimpleMatch[]>([])
   //get services
   async function getServices(mode: number, searchTerm: string): Promise<boolean> {
     try {
@@ -24,15 +29,22 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
-  async function viewService(serviceID: number, type: string): Promise<CustomService | null> {
+  async function viewService(
+    serviceID: number,
+    type: string,
+    HomeOwnerID: number | null,
+  ): Promise<CustomService | null> {
     try {
       let url = ''
       if (type == 'HomeOwner') url = '/ViewServiceHomeOwner'
-      if (type == 'Cleaner') url = '/ViewServiceCleaner'
-      if (type == 'shortlist') url = '/ViewServiceShortlist'
+      else if (type == 'Cleaner') url = '/ViewServiceCleaner'
+      else if (type == 'shortlist') url = '/ViewServiceShortlist'
       else url = '/ViewServiceCleaner'
       const response = await http.get(url, {
-        params: { ServiceID: serviceID },
+        params:
+          type == 'HomeOwner'
+            ? { ServiceID: serviceID, HomeOwnerID: HomeOwnerID }
+            : { ServiceID: serviceID },
       })
       return response.data.message
     } catch (err: any) {
@@ -91,17 +103,18 @@ export const useServiceStore = defineStore('service', () => {
       throw err
     }
   }
-  async function viewMatch(serviceID: number): Promise<CustomMatch | null> {
+  async function viewMatch(matchID: number): Promise<CustomMatch | null> {
     try {
       let url = '/ViewMatchHistory'
       const response = await http.get(url, {
-        params: { ServiceID: serviceID },
+        params: { MatchID: matchID },
       })
       return response.data.message
     } catch (err: any) {
       throw err
     }
   }
+
   return {
     services,
     getServices,

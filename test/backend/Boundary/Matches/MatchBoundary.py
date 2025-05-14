@@ -46,10 +46,10 @@ def CreateMatchBoundary(data: MatchesRequest):
     
 #req 5.1 and req 6.1
 @router.get("/ViewMatchHistory")
-def ViewMatchBoundary(ServiceID:int):
+def ViewMatchBoundary(MatchID:int):
     try:
         controller = ViewMatchController()
-        result = controller.ViewMatchController(ServiceID)
+        result = controller.ViewMatchController(MatchID)
         if result is None:
             return JSONResponse(Response(False,None).to_json())
         else:

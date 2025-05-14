@@ -47,7 +47,7 @@ class Matches:
 ##################################################################################
 
     @staticmethod
-    def ViewMatch( serviceID: int)->CustomMatch:
+    def ViewMatch( matchID: int)->CustomMatch:
         try:
             # query = """
             #         SELECT 
@@ -108,9 +108,9 @@ class Matches:
                     left join "user" on "user"."UserID" = "Service"."CleanerID"
                     left join "Matches" on "Matches"."ServiceID" = "Service"."ServiceID"
                     left join "user" as "HomeOwner" on "HomeOwner"."UserID" = "Matches"."HomeOwnerID"
-					WHERE "Matches"."ServiceID" = %s 
+					WHERE "Matches"."MatchID" = %s 
                 """
-            params = (serviceID,)
+            params = (matchID,)
             result = DB().fetch_one_by_key(query, params)
             print(result)
             if result:

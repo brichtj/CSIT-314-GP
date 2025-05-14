@@ -141,15 +141,15 @@ class Service:
     def ViewTotalViewbyID(ServiceID:int)->int:
         try:
             query = """
-                    SELECT "ViewCount"
-                    FROM "Service"
+                    SELECT count(*)
+                    FROM "Views"
                     WHERE "ServiceID" = %s
                     """
             params = (ServiceID,)
 
             result = DB().fetch_one_by_key(query, params)
             if result is not None:
-                return result["ViewCount"]
+                return result["count"]
             else:
                 return None
             
@@ -200,7 +200,7 @@ class Service:
             raise (e)
         
 #req 2, req 3.2,req 3.3 view service by serviceID
-    def viewService(self,ServiceID:int,updateViewCount:bool)->customService:
+    def viewService(self,ServiceID:int,updateViewCount:bool,HomeOwnerID:int)->customService:
         try:
             query = """
                     SELECT 
@@ -238,7 +238,16 @@ class Service:
                         WHERE "ServiceID" = %s;
                     """
                 
+                addServiceViewCount = """
+                        INSERT INTO "Views" ("HomeOwnerID", "ServiceID")
+                        VALUES (%s, %s)
+                        ON CONFLICT ("HomeOwnerID", "ServiceID") DO NOTHING;
+                    """
+                paramer = (HomeOwnerID,ServiceID,)
+                
                 DB().execute_update(updateServiceViewCount, params)
+                DB().execute_update(addServiceViewCount, paramer)
+
 
             if result:
                 return customService(**result)

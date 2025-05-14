@@ -4,11 +4,11 @@
 
     <div class="p-grid p-justify-start p-px-4">
       <div
-        v-for="service in services"
+        v-for="service in matches"
         :key="service.ServiceID"
         class="p-col-12 p-md-4 p-lg-3 p-mb-3"
       >
-        <ServiceCard :service="service" @book="handleViewClick" :view-only="true" />
+        <HistoryCard :match="service" @view="handleViewClick" />
       </div>
     </div>
     <HistoryDetailCard ref="popup" :service="match" :view-only="false" />
@@ -20,6 +20,7 @@ import { ref, computed, onMounted } from 'vue'
 import Navbar from '../components/NavBar.vue'
 import SearchBar from '../components/SearchBar.vue'
 import ServiceCard from '../components/ServiceCard.vue'
+import HistoryCard from '@/components/HistoryCard.vue'
 import { useServiceStore } from '@/stores/serviceStore'
 import type { CustomMatch } from '@/types/interfaces'
 import { useAuthenticationStore } from '@/stores/authentication'
@@ -29,7 +30,7 @@ import HistoryDetailCard from '@/components/HistoryDetailCard.vue'
 const serviceStore = useServiceStore()
 const authStore = useAuthenticationStore()
 
-const services = computed(() => serviceStore.matches)
+const matches = computed(() => serviceStore.matches)
 onMounted(() => {
   if (authStore.user?.UserProfileName == 'HomeOwner') {
     serviceStore.getMatchesHomeOwner(authStore.user?.UserID ?? 0, ' ')
@@ -42,9 +43,9 @@ async function searchServices(query: string) {
 
 const popup = ref()
 const match = ref<CustomMatch | null>(null)
-async function handleViewClick(serviceID: number) {
+async function handleViewClick(matchID: number) {
   try {
-    match.value = await serviceStore.viewMatch(serviceID)
+    match.value = await serviceStore.viewMatch(matchID)
     popup.value.openPopup()
   } catch (err) {
     console.log(err)

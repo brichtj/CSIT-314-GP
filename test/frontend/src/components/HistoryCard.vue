@@ -22,7 +22,9 @@
     <template #content>
       <div class="flex flex-col items-center">
         <div class="mt-2 text-sm text-gray-500">Confirmed on: {{ formattedDate }}</div>
-        <div class="mt-2 text-base font-semibold text-green-600">${{ match.Price.toFixed(2) }}</div>
+        <div class="mt-2 text-base font-semibold text-green-600">
+          Deal: ${{ match.DealPrice.toFixed(2) }}
+        </div>
       </div>
     </template>
     <template #footer>

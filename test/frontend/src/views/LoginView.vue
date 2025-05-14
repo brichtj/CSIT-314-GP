@@ -22,7 +22,9 @@ const handleLogin = async () => {
     //push route
     error.value = false
     errorMessage.value = ''
-    router.push('/home')
+    if (value === 'HomeOwner') {
+      router.push('/home')
+    }
   } catch (err: any) {
     //handle error(network)
 

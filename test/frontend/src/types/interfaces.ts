@@ -62,3 +62,15 @@ export interface SimpleMatch {
   DealPrice: number
   DealDate: string // or Date, depending on how you're parsing it in the frontend
 }
+
+export function getRandomImgurLink() {
+  const imgurLinks = [
+    'https://i.imgur.com/hLNZVyO.jpeg',
+    'https://i.imgur.com/lqQeSfx.jpeg',
+    'https://i.imgur.com/xVkYiuZ_d.webp?maxwidth=1520&fidelity=grand',
+    'https://i.imgur.com/Vz0hwqb.jpeg',
+  ]
+
+  const randomIndex = Math.floor(Math.random() * imgurLinks.length)
+  return imgurLinks[randomIndex]
+}

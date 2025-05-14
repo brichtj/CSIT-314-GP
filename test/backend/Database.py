@@ -31,6 +31,7 @@ class DB:
                 database=DATABASE['database']
             )
             self.cur = self.conn.cursor()
+            self.conn.autocommit = False
             print("Database: Connection established successfully!")
         except Exception as e:
             print(f"Error connecting to the database: {e}")
@@ -146,7 +147,6 @@ class DB:
         require_rows=True  # If True, require at least one row to be updated
     ):
         try:
-            self.conn.autocommit = False
             cur = self.conn.cursor()
 
             cur.execute(update1_query, update1_params)
@@ -164,7 +164,7 @@ class DB:
             print("Transaction failed:", e)
             if self.conn:
                 self.conn.rollback()
-            return False
+            raise e
 
         finally:
             if 'cur' in locals():
@@ -256,7 +256,7 @@ class DB:
             # Commit the transaction if insertion is successful
             self.conn.commit()
 
-            print("Insert successful")
+            #print("Insert successful")
             return True
         except Exception as e:
             # Rollback in case of an error

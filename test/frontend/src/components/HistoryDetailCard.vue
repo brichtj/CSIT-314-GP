@@ -26,7 +26,7 @@
 
       <!-- Category Info -->
       <div class="border-t pt-3">
-        <h3 class="font-semibold text-gray-800 mb-1">Category Info</h3>
+        <h3 class="font-extrabold underline text-gray-800 mb-1">Category Info</h3>
         <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
           <div><strong>Title:</strong> {{ service.CatTitle }}</div>
           <div class="col-span-2">
@@ -40,7 +40,7 @@
       <div class="border-t pt-3">
         <h3 class="font-semibold text-gray-800 mb-1">Cleaner Info</h3>
         <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
-          <div><strong>Name:</strong> {{ service.Username }}</div>
+          <div><strong>Name:</strong> {{ service.CleanerName }}</div>
           <div><strong>Active:</strong> {{ service.UActive ? 'Yes' : 'No' }}</div>
           <div><strong>Email:</strong> {{ service.Email }}</div>
           <div><strong>Phone:</strong> {{ service.Phone }}</div>
@@ -48,24 +48,28 @@
         </div>
       </div>
     </div>
+    <!-- Match Info -->
+    <div class="border-t pt-3">
+      <h3 class="font-semibold text-gray-800 mb-1">Match Info</h3>
+      <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
+        <div><strong>Deal Price:</strong> ${{ service?.DealPrice.toFixed(2) }}</div>
+        <div>
+          <strong>Deal Date:</strong>
+          {{ new Date(service?.DealDate ?? Date.now()).toLocaleDateString() }}
+        </div>
+      </div>
+    </div>
 
+    <!-- Homeowner Info -->
+    <div class="border-t pt-3">
+      <h3 class="font-semibold text-gray-800 mb-1">Homeowner Info</h3>
+      <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
+        <div><strong>Name:</strong> {{ service?.HomeOwnerName }}</div>
+        <div><strong>Address:</strong> {{ service?.Address }}</div>
+      </div>
+    </div>
     <template #footer>
       <div class="flex justify-between items-center w-full" v-if="!viewOnly">
-        <div class="flex items-center space-x-2">
-          <InputNumber
-            v-model="offerPrice"
-            mode="decimal"
-            :step="0.01"
-            :min="0"
-            :maxFractionDigits="2"
-            :minFractionDigits="0"
-            :useGrouping="false"
-            locale="en-US"
-            class="w-32"
-            inputClass="w-full"
-          />
-          <Button label="Confirm" icon="pi pi-check" @click="bookService" />
-        </div>
         <div class="flex space-x-2">
           <Button label="Close" icon="pi pi-times" @click="closePopup" severity="warn" />
         </div>
@@ -81,15 +85,14 @@ h3 {
   margin-bottom: 0.25rem; /* similar to mb-1 */
 }
 </style>
-
 <script setup lang="ts">
 import { ref, computed, onMounted, watchEffect } from 'vue'
 import Dialog from 'primevue/dialog'
 import Button from 'primevue/button'
-import type { CustomService } from '@/types/interfaces'
+import type { CustomMatch } from '@/types/interfaces'
 
 const props = defineProps<{
-  service: CustomService | null
+  service: CustomMatch | null
   viewOnly: boolean
 }>()
 
@@ -124,21 +127,7 @@ const formattedDate = computed(() => {
     day: 'numeric',
   })
 })
-import InputNumber from 'primevue/inputnumber'
 
-function bookService() {
-  if (offerPrice.value === null) {
-    alert('Please enter your offer price.')
-    return
-  }
-
-  emit('book', props.service!.ServiceID, offerPrice.value)
-
-  closePopup()
-}
-const emit = defineEmits<{
-  (e: 'book', serviceID: number, offerPrice: number): void
-}>()
 defineExpose({
   openPopup,
 })

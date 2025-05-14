@@ -2,7 +2,7 @@
   <div class="p-inputgroup w-full mb-4 px-4">
     <InputText
       v-model="searchText"
-      placeholder="Search cleaning services..."
+      :placeholder="props.details"
       class="w-full"
       @keyup.enter="handleSearch"
     />
@@ -18,6 +18,8 @@ import { ref } from 'vue'
 import InputText from 'primevue/inputtext'
 
 const searchText = ref('')
+
+const props = defineProps<{ details: string }>()
 
 const handleSearch = () => {
   // Emit the search event only when the button is clicked or Enter key is pressed

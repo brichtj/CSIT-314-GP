@@ -3,7 +3,7 @@ export interface Service {
   CategoryID: number
   Title: string
   Description: string
-  DatePosted: string // or `Date` if you parse it before use
+  DatePosted: string // or Date
   CleanerID: number
   LikeCount: number
   ViewCount: number
@@ -11,16 +11,54 @@ export interface Service {
   Price: number
   ImageLink: string
 }
+
 export interface User {
   Address: string
   Email: string
   Experience: number
   IsActive: boolean
   Phone: string
-  Privilege: string // narrow this union if there are other known values
+  Privilege: string
   UPActive: boolean
   UserID: number
   UserProfile: number
   UserProfileName: string
   Username: string
+}
+
+// Inherit from Service
+export interface CustomService extends Service {
+  // Category details
+  CatTitle: string
+  CatDesc: string
+  CatActive: boolean
+
+  // Cleaner/User details
+  Username: string
+  Email: string
+  Phone: string
+  UActive: boolean
+  Experience: number
+}
+
+// Inherit from CustomService, which already includes Service fields
+//remove Username as we want it to be cleanerName instead
+//email phone will be assuumed to be blonging to cleaner
+export type CustomMatch = Omit<CustomService, 'Username'> & {
+  CleanerName: string
+  //HomeOwnerDetails
+  HomeOwnerName: string
+  Address: string
+  // Match details
+  DealPrice: number
+  DealDate: string
+}
+export interface SimpleMatch {
+  ServiceID: number
+  Title: string
+  Price: number
+  ImageLink: string
+  MatchID: number
+  DealPrice: number
+  DealDate: string // or Date, depending on how you're parsing it in the frontend
 }

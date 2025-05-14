@@ -1,6 +1,9 @@
 
 from Database import DB
 from Classes.MatchesResponse import MatchesResponse
+from Classes.CustomMatch import CustomMatch
+from Classes.CustomService import customService
+from Classes.SimpleMatch import SimpleMatch
 from utils.utils import log_exception
 
 # ServiecID
@@ -11,119 +14,15 @@ from utils.utils import log_exception
 
 
 class Matches:
-    def __init__(self,ServiceID:int,HomeOwnerID:int):
-        self.db = DB()
+    def __init__(self,ServiceID:int,HomeOwnerID:int,MatchID:int):
         self.ServiceID = ServiceID
         self.HomeOwnerID = HomeOwnerID
-
-    def SearchByServiceID(self, ServiceID):
-        try:
-            query = """
-                    SELECT *
-                    FROM "Matches"
-                    WHERE "ServiceID" = %s
-                    """
-            params = (ServiceID,)
-
-            result = self.db.fetch_one_by_key(query, params)
-
-            return result
-
-        except Exception as e:
-            log_exception(e)
-            raise (e)
-
-    def SearchByHomeOwnerID(self, HomeOwnerID):
-        try:
-            query = """
-                    SELECT *
-                    FROM "Matches"
-                    WHERE "HomeOwnerID" = %s
-                    """
-            params = (self.HomeOwnerID,)
-
-            result = self.db.fetch_one_by_key(query, params)
-
-            return result
-
-        except Exception as e:
-            log_exception(e)
-            raise (e)
+        self.matchID = MatchID
 
 
-##################################################################################
-# Req5.1 Req6.1 View History
-##################################################################################
-
-
-    def ViewCleanerHistory(self, CleanerID):
-        try:
-            query = """
-                    SELECT *
-                    FROM "Matches"
-                    WHERE "ServiceID" IN(
-                        SELECT "ServiceID"
-                        FROM "Service"
-                        WHERE "CleanerID" = %s
-                    )
-                    """
-            params = (CleanerID,)
-            result = self.db.execute_fetchall(query, params)
-            return result
-        except Exception as e:
-            log_exception(e)
-            raise e
-        
-    def ViewHomeOwnerHistory(self, HomeOwnerID):
-        try:
-            query = """
-                    SELECT *
-                    FROM "Matches"
-                    WHERE "HomeOwnerID" = %s
-                    """
-            params = (HomeOwnerID,)
-            result = self.db.execute_fetchall(query, params)
-            return result
-        except Exception as e:
-            log_exception(e)
-            raise e
-
-##################################################################################
-# Req5.2 Req.6.2 Search History
-##################################################################################
-
-    def SearchCleanerHistoryByServiceID(self, CleanerID, ServiceID):
-        try:
-            query = """
-                    SELECT m.*
-                    FROM "Matches" m
-                    JOIN "Service" s ON m."ServiceID" = s."ServiceID"
-                    WHERE s."CleanerID" = %s
-                    AND m."ServiceID" = %s
-                    """
-            params = (CleanerID, ServiceID)
-            result = self.db.execute_fetchall(query, params)
-            return result
-        except Exception as e:
-            log_exception(e)
-            raise e
-
-    def SearchHomeOwnerHistoryByServiceID(self, HomeOwnerID, ServiceID):
-        try:
-            query = """
-                    SELECT *
-                    FROM "Matches"
-                    WHERE "HomeOwnerID" = %s
-                    AND "ServiceID" = %s
-                    """
-            params = (HomeOwnerID, ServiceID)
-            result = self.db.execute_fetchall(query, params)
-            return result
-        except Exception as e:
-            log_exception(e)
-            raise e
 # req 3 extra create
-    def CreateMatch(self, HomeOwnerID:int, ServiceID:int, Price:float,)->bool:
+    @staticmethod
+    def CreateMatch(HomeOwnerID:int, ServiceID:int, Price:float)->bool:
         try:
             query = """
                     INSERT INTO "Matches" ("ServiceID","HomeOwnerID", "Price")
@@ -139,6 +38,183 @@ class Matches:
             param2  = (ServiceID,)
             result = DB().update_two_tables(query,params,UpdateMatch,param2)
             return result
+        except Exception as e:
+            log_exception(e)
+            raise e
+        
+##################################################################################
+# Req5.1 Req6.1 View History
+##################################################################################
+
+    @staticmethod
+    def ViewMatch( serviceID: int)->CustomMatch:
+        try:
+            # query = """
+            #         SELECT 
+            #             "ServiceID",
+            #             "Service"."CategoryID",
+            #             "Service"."Title",
+            #             "Service"."Description",
+            #             "DatePosted",
+            #             "CleanerID",
+            #             "LikeCount",
+            #             "ViewCount",
+            #             "MatchCount",
+            #             "price",
+            #             "ImageLink",
+			# 			"Category"."Title" as "CatTitle",
+			# 			"Category"."Description" as "CatDesc",
+			# 			"Category"."Is_Active" as "CatActive",
+			# 			"user"."Username",
+			# 			"user"."Email",
+			# 			"user"."Phone",
+			# 			"user"."IsActive" as "UActive",
+			# 			"user"."Experience",
+            #             "Matches"."Price" as "DealPrice",
+            #             "Matches"."DateCreated" as "DealDate"
+            #         FROM "Service"
+			# 		left join "Category" on "Category"."CategoryID" = "Service"."CategoryID"
+            #         left join "user" on "user"."UserID" = "Service"."CleanerID"
+            #         left join "Matches" on "Matches"."ServiceID" = "Service"."ServiceID"
+			# 		WHERE "Matches"."ServiceID" = %s and "Service"."CleanerID" = %s
+            #     """
+            query = """
+                    SELECT 
+                        "Service"."ServiceID",
+                        "Service"."CategoryID",
+                        "Service"."Title",
+                        "Service"."Description",
+                        "DatePosted",
+                        "CleanerID",
+                        "LikeCount",
+                        "ViewCount",
+                        "MatchCount",
+                        "price",
+                        "ImageLink",
+                        "Category"."Title" as "CatTitle",
+                        "Category"."Description" as "CatDesc",
+                        "Category"."Is_Active" as "CatActive",
+                        "user"."Username" as "CleanerName",
+                        "user"."Email",
+                        "user"."Phone",
+                        "user"."IsActive" as "UActive",
+                        "user"."Experience",
+                        "HomeOwner"."Address",
+                        "HomeOwner"."Username" as "HomeOwnerName",
+                        "Matches"."Price" as "DealPrice",
+                        "Matches"."Date" as "DealDate"
+                    FROM "Service"
+                    left join "Category" on "Category"."CategoryID" = "Service"."CategoryID"
+                    left join "user" on "user"."UserID" = "Service"."CleanerID"
+                    left join "Matches" on "Matches"."ServiceID" = "Service"."ServiceID"
+                    left join "user" as "HomeOwner" on "HomeOwner"."UserID" = "Matches"."HomeOwnerID"
+					WHERE "Matches"."ServiceID" = %s 
+                """
+            params = (serviceID,)
+            result = DB().fetch_one_by_key(query, params)
+            print(result)
+            if result:
+                return CustomMatch(**result)
+            else:
+                return None
+        except Exception as e:
+            log_exception(e)
+            raise e
+        
+#req 5.2
+    def SearchMatchCleaner(searchTerm:str,CleanerID:int)->list[SimpleMatch]:
+
+        try:
+            query =''
+            params = ()
+            if searchTerm.rstrip() == '':
+                query = """
+                    SELECT 
+                        "Service"."ServiceID",
+                        "Service"."Title",
+                        "price" as "Price",
+                        "ImageLink",
+                        "Matches"."Price" as "DealPrice",
+                        "Matches"."Date" as "DealDate",
+                        "Matches"."MatchID"
+                    FROM "Service"
+                    left join "Category" on "Category"."CategoryID" = "Service"."CategoryID"
+                    left join "user" on "user"."UserID" = "Service"."CleanerID"
+                    INNER join "Matches" on "Matches"."ServiceID" = "Service"."ServiceID"
+                    WHERE "Service"."CleanerID" = %s
+                    LIMIT 10;
+                """
+                params = (CleanerID,)
+            else:
+                query = """
+                        "Service"."ServiceID",
+                        "Service"."Title",
+                        "price" as "Price",
+                        "ImageLink",
+                        "Matches"."Price" as "DealPrice",
+                        "Matches"."Date" as "DealDate",
+                        "Matches"."MatchID"
+                    FROM "Service"
+                    left join "Category" on "Category"."CategoryID" = "Service"."CategoryID"
+                    left join "user" on "user"."UserID" = "Service"."CleanerID"
+                    INNER join "Matches" on "Matches"."ServiceID" = "Service"."ServiceID"
+                    WHERE "Service"."Title" LIKE %s and "Service"."CleanerID" = %s
+                """
+                params = (f"%{searchTerm}%", CleanerID,)
+            result = DB().execute_fetchall(query, params)
+            if result:  
+                return [SimpleMatch(**match) for match in result]
+            else:
+                return []
+        except Exception as e:
+            log_exception(e)
+            raise e
+        
+#req 6.2
+    def SearchMatchHomeOwner(searchTerm:str,HomeOwnerID:int)->list[SimpleMatch]:
+        
+        try:
+            query =''
+            params = ()
+            if searchTerm.rstrip() == '':
+                query = """
+                    SELECT 
+                        "Service"."ServiceID",
+                        "Service"."Title",
+                        "price" as "Price",
+                        "ImageLink",
+                        "Matches"."Price" as "DealPrice",
+                        "Matches"."Date" as "DealDate",
+                        "Matches"."MatchID"
+                    FROM "Service"
+                    left join "Category" on "Category"."CategoryID" = "Service"."CategoryID"
+                    left join "user" on "user"."UserID" = "Service"."CleanerID"
+                    INNER join "Matches" on "Matches"."ServiceID" = "Service"."ServiceID"
+                    WHERE "Matches"."HomeOwnerID" = %s
+                    LIMIT 10;
+                """
+                params = (HomeOwnerID,)
+            else:
+                query = """
+                        "Service"."ServiceID",
+                        "Service"."Title",
+                        "price" as "Price",
+                        "ImageLink",
+                        "Matches"."Price" as "DealPrice",
+                        "Matches"."Date" as "DealDate",
+                        "Matches"."MatchID"
+                    FROM "Service"
+                    left join "Category" on "Category"."CategoryID" = "Service"."CategoryID"
+                    left join "user" on "user"."UserID" = "Service"."CleanerID"
+                    INNER join "Matches" on "Matches"."ServiceID" = "Service"."ServiceID"
+                    WHERE "Service"."Title" LIKE %s and "Matches"."HomeOwnerID" = %s
+                """
+                params = (f"%{searchTerm}%", HomeOwnerID,)
+            result = DB().execute_fetchall(query, params)
+            if result:  
+                return [SimpleMatch(**match) for match in result]
+            else:
+                return []
         except Exception as e:
             log_exception(e)
             raise e

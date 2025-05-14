@@ -8,7 +8,19 @@ import type { User } from '@/types/interfaces'
 // Define the store
 export const useAuthenticationStore = defineStore('authentication', () => {
   // Auth state with types
-  const user = ref<User | null>(null)
+  const user = ref<User | null>({
+    Address: '',
+    Email: '',
+    Experience: 0,
+    IsActive: false,
+    Phone: '',
+    Privilege: '',
+    UPActive: false,
+    UserID: 42,
+    UserProfile: 0,
+    UserProfileName: 'HomeOwner',
+    Username: '',
+  })
   const token = ref<string | null>(null)
 
   // Login action
@@ -18,7 +30,7 @@ export const useAuthenticationStore = defineStore('authentication', () => {
       const response = await http.post('/login', credentials)
       //console.log('LOGIN RESPONSE:', response.data)
       user.value = response.data.message
-      console.log(user.value)
+      //console.log(user.value)
       //user.value = response.data.user
       //return response
       return true

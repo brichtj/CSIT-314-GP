@@ -102,7 +102,7 @@ def ViewServiceHomeownerBoundary(ServiceID:int):
         )
     except Exception as e:
         print("exception has occured")
-        #log_exception(e)
+        log_exception(e)
         return JSONResponse(
             content=Response(False, "internal server error").to_json(),
             status_code=505

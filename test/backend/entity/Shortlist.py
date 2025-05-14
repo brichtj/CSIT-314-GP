@@ -38,14 +38,20 @@ class Shortlist:
 
         except Exception as e:
             log_exception(e)
+            print("ERROR",e)
             raise e
         
     #req 3.4(custom return object, check usecase description)
-    def searchShortlistForHomeOwner(self,HomeOwnerID:int,Title:str)->list[Service]:
+    @staticmethod
+    def searchShortlistForHomeOwner(HomeOwnerID:int,Title:str)->list[Service]:
         try:
-            query = """
-
-            SELECT "Service"."ServiceID",
+            title = Title.strip()
+            query = ""
+            params = ()
+            if title:
+                # Query with title filter
+                query = """
+                    SELECT "Service"."ServiceID",
                         "CategoryID",
                         "Title",
                         "Description",
@@ -55,15 +61,40 @@ class Shortlist:
                         "ViewCount",
                         "MatchCount",
                         "price",
-                        "ImageLink" FROM public."Shortlist_Record"
-LEFT join "Service" ON "Service"."ServiceID" = "Service"."ServiceID"
-where "HomeOwnerID" = %s and "Service"."Title" = ILIKE %s
+                        "ImageLink"
+                    FROM public."Shortlist_Record"
+                    LEFT JOIN "Service" ON "Service"."ServiceID" = "Shortlist_Record"."ServiceID"
+                    WHERE "HomeOwnerID" = %s
+                    AND "Service"."Title" ILIKE %s
+                    LIMIT 10;
                 """
-            params = (HomeOwnerID,f"%{Title}%",)
+                params = (HomeOwnerID,f"%{Title}%",)
+            else:
+                # Query without title filter
+                query = """
+                    SELECT "Service"."ServiceID",
+                        "CategoryID",
+                        "Title",
+                        "Description",
+                        "DatePosted",
+                        "CleanerID",
+                        "LikeCount",
+                        "ViewCount",
+                        "MatchCount",
+                        "price",
+                        "ImageLink"
+                    FROM public."Shortlist_Record"
+                    LEFT JOIN "Service" ON "Service"."ServiceID" = "Shortlist_Record"."ServiceID"
+                    WHERE "HomeOwnerID" = %s;
+                """
+                params = (HomeOwnerID,)
 
             result = DB().execute_fetchall(query,params)
 
-            return [Service(**row)for row in result]
+            if result is None or len(result) == 0:
+                return []
+            else:
+                return [Service(**row)for row in result]
 
         except Exception as e:
             log_exception(e)

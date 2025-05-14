@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SearchBar @search="searchServices" details="Search services" />
+    <SearchBar @search="searchServices" details="Search Favourites" />
 
     <div class="p-grid p-justify-start p-px-4">
       <div
@@ -12,7 +12,7 @@
           :service="service"
           @book="handleBookClick"
           @shortList="handleShortListClick"
-          :view-only="false"
+          :view-only="true"
         />
       </div>
     </div>
@@ -39,12 +39,13 @@ import { useAuthenticationStore } from '@/stores/authentication'
 const serviceStore = useServiceStore()
 const authStore = useAuthenticationStore()
 
-const services = computed(() => serviceStore.services)
+const services = computed(() => serviceStore.shortListedServices)
 onMounted(() => {
-  serviceStore.getServices(1, ' ')
+  console.log('wass')
+  serviceStore.getShortListedService(authStore.user?.UserID ?? 0, ' ')
 })
 async function searchServices(query: string) {
-  await serviceStore.getServices(1, query)
+  await serviceStore.getShortListedService(authStore.user?.UserID ?? 0, query)
   //do loading and stuff here
 }
 
@@ -52,7 +53,7 @@ const popup = ref()
 const service = ref<CustomService | null>(null)
 async function handleBookClick(serviceID: number) {
   try {
-    service.value = await serviceStore.viewService(serviceID, 'HomeOwner')
+    service.value = await serviceStore.viewService(serviceID, 'shortlist')
     popup.value.openPopup()
   } catch (err) {
     console.log(err)

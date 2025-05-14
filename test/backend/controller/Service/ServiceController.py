@@ -1,4 +1,4 @@
-from entity.Service import Service
+from entity.Service import Service, customService
 class CreateServiceController:
 
     def createServiceController(self, CategoryID: int,Title: str,Description: str,CleanerID: int,Price: float,ImageLink: str):
@@ -6,7 +6,7 @@ class CreateServiceController:
         return Service().createService(CategoryID,Title,Description,CleanerID,Price,ImageLink)
     
 class ViewServiceController:
-    def ViewServiceController(self,ServiceID:int,updateViewCount:bool)->Service:
+    def ViewServiceController(self,ServiceID:int,updateViewCount:bool)->customService:
         return Service().viewService(ServiceID,updateViewCount)
     
 class UpdateServiceController:
@@ -38,11 +38,6 @@ class ViewTotalShortlistedCountByIDController:
 class HomeOwnerSearchServiceController:
     def SearchService(self, mode: int, searchTerm: str)->list[Service]:
         return Service.SearchService(mode, searchTerm)
-
-
-
-
-
 
 
 ##################################################################################

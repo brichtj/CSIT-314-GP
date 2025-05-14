@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Self
 from Database import DB
 from Classes.ServiceResponse import ServiceResponse
+from Classes.CustomService import customService
 from utils.utils import log_exception
 
 # ServiceID
@@ -17,49 +18,6 @@ from utils.utils import log_exception
 # Price
 
         
-class customService():#to return the full service object with all joined values
-    def __init__(self,ServiceID:int,CategoryID:int,Title:str,Description:str,DatePosted:datetime,CleanerID:int,LikeCount:int,ViewCount:int,MatchCount:int,price:float,ImageLink:str,CatTitle:str,CatDesc:str,CatActive:bool,Username:str,Email:str,Phone:str,UActive:str,Experience:float) -> None:
-        self.ServiceID = ServiceID
-        self.CategoryID = CategoryID
-        self.Title = Title
-        self.Description = Description
-        self.DatePosted = DatePosted
-        self.CleanerID = CleanerID
-        self.LikeCount = LikeCount
-        self.ViewCount = ViewCount
-        self.MatchCount = MatchCount
-        self.price = price
-        self.ImageLink = ImageLink
-        self.CatTitle = CatTitle
-        self.CatDesc = CatDesc
-        self.CatActive = CatActive
-        self.Username = Username
-        self.Email = Email
-        self.Phone = Phone
-        self.UActive = UActive
-        self.Experience = Experience
-    def to_json(self):
-        return {
-            "ServiceID": self.ServiceID,
-            "CategoryID": self.CategoryID,
-            "Title": self.Title,
-            "Description": self.Description,
-            "DatePosted": self.DatePosted,
-            "CleanerID": self.CleanerID,
-            "LikeCount": self.LikeCount,
-            "ViewCount": self.ViewCount,
-            "MatchCount": self.MatchCount,
-            "price": self.price,
-            "ImageLink": self.ImageLink,
-            "CatTitle": self.CatTitle,
-            "CatDesc": self.CatDesc,
-            "CatActive": self.CatActive,
-            "Username": self.Username,
-            "Email": self.Email,
-            "Phone": self.Phone,
-            "UActive": self.UActive,
-            "Experience": self.Experience,
-        }
 
 class Service:
 
@@ -207,15 +165,13 @@ class Service:
     def ViewTotalShortlistedCountByID(ServiceID:int)->int:
         try:
             query = """
-                    SELECT "LikeCount"
-                    FROM "Service"
-                    WHERE "ServiceID" = %s
+            SELECT count(*) FROM public."Shortlist_Record" where "ServiceID" = %s
                     """
             params = (ServiceID,)
 
             result = DB().fetch_one_by_key(query, params)
             if result is not None:
-                return result["LikeCount"]
+                return result["count"]
             else:
                 return None
 
@@ -260,7 +216,7 @@ class Service:
                         "price",
                         "ImageLink",
 						"Category"."Title" as "CatTitle",
-						"Category"."Description",
+						"Category"."Description" as "CatDesc",
 						"Category"."Is_Active" as "CatActive",
 						"user"."Username",
 						"user"."Email",

@@ -18,6 +18,7 @@ class ShortlistServiceRequest(BaseModel):
 @router.post("/ShortlistService")
 def ShortlistService(data: ShortlistServiceRequest):
     try:
+        print(data)
         controller = ShortListServiceController()
         result = controller.ShortListServiceController(data.serviceID, data.HomeOwnerID)
         if result:

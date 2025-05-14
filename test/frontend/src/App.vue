@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import NavBar from './components/NavBar.vue'
 </script>
 
 <template>
@@ -12,7 +12,10 @@ import HelloWorld from './components/HelloWorld.vue'
       padding: 0; /* 100% of viewport height */
     "
   >
-    <RouterView />
+    <div>
+      <NavBar />
+      <RouterView />
+    </div>
   </div>
 </template>
 

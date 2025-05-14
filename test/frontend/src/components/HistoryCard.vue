@@ -16,33 +16,18 @@
     </template>
 
     <template #title>
-      <div class="text-xl font-semibold truncate w-full">{{ service.Title }}</div>
+      <div class="text-xl font-semibold truncate w-full">{{ match.Title }}</div>
     </template>
 
     <template #content>
       <div class="flex flex-col items-center">
-        <div class="mt-2 text-sm text-gray-500">Posted: {{ formattedDate }}</div>
-        <div class="mt-2 text-base font-semibold text-green-600">
-          ${{ service.Price.toFixed(2) }}
-        </div>
+        <div class="mt-2 text-sm text-gray-500">Confirmed on: {{ formattedDate }}</div>
+        <div class="mt-2 text-base font-semibold text-green-600">${{ match.Price.toFixed(2) }}</div>
       </div>
     </template>
     <template #footer>
       <div style="justify-content: space-between; justify-items: center">
-        <Button label="View Details" @click="emit('book', props.service.ServiceID)" />
-        <Button
-          v-if="!viewOnly"
-          @click="
-            () => {
-              toggleLove()
-              if (loved) emit('shortList', props.service.ServiceID)
-            }
-          "
-          :icon="loved ? 'pi pi-heart-fill' : 'pi pi-heart'"
-          severity="danger"
-          content="Like"
-          :label="service.LikeCount.toString()"
-        />
+        <Button label="View Details" @click="emit('view', props.match.MatchID)" />
       </div>
     </template>
   </Card>
@@ -60,17 +45,16 @@ h3 {
 import Card from 'primevue/card'
 import Button from 'primevue/button'
 import { computed, ref } from 'vue'
-import type { Service } from '@/types/interfaces'
+import type { SimpleMatch } from '@/types/interfaces'
 
-const props = defineProps<{ service: Service; viewOnly: boolean }>()
+const props = defineProps<{ match: SimpleMatch }>()
 
 const emit = defineEmits<{
-  (e: 'book', serviceID: number): void
-  (e: 'shortList', serviceID: number): void
+  (e: 'view', matchID: number): void
 }>()
 
 const defaultImage = 'https://www.purevpn.com/wp-content/uploads/2023/03/What-is-IMGUR_.png' // 👈 Update with your actual default path
-const imageSrc = ref(props.service.ImageLink)
+const imageSrc = ref(props.match.ImageLink)
 function handleImageError(event: Event) {
   imageSrc.value = defaultImage
 }
@@ -81,7 +65,7 @@ function toggleLove() {
 }
 
 const formattedDate = computed(() => {
-  const date = new Date(props.service.DatePosted)
+  const date = new Date(props.match.DealDate)
   return date.toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',

@@ -8,16 +8,15 @@ from utils.utils import log_exception
 
 class User():
     # Password =  input_Password
-    def __init__(self, user_id,username=None, email=None, phone=None,is_active=True,userProfileID=None,Address=None,Experience=None,UserProfile = None):
+    def __init__(self, user_id,username=None, email=None, phone=None,is_active=True,userProfileID=None,Address=None,Experience=None):
         self.UserID = user_id
         self.Username = username
         self.Email = email
         self.Phone = phone
         self.IsActive = is_active
-        self.UserProfile = userProfileID
+        self.UserProfileID = userProfileID
         self.Address = Address
         self.Experience = Experience
-        self.UserProfile = UserProfile
 
     #to json method
     def to_json(self):
@@ -27,17 +26,16 @@ class User():
             "Email": self.Email,
             "Phone": self.Phone,
             "IsActive": self.IsActive,
-            "UserProfile": self.UserProfile,
+            "UserProfile": self.UserProfileID,
             "Address": self.Address,
             "Experience": float(self.Experience) if self.Experience is not None else self.Experience,
-            "UserProfile": self.UserProfile.to_json()
         }
     @staticmethod
     def login(username:str,password:str)->LoginResponse:
         try:
             query = """
                 SELECT "UserID", "Username",  "Email", "Phone", "IsActive","user"."UserProfileID", "Address", "Experience","Password"
-                ,"Name","Privilege","IsActive"
+                ,"Name","Privilege","Is_Active" as "UPActive"
                 FROM "user"
                 Left join "UserProfile" on "UserProfile"."UserProfileID" = "user"."UserProfileID"    
                             
@@ -53,10 +51,13 @@ class User():
                 return LoginResponse(False, "Password false", None)
             elif result["IsActive"] == False:
                 return LoginResponse(False, "User suspended", None)
+            elif result["UPActive"] == False:   
+                return LoginResponse(False, "User profile suspended", None)
             else:
-                userProfile = UserProfile(result["UserProfileID"],result["Name"],result["Privilege"],result["IsActive"])
-                user = User(result["UserID"],result["Username"],result["Email"],result["Phone"],result["IsActive"],result["UserProfileID"],result["Address"],result["Experience"],userProfile)
-                return LoginResponse(True, "welcome", user)
+                #userProfile = UserProfile(result["UserProfileID"],result["Name"],result["Privilege"],result["IsActive"])
+                #user = User(,userProfile)
+                use = CustomUser(result["UserID"],result["Username"],result["Email"],result["Phone"],result["IsActive"],result["UserProfileID"],result["Address"],result["Experience"],result["Name"],result["Privilege"],result["IsActive"])
+                return LoginResponse(True, "welcome", use)
 
         except Exception as e:
             log_exception(e)
@@ -190,3 +191,20 @@ class User():
         except Exception as e:
             log_exception(e)
             raise (e)
+
+class CustomUser(User):
+    def __init__(self,user_id,username=None, email=None, phone=None,is_active=True,userProfileID=None,Address=None,Experience=None,userprofileName = None,Privilege = None,UPActive = None):
+        super().__init__(user_id, username, email, phone, is_active,userProfileID,Address,Experience)
+        self.userProfileName = userprofileName
+        self.Privilege = Privilege
+        self.UPActive = UPActive
+    def to_json(self):
+        parentJson = super().to_json()
+        json = {
+            "UserProfileName":self.userProfileName,
+            "Privilege":self.Privilege,
+            "UPActive":self.UPActive
+            }
+        parentJson.update(json)
+
+        return parentJson

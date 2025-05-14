@@ -60,23 +60,43 @@ class Service:
         try:
 
             query = ''
+            params = ()
             if mode == 1:#by title
-                query = """
+                if searchTerm.strip() == "":
+                    query = """
                         SELECT 
-                        "ServiceID",
-                        "CategoryID",
-                        "Title",
-                        "Description",
-                        "DatePosted",
-                        "CleanerID",
-                        "LikeCount",
-                        "ViewCount",
-                        "MatchCount",
-                        "price",
-                        "ImageLink"
+                            "ServiceID",
+                            "CategoryID",
+                            "Title",
+                            "Description",
+                            "DatePosted",
+                            "CleanerID",
+                            "LikeCount",
+                            "ViewCount",
+                            "MatchCount",
+                            "price",
+                            "ImageLink"
+                        FROM "Service"
+                    """
+                    params = ()
+                else:
+                    query = """
+                        SELECT 
+                            "ServiceID",
+                            "CategoryID",
+                            "Title",
+                            "Description",
+                            "DatePosted",
+                            "CleanerID",
+                            "LikeCount",
+                            "ViewCount",
+                            "MatchCount",
+                            "price",
+                            "ImageLink"
                         FROM "Service"
                         WHERE "Title" ILIKE %s
-                        """
+                    """
+                    params = (f"%{searchTerm}%",)
             elif mode == 2:#by category name
                 query = """
                         SELECT 
@@ -98,11 +118,13 @@ class Service:
                             WHERE "Title" ILIKE %s
                         )
                         """
-            params = (f"%{searchTerm}%",)
+                params = (f"%{searchTerm}%",)
 
             result = DB().execute_fetchall(query, params)
-
-            return [Service(**row) for row in result]
+            if result is None or len(result) == 0:
+                return []
+            else:
+                return [Service(**row) for row in result]
 
         except Exception as e:
             log_exception(e)

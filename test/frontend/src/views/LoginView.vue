@@ -17,24 +17,18 @@ const auth = useAuthenticationStore()
 const router = useRouter()
 
 const handleLogin = async () => {
-  router.push('/home')
   try {
     const value = await auth.login(username.value, password.value)
-    console.log(value)
-    if (value.data.authentication) {
-      //push route
-      error.value = false
-      errorMessage.value = ''
-      router.push('/home')
-    } else {
-      //handle incorrect username/ password
-      error.value = true
-      errorMessage.value = 'Incorrect username/password'
-    }
-  } catch (err: unknown) {
+    //push route
+    error.value = false
+    errorMessage.value = ''
+    router.push('/home')
+  } catch (err: any) {
     //handle error(network)
+
+    //console.log(err.response.data.message)
     error.value = true
-    errorMessage.value = 'Network Error, please try again'
+    errorMessage.value = err.response.data.message
   }
 }
 </script>
@@ -67,20 +61,14 @@ const handleLogin = async () => {
             />
           </div>
 
-          <Button
-            label="Login"
-            icon="pi pi-sign-in"
-            :loading="auth.loading"
-            class="login-btn"
-            @click="handleLogin"
-          />
+          <Button label="Login" icon="pi pi-sign-in" class="login-btn" @click="handleLogin" />
 
           <Message v-if="error" severity="error" class="mt-2">
             {{ errorMessage }}
           </Message>
 
           <Message v-if="auth.user" severity="success" class="mt-2">
-            Welcome, {{ auth.user.name }}!
+            Welcome, {{ auth.user.Username }}!
           </Message>
         </div>
       </template>

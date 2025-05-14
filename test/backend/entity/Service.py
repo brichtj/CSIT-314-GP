@@ -1,4 +1,5 @@
 
+from datetime import datetime
 from typing import Self
 from Database import DB
 from Classes.ServiceResponse import ServiceResponse
@@ -15,6 +16,50 @@ from utils.utils import log_exception
 # MatchCount
 # Price
 
+        
+class customService():#to return the full service object with all joined values
+    def __init__(self,ServiceID:int,CategoryID:int,Title:str,Description:str,DatePosted:datetime,CleanerID:int,LikeCount:int,ViewCount:int,MatchCount:int,price:float,ImageLink:str,CatTitle:str,CatDesc:str,CatActive:bool,Username:str,Email:str,Phone:str,UActive:str,Experience:float) -> None:
+        self.ServiceID = ServiceID
+        self.CategoryID = CategoryID
+        self.Title = Title
+        self.Description = Description
+        self.DatePosted = DatePosted
+        self.CleanerID = CleanerID
+        self.LikeCount = LikeCount
+        self.ViewCount = ViewCount
+        self.MatchCount = MatchCount
+        self.price = price
+        self.ImageLink = ImageLink
+        self.CatTitle = CatTitle
+        self.CatDesc = CatDesc
+        self.CatActive = CatActive
+        self.Username = Username
+        self.Email = Email
+        self.Phone = Phone
+        self.UActive = UActive
+        self.Experience = Experience
+    def to_json(self):
+        return {
+            "ServiceID": self.ServiceID,
+            "CategoryID": self.CategoryID,
+            "Title": self.Title,
+            "Description": self.Description,
+            "DatePosted": self.DatePosted,
+            "CleanerID": self.CleanerID,
+            "LikeCount": self.LikeCount,
+            "ViewCount": self.ViewCount,
+            "MatchCount": self.MatchCount,
+            "price": self.price,
+            "ImageLink": self.ImageLink,
+            "CatTitle": self.CatTitle,
+            "CatDesc": self.CatDesc,
+            "CatActive": self.CatActive,
+            "Username": self.Username,
+            "Email": self.Email,
+            "Phone": self.Phone,
+            "UActive": self.UActive,
+            "Experience": self.Experience,
+        }
 
 class Service:
 
@@ -22,7 +67,6 @@ class Service:
     def __init__(self, ServiceID=None, CategoryID=None, Title=None, Description=None,
                 DatePosted=None, CleanerID=None, LikeCount=None, ViewCount=None,
                 MatchCount=None, price=None, ImageLink=None):
-        self.db = DB()
         self.ServiceID = ServiceID
         self.CategoryID = CategoryID
         self.Title = Title
@@ -77,6 +121,8 @@ class Service:
                             "price",
                             "ImageLink"
                         FROM "Service"
+                        order by "DatePosted"
+                        LIMIT 10
                     """
                     params = ()
                 else:
@@ -188,7 +234,7 @@ class Service:
                     """
             values = (CategoryID, Title, Description, CleanerID, Price, ImageLink)
 
-            res = self.db.insertFreeStyle(query, values)
+            res =DB().insertFreeStyle(query, values)
 
             return True
 
@@ -198,27 +244,37 @@ class Service:
             raise (e)
         
 #req 2, req 3.2,req 3.3 view service by serviceID
-    def viewService(self,ServiceID:int,updateViewCount:bool)->Self:
+    def viewService(self,ServiceID:int,updateViewCount:bool)->customService:
         try:
             query = """
                     SELECT 
                         "ServiceID",
-                        "CategoryID",
-                        "Title",
-                        "Description",
+                        "Service"."CategoryID",
+                        "Service"."Title",
+                        "Service"."Description",
                         "DatePosted",
                         "CleanerID",
                         "LikeCount",
                         "ViewCount",
                         "MatchCount",
                         "price",
-                        "ImageLink"
+                        "ImageLink",
+						"Category"."Title" as "CatTitle",
+						"Category"."Description",
+						"Category"."Is_Active" as "CatActive",
+						"user"."Username",
+						"user"."Email",
+						"user"."Phone",
+						"user"."IsActive" as "UActive",
+						"user"."Experience"
                     FROM "Service"
-                    WHERE "ServiceID" = %s;
+					left join "Category" on "Category"."CategoryID" = "Service"."CategoryID"
+                    left join "user" on "user"."UserID" = "Service"."CleanerID"
+					WHERE "ServiceID" = %s;
                 """
             params = (ServiceID,)
 
-            result = self.db.fetch_one_by_key(query, params)
+            result = DB().fetch_one_by_key(query, params)
             if updateViewCount == True:
                 updateServiceViewCount = """
                         UPDATE "Service"
@@ -226,10 +282,10 @@ class Service:
                         WHERE "ServiceID" = %s;
                     """
                 
-                self.db.execute_update(updateServiceViewCount, params)
+                DB().execute_update(updateServiceViewCount, params)
 
             if result:
-                return Service(**result) 
+                return customService(**result)
             else:
                 return None
         
@@ -252,7 +308,7 @@ class Service:
                 """
             params = (CategoryID,Title,Description,price,ImageLink,ServiceID,CleanerID)
 
-            result = self.db.execute_update(query, params)
+            result = DB().execute_update(query, params)
             return result
 
 
@@ -269,7 +325,7 @@ class Service:
                 """
             params = (ServiceID,CleanerID,)
 
-            result = self.db.execute_delete(query, params)
+            result = DB().execute_delete(query, params)
             return result
 
         except Exception as e:
@@ -297,7 +353,7 @@ class Service:
                 """
             params = ('%'+Title+'%',CleanerID,)
 
-            result = self.db.execute_fetchall(query, params)
+            result = DB().execute_fetchall(query, params)
             if result is None or len(result) == 0:
                 return []
             else:

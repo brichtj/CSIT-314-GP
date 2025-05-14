@@ -1,21 +1,10 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import http from '../../globals.ts' // use the global axios instance
+import type { Service } from '@/types/interfaces'
 
 // Define the User type
-interface Service {
-  ServiceID: number
-  CategoryID: number
-  Title: string
-  Description: string
-  DatePosted: string // or `Date` if you parse it before use
-  CleanerID: number
-  LikeCount: number
-  ViewCount: number
-  MatchCount: number
-  Price: number
-  ImageLink: string
-}
+
 // Define the store
 export const useServiceStore = defineStore('service', () => {
   // Auth state with types
@@ -33,5 +22,16 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
-  return { services, getServices }
+  async function viewService(serviceID: number): Promise<Service | null> {
+    try {
+      const response = await http.get('/ViewServiceHomeOwner', {
+        params: { ServiceID: serviceID },
+      })
+      return response.data.message
+    } catch (err: any) {
+      throw err
+    }
+  }
+
+  return { services, getServices, viewService }
 })

@@ -1,21 +1,9 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import http from '../../globals.ts' // use the global axios instance
+import type { User } from '@/types/interfaces'
 
 // Define the User type
-interface User {
-  Address: string
-  Email: string
-  Experience: number
-  IsActive: boolean
-  Phone: string
-  Privilege: string // narrow this union if there are other known values
-  UPActive: boolean
-  UserID: number
-  UserProfile: number
-  UserProfileName: string
-  Username: string
-}
 
 // Define the store
 export const useAuthenticationStore = defineStore('authentication', () => {

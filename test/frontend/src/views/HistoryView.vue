@@ -51,7 +51,7 @@ const popup = ref()
 const match = ref<CustomMatch | null>(null)
 async function handleViewClick(matchID: number) {
   try {
-    match.value = await serviceStore.viewMatch(matchID)
+    match.value = await serviceStore.viewMatch(matchID, authStore.user?.UserProfileName ?? '')
     popup.value.openPopup()
   } catch (err) {
     console.log(err)

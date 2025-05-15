@@ -145,9 +145,11 @@ export const useServiceStore = defineStore('service', () => {
       throw err
     }
   }
-  async function viewMatch(matchID: number): Promise<CustomMatch | null> {
+  async function viewMatch(matchID: number, userProfile: string): Promise<CustomMatch | null> {
     try {
-      let url = '/ViewMatchHistory'
+      let url = ''
+      if (userProfile == 'Cleaner') url = '/ViewMatchHistoryCleaner'
+      else if (userProfile == 'HomeOwner') url = '/ViewMatchHistoryHomeOwner'
       const response = await http.get(url, {
         params: { MatchID: matchID },
       })

@@ -4,7 +4,8 @@ import unittest
 from Boundary.User.UserBoundary import login
 
 #IMPORTANT NOTE, to run this, make sure your working directory is backend, then run python -m tests.login_test
-#because you need to run this as a module, you need an empty __init__.py file in tests folder, otherwise python thinks tests folder is the only working directory and cannot import from boundary folder
+#because you need to run this unittest file as a module, you need an empty __init__.py file in tests folder, 
+# otherwise python thinks tests folder is the only working directory and cannot import from boundary folder
 
 class DummyRequest:
     def __init__(self, username, password):

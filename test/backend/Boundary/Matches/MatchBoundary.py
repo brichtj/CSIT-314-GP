@@ -44,9 +44,9 @@ def CreateMatchBoundary(data: MatchesRequest):
             status_code=500
         )
     
-#req 5.1 and req 6.1
-@router.get("/ViewMatchHistory")
-def ViewMatchBoundary(MatchID:int):
+#req 5.1
+@router.get("/ViewMatchHistoryCleaner")
+def ViewMatchCleanerBoundary(MatchID:int):
     try:
         controller = ViewMatchController()
         result = controller.ViewMatchController(MatchID)
@@ -67,6 +67,30 @@ def ViewMatchBoundary(MatchID:int):
             content=Response(False, "internal server error").to_json(),
             status_code=505
         )
+#req 6.1
+@router.get("/ViewMatchHistoryHomeOwner")
+def ViewMatchHomeOwnerBoundary(MatchID:int):
+    try:
+        controller = ViewMatchController()
+        result = controller.ViewMatchController(MatchID)
+        if result is None:
+            return JSONResponse(Response(False,None).to_json())
+        else:
+            return JSONResponse(Response(True,result.to_json()).to_json())
+    except psycopg2.Error as e:
+        message = f"Database Error: {e}"
+        print(message)
+        return JSONResponse(
+            content=Response(False, "Database Error").to_json(),
+            status_code=400
+        )
+    except Exception as e:
+        print(f"exception has occured: {e}")
+        return JSONResponse(
+            content=Response(False, "internal server error").to_json(),
+            status_code=505
+        )
+
 
 #req 5.2
 @router.get("/SearchMatchCleaner")

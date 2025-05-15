@@ -24,6 +24,8 @@ const handleLogin = async () => {
     errorMessage.value = ''
     if (value === 'HomeOwner') {
       router.push('/home')
+    } else if (value === 'Cleaner') {
+      router.push('/CleanerView')
     }
   } catch (err: any) {
     //handle error(network)

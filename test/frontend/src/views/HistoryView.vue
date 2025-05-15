@@ -34,10 +34,16 @@ const matches = computed(() => serviceStore.matches)
 onMounted(() => {
   if (authStore.user?.UserProfileName == 'HomeOwner') {
     serviceStore.getMatchesHomeOwner(authStore.user?.UserID ?? 0, ' ')
+  } else {
+    serviceStore.getMatchesCleaner(authStore.user?.UserID ?? 0, ' ')
   }
 })
 async function searchServices(query: string) {
-  await serviceStore.getShortListedService(authStore.user?.UserID ?? 0, query)
+  if (authStore.user?.UserProfileName == 'HomeOwner') {
+    serviceStore.getMatchesHomeOwner(authStore.user?.UserID ?? 0, query)
+  } else {
+    serviceStore.getMatchesCleaner(authStore.user?.UserID ?? 0, query)
+  }
   //do loading and stuff here
 }
 

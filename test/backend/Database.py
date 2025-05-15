@@ -92,6 +92,8 @@ class DB:
 
             return result
         except Exception as e:
+            self.cur.close()
+            
             print(f"Database error: {e}")
             return None
         

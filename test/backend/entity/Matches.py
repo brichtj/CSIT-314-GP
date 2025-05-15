@@ -147,6 +147,7 @@ class Matches:
                 params = (CleanerID,)
             else:
                 query = """
+                Select
                         "Service"."ServiceID",
                         "Service"."Title",
                         "price" as "Price",
@@ -196,6 +197,7 @@ class Matches:
                 params = (HomeOwnerID,)
             else:
                 query = """
+                SELECT
                         "Service"."ServiceID",
                         "Service"."Title",
                         "price" as "Price",

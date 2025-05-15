@@ -300,7 +300,10 @@ class Service:
     #req 2 search Service by title and cleanerID(so that cleaner can search his own services)
     def searchServiceByCleanerID(self,Title:str,CleanerID:int)->list[Self]:
         try:
-            query = """
+            query = ''
+            params = ()
+            if Title.strip() == "":
+                query = """
                     SELECT 
                         "ServiceID",
                         "CategoryID",
@@ -314,9 +317,31 @@ class Service:
                         "price",
                         "ImageLink"
                     FROM "Service"
-                    WHERE "Title" ILIKE %s and "CleanerID" = %s;
+                    WHERE "CleanerID" = %s
+                    order by "DatePosted"
+                    LIMIT 10
                 """
-            params = ('%'+Title+'%',CleanerID,)
+                params = (CleanerID,)
+            else:
+                query = """
+                        SELECT 
+                            "ServiceID",
+                            "CategoryID",
+                            "Title",
+                            "Description",
+                            "DatePosted",
+                            "CleanerID",
+                            "LikeCount",
+                            "ViewCount",
+                            "MatchCount",
+                            "price",
+                            "ImageLink"
+                        FROM "Service"
+                        WHERE "Title" ILIKE %s and "CleanerID" = %s;
+                    order by "DatePosted"
+                    
+                    """
+                params = ('%'+Title+'%',CleanerID,)
 
             result = DB().execute_fetchall(query, params)
             if result is None or len(result) == 0:

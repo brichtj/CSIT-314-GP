@@ -29,6 +29,37 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
+  async function getServicesForCleaner(CleanerID: number, searchTerm: string): Promise<boolean> {
+    try {
+      const response = await http.get('/SearchServiceByCleanerID', {
+        params: { CleanerID: CleanerID, Title: searchTerm },
+      })
+      services.value = response.data.message
+      return true
+    } catch (err: any) {
+      throw err
+    }
+  }
+  interface LikesAndViewsResponse {
+    Likes: number
+    Views: number
+  }
+  async function getLikesAndViewsForService(ServiceID: number): Promise<LikesAndViewsResponse> {
+    try {
+      const totalViews = await http.get('/ViewTotalViewbyID', {
+        params: { ServiceID: ServiceID },
+      })
+      const totalLikes = await http.get('/ViewTotalshortlistedCountbyID', {
+        params: { ServiceID: ServiceID },
+      })
+      return {
+        Likes: totalLikes.data.message,
+        Views: totalViews.data.message,
+      }
+    } catch (err: any) {
+      throw err
+    }
+  }
   async function viewService(
     serviceID: number,
     type: string,
@@ -103,6 +134,17 @@ export const useServiceStore = defineStore('service', () => {
       throw err
     }
   }
+  async function getMatchesCleaner(CleanerID: number, searchTerm: string): Promise<boolean> {
+    try {
+      const response = await http.get('/SearchMatchCleaner', {
+        params: { CleanerID: CleanerID, searchTerm: searchTerm },
+      })
+      matches.value = response.data.message
+      return true
+    } catch (err: any) {
+      throw err
+    }
+  }
   async function viewMatch(matchID: number): Promise<CustomMatch | null> {
     try {
       let url = '/ViewMatchHistory'
@@ -126,5 +168,7 @@ export const useServiceStore = defineStore('service', () => {
     getMatchesHomeOwner,
     matches,
     viewMatch,
+    getMatchesCleaner,
+    getServicesForCleaner,
   }
 })

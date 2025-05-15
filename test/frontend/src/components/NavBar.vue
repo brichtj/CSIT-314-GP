@@ -20,25 +20,55 @@ const route = useRoute()
 // Hide navbar on the login page
 const isLoginPage = computed(() => route.path === '/')
 
-const menuItems = [
-  {
-    label: 'Home',
-    command: () => router.push('/home'),
-  },
-  {
-    label: 'Bookings',
-    command: () => router.push('/bookings'),
-  },
-  {
-    label: 'Favourites',
-    command: () => router.push('/shortList'),
-  },
-  {
-    label: 'logout',
-    command: () => {
-      auth.logout()
-      router.push('/')
-    },
-  },
-]
+// Define menu items dynamically
+const menuItems = computed(() => {
+  let items = []
+  if (auth.user?.UserProfileName === 'HomeOwner') {
+    items.push(
+      ...[
+        {
+          label: 'Home',
+          command: () => router.push('/home'),
+        },
+        {
+          label: 'Bookings',
+          command: () => router.push('/bookings'),
+        },
+        {
+          label: 'Favourites',
+          command: () => router.push('/shortList'),
+        },
+        {
+          label: 'logout',
+          command: () => {
+            auth.logout()
+            router.push('/')
+          },
+        },
+      ],
+    )
+  } else if (auth.user?.UserProfileName === 'Cleaner') {
+    items.push(
+      ...[
+        {
+          label: 'Services',
+          command: () => router.push('/CleanerView'),
+        },
+        {
+          label: 'Bookings',
+          command: () => router.push('/bookings'),
+        },
+        {
+          label: 'logout',
+          command: () => {
+            auth.logout()
+            router.push('/')
+          },
+        },
+      ],
+    )
+  }
+
+  return items
+})
 </script>

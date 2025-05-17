@@ -1,28 +1,27 @@
 <template>
-  <div>
-    <SearchBar @search="searchCategory" details="Search User Profiles" />
-    <Button
-      label="Add Profile"
-      class="bg-blue-500 hover:bg-blue-600 text-white"
-      severity="info"
-      @click="handleCreateClick"
-    />
-    <div class="p-grid p-justify-start p-px-4">
-      <div
-        v-for="category in categories"
-        :key="category.CategoryID"
-        class="p-col-12 p-md-4 p-lg-3 p-mb-3"
-      >
-        <CategoryCard :category="category" @edit="handleViewClick" :view-only="false" />
-      </div>
-    </div>
-    <CategoryDetail
-      ref="editCategoryPopUp"
-      :userProfile="categoryIndividual!"
-      @update="handleUpdateClick"
-      @suspend="handleSuspendClick"
+  <SearchBar @search="searchCategory" details="Search Category" />
+  <Button
+    label="Create Category"
+    class="bg-blue-500 hover:bg-blue-600 text-white"
+    severity="info"
+    @click="handleCreateClick"
+  />
+  <div style="display: flex; flex-wrap: wrap; gap: 16px; /* space between cards */ padding: 16px">
+    <CategoryCard
+      v-for="category in categories"
+      :key="category.CategoryID"
+      class="p-col-12 p-md-4 p-lg-3 p-mb-3"
+      :category="category"
+      @edit="handleViewClick"
+      :view-only="false"
     />
   </div>
+  <CategoryDetail
+    ref="editCategoryPopUp"
+    :category="categoryIndividual!"
+    @update="handleUpdateClick"
+    @suspend="handleSuspendClick"
+  />
   <CreateCategory ref="createCategoryPopUp" @create="handleCreate" />
 </template>
 
@@ -55,9 +54,8 @@ async function searchCategory(searchTerm: string) {
   await managementStore.searchCategory(searchTerm)
 }
 
-async function handleViewClick(userProfileID: number) {
-  console.log(userProfileID)
-  categoryIndividual.value = await managementStore.viewCategory(userProfileID)
+async function handleViewClick(categoryID: number) {
+  categoryIndividual.value = await managementStore.viewCategory(categoryID)
   editCategoryPopUp.value.openPopup()
 }
 

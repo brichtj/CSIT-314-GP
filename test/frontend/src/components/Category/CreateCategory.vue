@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-model:visible="visible"
-    header="Create Profile"
+    header="Create Category"
     :modal="true"
     :closable="false"
     :style="{ width: '600px' }"
@@ -9,9 +9,9 @@
     <div class="space-y-4 p-3">
       <!-- Name -->
       <div>
-        <label class="block font-medium mb-1">Profile Name</label>
+        <label class="block font-medium mb-1">Title</label>
         <InputText
-          v-model="createUserProfileValues.name"
+          v-model="createCategoryValues.Title"
           class="w-full"
           placeholder="Enter Profile Name"
         />
@@ -19,9 +19,9 @@
 
       <!-- Privilege -->
       <div>
-        <label class="block font-medium mb-1">Privilege</label>
+        <label class="block font-medium mb-1">Description</label>
         <InputText
-          v-model="createUserProfileValues.privilege"
+          v-model="createCategoryValues.Description"
           class="w-full"
           placeholder="Enter privilege"
         />
@@ -66,9 +66,9 @@ import type {
 } from '@/types/interfaces'
 const toast = useToast()
 
-const createUserProfileValues = ref<CreateUserProfileType>({
-  name: '',
-  privilege: '',
+const createCategoryValues = ref<CreateCategoryType>({
+  Title: '',
+  Description: '',
 })
 const visible = ref(false)
 
@@ -81,19 +81,19 @@ const closePopup = () => {
 }
 
 function handleCreateClick() {
-  const { name, privilege } = createUserProfileValues.value
+  const { Title, Description } = createCategoryValues.value
 
-  if (!name.trim() || !privilege.trim()) {
+  if (!Title.trim() || !Description.trim()) {
     toast.add({
       severity: 'error',
       summary: 'Validation Error',
-      detail: 'Profile name and profile privilege is required',
+      detail: 'Title and description is required',
       life: 3000,
     })
     return
   }
 
-  emit('create', createUserProfileValues.value)
+  emit('create', createCategoryValues.value)
 }
 const emit = defineEmits<{
   (e: 'create', details: CreateCategoryType): void

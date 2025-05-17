@@ -28,6 +28,8 @@ const handleLogin = async () => {
       router.push('/CleanerView')
     } else if (value === 'UserAdmin') {
       router.push('/UserView')
+    } else if (value == 'PlatformManagement') {
+      router.push('/CategoryView')
     }
   } catch (err: any) {
     //handle error(network)

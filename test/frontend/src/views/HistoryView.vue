@@ -2,14 +2,13 @@
   <div>
     <SearchBar @search="searchServices" details="Search Matches" />
 
-    <div class="p-grid p-justify-start p-px-4">
-      <div
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; /* space between cards */ padding: 16px">
+      <HistoryCard
         v-for="service in matches"
         :key="service.ServiceID"
-        class="p-col-12 p-md-4 p-lg-3 p-mb-3"
-      >
-        <HistoryCard :match="service" @view="handleViewClick" />
-      </div>
+        :match="service"
+        @view="handleViewClick"
+      />
     </div>
     <HistoryDetailCard ref="popup" :service="match" :view-only="false" />
   </div>

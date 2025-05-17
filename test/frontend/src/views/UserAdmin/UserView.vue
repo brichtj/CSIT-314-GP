@@ -3,15 +3,19 @@
     <SearchBar @search="searchUser" details="Search Users" />
 
     <Button
-      label="Add User"
+      label="Create User"
       class="bg-blue-500 hover:bg-blue-600 text-white"
       severity="info"
       @click="handleCreateUserClick"
     />
-    <div class="p-grid p-justify-start p-px-4">
-      <div v-for="user in users" :key="user.UserID" class="p-col-12 p-md-4 p-lg-3 p-mb-3">
-        <UserCard :user="user" @view="handleViewClick" :view-only="false" />
-      </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; /* space between cards */ padding: 16px">
+      <UserCard
+        v-for="user in users"
+        :key="user.UserID"
+        :user="user"
+        @view="handleViewClick"
+        :view-only="false"
+      />
     </div>
     <UserDetailsCard
       ref="popup"

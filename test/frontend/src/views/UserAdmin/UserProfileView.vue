@@ -2,20 +2,21 @@
   <div>
     <SearchBar @search="searchUserProfile" details="Search User Profiles" />
     <Button
-      label="Add Profile"
+      label="Create Profile"
       class="bg-blue-500 hover:bg-blue-600 text-white"
       severity="info"
       @click="handleCreateClick"
     />
-    <div class="p-grid p-justify-start p-px-4">
-      <div
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; /* space between cards */ padding: 16px">
+      <UserProfileCard
         v-for="userProfile in userProfiles"
         :key="userProfile.UserProfileID"
-        class="p-col-12 p-md-4 p-lg-3 p-mb-3"
-      >
-        <UserProfileCard :user-profile="userProfile" @edit="handleViewClick" :view-only="false" />
-      </div>
+        :user-profile="userProfile"
+        @edit="handleViewClick"
+        :view-only="false"
+      />
     </div>
+
     <UserProfileDetailsCard
       ref="editUserProfilePopUp"
       :userProfile="userProfileIndi!"

@@ -12,7 +12,13 @@ import NavBar from './components/NavBar.vue'
       padding: 0; /* 100% of viewport height */
     "
   >
-    <div>
+    <div
+      style="
+        width: 100vw; /* 100% of viewport width */
+        height: 100vh;
+        padding: 0; /* 100% of viewport height */
+      "
+    >
       <NavBar />
       <RouterView />
       <Toast />

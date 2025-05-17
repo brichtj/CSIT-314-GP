@@ -68,9 +68,9 @@ class Service:
                     query = """
                         SELECT 
                             "ServiceID",
-                            "CategoryID",
-                            "Title",
-                            "Description",
+                            "Service"."CategoryID",
+                            "Service"."Title",
+                            "Service"."Description",
                             "DatePosted",
                             "CleanerID",
                             "LikeCount",
@@ -79,17 +79,19 @@ class Service:
                             "price",
                             "ImageLink"
                         FROM "Service"
+                        Left join "Category" on "Category"."CategoryID" = "Service"."CategoryID"
+                        where "Category"."Is_Active" = true
                         order by "DatePosted"
-                        LIMIT 10
+                        LIMIT 50
                     """
                     params = ()
                 else:
                     query = """
                         SELECT 
                             "ServiceID",
-                            "CategoryID",
-                            "Title",
-                            "Description",
+                            "Service"."CategoryID",
+                            "Service"."Title",
+                            "Service"."Description",
                             "DatePosted",
                             "CleanerID",
                             "LikeCount",
@@ -98,16 +100,18 @@ class Service:
                             "price",
                             "ImageLink"
                         FROM "Service"
-                        WHERE "Title" ILIKE %s
+                        Left join "Category" on "Category"."CategoryID" = "Service"."CategoryID"
+                        WHERE "Service"."Title" ILIKE %s and "Category"."Is_Active" = true
+                        order by "DatePosted"
                     """
                     params = (f"%{searchTerm}%",)
             elif mode == 2:#by category name
                 query = """
                         SELECT 
                         "ServiceID",
-                        "CategoryID",
-                        "Title",
-                        "Description",
+                        "Service"."CategoryID",
+                        "Service"."Title",
+                        "Service"."Description",
                         "DatePosted",
                         "CleanerID",
                         "LikeCount",
@@ -320,7 +324,7 @@ class Service:
                     FROM "Service"
                     WHERE "CleanerID" = %s
                     order by "DatePosted"
-                    LIMIT 10
+                    LIMIT 50
                 """
                 params = (CleanerID,)
             else:

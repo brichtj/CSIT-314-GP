@@ -55,7 +55,7 @@ export const useManagementStore = defineStore('management', () => {
 
   async function suspendCategory(CategoryID: number): Promise<boolean> {
     try {
-      const response = await http.put('/SuspendCategory', { UserProfileID: CategoryID })
+      const response = await http.put('/SuspendCategory', { CategoryID: CategoryID })
       return true
     } catch (err: any) {
       throw err

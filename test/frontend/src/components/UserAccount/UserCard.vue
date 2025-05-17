@@ -2,6 +2,7 @@
   <Card
     class="w-[280px] shadow-md rounded-2xl text-center flex flex-col items-center"
     style="width: 300px"
+    :style="{ opacity: user.IsActive ? 1 : 0.4 }"
   >
     <template #header>
       <div class="relative"></div>

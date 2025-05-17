@@ -3,20 +3,20 @@
     <SearchBar @search="searchServices" details="Search your services" />
 
     <Button
-      label="Add"
+      label="Create  service"
       class="bg-blue-500 hover:bg-blue-600 text-white"
       severity="info"
       @click="handleAddClick"
     />
 
-    <div class="p-grid p-justify-start p-px-4">
-      <div
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; /* space between cards */ padding: 16px">
+      <ServiceCard
         v-for="service in services"
         :key="service.ServiceID"
-        class="p-col-12 p-md-4 p-lg-3 p-mb-3"
-      >
-        <ServiceCard :service="service" @book="handleViewClick" :view-only="true" />
-      </div>
+        :service="service"
+        @book="handleViewClick"
+        :view-only="true"
+      />
     </div>
     <CleanerServiceDetailcard
       ref="editServicePopUp"

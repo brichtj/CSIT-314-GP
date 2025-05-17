@@ -2,19 +2,15 @@
   <div>
     <SearchBar @search="searchServices" details="Search services" />
 
-    <div class="p-grid p-justify-start p-px-4">
-      <div
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; /* space between cards */ padding: 16px">
+      <ServiceCard
         v-for="service in services"
         :key="service.ServiceID"
-        class="p-col-12 p-md-4 p-lg-3 p-mb-3"
-      >
-        <ServiceCard
-          :service="service"
-          @book="handleBookClick"
-          @shortList="handleShortListClick"
-          :view-only="false"
-        />
-      </div>
+        :service="service"
+        @book="handleBookClick"
+        @shortList="handleShortListClick"
+        :view-only="false"
+      />
     </div>
     <ServiceDetailCard
       ref="popup"

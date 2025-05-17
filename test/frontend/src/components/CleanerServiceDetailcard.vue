@@ -34,6 +34,7 @@
             <strong>Description:</strong>
             <p class="ml-2">{{ service.CatDesc }}</p>
           </div>
+          <div><strong>Category Active:</strong> {{ service.CatActive ? 'Yes' : 'No' }}</div>
         </div>
       </div>
 

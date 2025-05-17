@@ -21,8 +21,8 @@ app.use(PrimeVue, {
 })
 app.use(createPinia())
 app.use(ToastService)
-app.component('Toast', Toast)
 app.use(router)
+app.component('Toast', Toast)
 router.beforeEach((to, from, next) => {
   const defaultTitle = 'Cleaner'
   if (typeof to.meta.title === 'string') {

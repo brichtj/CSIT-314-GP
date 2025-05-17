@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import http from '../../globals.ts' // use the global axios instance
 import type {
+  UserProfile,
   CreateUserType,
   CustomUserAccount,
   UpdateUserType,
@@ -15,6 +16,7 @@ export const useUserStore = defineStore('user', () => {
   // Auth state with types
 
   const userAccounts = ref<UserAccount[]>([])
+  const userProfiles = ref<UserProfile[]>([])
 
   async function searchUser(searchTerm: string): Promise<boolean> {
     try {
@@ -30,7 +32,7 @@ export const useUserStore = defineStore('user', () => {
 
   async function viewUser(UserID: number): Promise<CustomUserAccount> {
     try {
-      const response = await http.get('/ViewUser', {
+      const response = await http.get('/ViewUserAccount', {
         params: { UserID: UserID },
       })
       return response.data.message
@@ -60,12 +62,44 @@ export const useUserStore = defineStore('user', () => {
 
   async function suspendUser(UserProfileID: number): Promise<boolean> {
     try {
-      const response = await http.put('/SuspendUser', { UserProfileID: UserProfileID })
+      const response = await http.put('/SuspendUserAccount', { UserProfileID: UserProfileID })
       return true
     } catch (err: any) {
       throw err
     }
   }
 
-  return { userAccounts, searchUser, viewUser, CreateUserAccount, updateUserAccount, suspendUser }
+  async function searchUserProfiles(searchTerm: string): Promise<UserProfile[]> {
+    try {
+      const response = await http.get('/SearchUserProfile', {
+        params: { searchTerm: searchTerm },
+      })
+      userProfiles.value = response.data.message
+      return response.data.message
+    } catch (err: any) {
+      throw err
+    }
+  }
+
+  async function viewUserProfile(userProfileID: number): Promise<UserProfile> {
+    try {
+      const response = await http.get('/ViewUserProfile', {
+        params: { UserProfileID: userProfileID },
+      })
+      return response.data.message
+    } catch (err: any) {
+      throw err
+    }
+  }
+
+  return {
+    userAccounts,
+    userProfiles,
+    searchUser,
+    viewUser,
+    CreateUserAccount,
+    updateUserAccount,
+    suspendUser,
+    searchUserProfiles,
+  }
 })

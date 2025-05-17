@@ -78,6 +78,13 @@ const menuItems = computed(() => {
           label: 'User Profiles',
           command: () => router.push('/UserProfileView'),
         },
+        {
+          label: 'logout',
+          command: () => {
+            auth.logout()
+            router.push('/')
+          },
+        },
       ],
     )
   }

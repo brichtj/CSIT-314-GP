@@ -55,6 +55,12 @@ export interface UserProfile {
   Privilege: string
   Is_Active: boolean
 }
+export interface UpdateUserProfileType {
+  name: string
+  privilege: string
+  is_active: boolean
+  userprofileID: number
+}
 export interface CreateUserType {
   username: string
   email: string
@@ -62,6 +68,10 @@ export interface CreateUserType {
   address: string
   Experience: number
   UserProfileID: number
+}
+export interface CreateUserProfileType {
+  name: string
+  privilege: string
 }
 export interface UpdateUserType {
   username: string

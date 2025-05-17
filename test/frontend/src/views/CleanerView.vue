@@ -31,12 +31,10 @@
     <CreateService ref="createServicePopUp" @create="handleCreateClick" :categories="categories">
     </CreateService>
   </div>
-  <Toast />
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import Navbar from '../components/NavBar.vue'
 import SearchBar from '../components/SearchBar.vue'
 import ServiceCard from '../components/ServiceCard.vue'
 import { useServiceStore } from '@/stores/serviceStore'
@@ -93,13 +91,7 @@ async function handleUpdateClick(details: any) {
           life: 3000,
         })
         editServicePopUp.value.closePopup()
-      } else
-        toast.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to update',
-          life: 3000,
-        })
+      } else throw 'Failed to update, please try again later or contact support'
     } else throw 'Please login to update a service'
   } catch (err) {
     toast.add({

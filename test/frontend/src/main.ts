@@ -7,6 +7,7 @@ import App from './App.vue'
 import router from './router'
 
 import PrimeVue from 'primevue/config'
+import Chart from 'primevue/chart'
 import Aura from '@primeuix/themes/aura'
 import 'primeicons/primeicons.css'
 import ToastService from 'primevue/toastservice'
@@ -23,6 +24,7 @@ app.use(createPinia())
 app.use(ToastService)
 app.use(router)
 app.component('Toast', Toast)
+app.component('Chart', Chart)
 router.beforeEach((to, from, next) => {
   const defaultTitle = 'Cleaner'
   if (typeof to.meta.title === 'string') {

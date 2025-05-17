@@ -36,6 +36,10 @@ export interface UserAccount {
   Address: boolean
   Experience: string | null
 }
+export interface ReportEntry {
+  date: string // ISO date string, e.g., "2016-12-23"
+  postcount: number // Number of posts on that date
+}
 export interface CustomUserAccount {
   UserProfileName: string
   Privilege: string

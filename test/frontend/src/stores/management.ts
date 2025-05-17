@@ -1,7 +1,12 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import http from '../../globals.ts' // use the global axios instance
-import type { CategoryType, CreateCategoryType, UpdateCategoryType } from '@/types/interfaces.ts'
+import type {
+  CategoryType,
+  CreateCategoryType,
+  ReportEntry,
+  UpdateCategoryType,
+} from '@/types/interfaces.ts'
 
 // Define the User type
 
@@ -61,6 +66,25 @@ export const useManagementStore = defineStore('management', () => {
       throw err
     }
   }
+
+  async function getReport(mode: string): Promise<ReportEntry[]> {
+    try {
+      let url = ''
+      if (mode == 'daily') {
+        url = '/getDailyReport'
+      } else if (mode == 'weekly') {
+        url = '/getWeeklyReport'
+      } else if (mode == 'monthly') {
+        url = '/getMonthlyReport'
+      }
+      const response = await http.get(url, {
+        params: {},
+      })
+      return response.data.message
+    } catch (err: any) {
+      throw err
+    }
+  }
   return {
     categories,
     searchCategory,
@@ -68,5 +92,6 @@ export const useManagementStore = defineStore('management', () => {
     CreateCategory,
     updateCategory,
     suspendCategory,
+    getReport,
   }
 })

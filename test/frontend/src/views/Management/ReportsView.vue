@@ -1,124 +1,202 @@
 <template>
-  <SearchBar @search="searchCategory" details="Search Category" />
-  <Button
-    label="Add Category"
-    class="bg-blue-500 hover:bg-blue-600 text-white"
-    severity="info"
-    @click="handleCreateClick"
-  />
-  <div style="display: flex; flex-wrap: wrap; gap: 16px; /* space between cards */ padding: 16px">
-    <CategoryCard
-      v-for="category in categories"
-      :key="category.CategoryID"
-      class="p-col-12 p-md-4 p-lg-3 p-mb-3"
-      :category="category"
-      @edit="handleViewClick"
-      :view-only="false"
+  <div>
+    <h2>Posts per Day</h2>
+    <Chart
+      v-if="dailyData.length"
+      type="line"
+      :data="dailyChartData"
+      :options="chartOptions('Date')"
     />
+    <p v-else>No daily data available.</p>
+
+    <h2>Posts per Week</h2>
+    <Chart
+      v-if="weeklyData.length"
+      type="line"
+      :data="weeklyChartData"
+      :options="chartOptions('Week Start')"
+    />
+    <p v-else>No weekly data available.</p>
+
+    <h2>Posts per Month</h2>
+    <Chart
+      v-if="monthlyData.length"
+      type="line"
+      :data="monthlyChartData"
+      :options="chartOptions('Month Start')"
+    />
+    <p v-else>No monthly data available.</p>
   </div>
-  <CategoryDetail
-    ref="editCategoryPopUp"
-    :category="categoryIndividual!"
-    @update="handleUpdateClick"
-    @suspend="handleSuspendClick"
-  />
-  <CreateCategory ref="createCategoryPopUp" @create="handleCreate" />
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useManagementStore } from '@/stores/management'
-import {
-  type CreateCategoryType,
-  type UpdateCategoryType,
-  type CategoryType,
-} from '@/types/interfaces'
-import { useToast, Button } from 'primevue'
-import CategoryCard from '@/components/Category/CategoryCard.vue'
-import CategoryDetail from '@/components/Category/CategoryDetail.vue'
-import CreateCategory from '@/components/Category/CreateCategory.vue'
-import SearchBar from '@/components/SearchBar.vue'
-const toast = useToast()
+import type { ReportEntry } from '@/types/interfaces'
 
 const managementStore = useManagementStore()
-const categories = computed(() => managementStore.categories)
-const categoryIndividual = ref<CategoryType>()
-const editCategoryPopUp = ref()
-const createCategoryPopUp = ref()
 
-onMounted(async () => {
-  await managementStore.searchCategory(' ')
+// Helper: parse ISO date string -> Date
+const parseDate = (d: string) => new Date(d + 'T00:00:00')
+
+// Helper: format Date -> ISO string 'YYYY-MM-DD'
+function formatDate(d: Date): string {
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0') // month 0-11
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+// Generate all dates between start and end inclusive (daily)
+function fillMissingDays(data: ReportEntry[]): ReportEntry[] {
+  if (!data.length) return []
+
+  const sorted = data
+    .slice()
+    .sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime())
+  const start = parseDate(sorted[0].date)
+  const end = parseDate(sorted[sorted.length - 1].date)
+
+  const result: ReportEntry[] = []
+  for (let dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+    const iso = formatDate(dt)
+    const found = data.find((d) => d.date === iso)
+    result.push(found ?? { date: iso, postcount: 0 })
+  }
+  return result
+}
+
+// Generate all weeks between start and end inclusive
+function fillMissingWeeks(data: ReportEntry[]): ReportEntry[] {
+  if (!data.length) return []
+
+  const sorted = data
+    .slice()
+    .sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime())
+  let start = parseDate(sorted[0].date)
+  let end = parseDate(sorted[sorted.length - 1].date)
+  console.log(start, end)
+
+  // normalize start to the Monday of that week (or Sunday depending on your week start)
+  start.setDate(start.getDate() - ((start.getDay() + 6) % 7))
+  console.log(start)
+  console.log(formatDate(start))
+  console.log(data[0].date)
+  const result: ReportEntry[] = []
+  for (let dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 7)) {
+    const iso = formatDate(dt)
+    const found = data.find((d) => d.date === iso)
+    result.push(found ?? { date: iso, postcount: 0 })
+  }
+  return result
+}
+
+// Generate all months between start and end inclusive
+function fillMissingMonths(data: ReportEntry[]): ReportEntry[] {
+  if (!data.length) return []
+
+  const sorted = data
+    .slice()
+    .sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime())
+  let start = parseDate(sorted[0].date)
+  let end = parseDate(sorted[sorted.length - 1].date)
+
+  start = new Date(start.getFullYear(), start.getMonth(), 1)
+  end = new Date(end.getFullYear(), end.getMonth(), 1)
+
+  const result: ReportEntry[] = []
+  for (let dt = new Date(start); dt <= end; dt.setMonth(dt.getMonth() + 1)) {
+    const iso = dt.toISOString().slice(0, 7) + '-01' // e.g. '2023-05-01'
+    const found = data.find((d) => d.date === iso)
+    result.push(found ?? { date: iso, postcount: 0 })
+  }
+  return result
+}
+
+// Usage example with your refs:
+const dailyData = ref<ReportEntry[]>([])
+const weeklyData = ref<ReportEntry[]>([])
+const monthlyData = ref<ReportEntry[]>([])
+
+// After fetching raw data from backend:
+async function loadData() {
+  const rawDaily = await managementStore.getReport('daily')
+  dailyData.value = fillMissingDays(rawDaily)
+
+  const rawWeekly = await managementStore.getReport('weekly')
+  weeklyData.value = fillMissingWeeks(rawWeekly)
+
+  const rawMonthly = await managementStore.getReport('monthly')
+  monthlyData.value = fillMissingMonths(rawMonthly)
+}
+
+// Chart option generator
+const chartOptions = (xLabel: string) => ({
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top',
+    },
+  },
+  scales: {
+    x: {
+      title: {
+        display: true,
+        text: xLabel,
+      },
+    },
+    y: {
+      title: {
+        display: true,
+        text: 'Post Count',
+      },
+      beginAtZero: true,
+    },
+  },
 })
 
-async function searchCategory(searchTerm: string) {
-  await managementStore.searchCategory(searchTerm)
-}
+// Chart data for each chart
+const dailyChartData = computed(() => ({
+  labels: dailyData.value.map((entry) => entry.date),
+  datasets: [
+    {
+      label: 'Posts per Day',
+      data: dailyData.value.map((entry) => entry.postcount),
+      borderColor: '#42A5F5',
+      fill: false,
+      tension: 0.4,
+    },
+  ],
+}))
 
-async function handleViewClick(categoryID: number) {
-  categoryIndividual.value = await managementStore.viewCategory(categoryID)
-  editCategoryPopUp.value.openPopup()
-}
+const weeklyChartData = computed(() => ({
+  labels: weeklyData.value.map((entry) => entry.date),
+  datasets: [
+    {
+      label: 'Posts per Week',
+      data: weeklyData.value.map((entry) => entry.postcount),
+      borderColor: '#66BB6A',
+      fill: false,
+      tension: 0.4,
+    },
+  ],
+}))
 
-async function handleUpdateClick(category: UpdateCategoryType) {
-  try {
-    await managementStore.updateCategory(category)
-    toast.add({
-      severity: 'success',
-      summary: 'Category Updated',
-      detail: 'Category updated successfully.',
-      life: 3000,
-    })
-    editCategoryPopUp.value.closePopup()
-  } catch (err) {
-    toast.add({
-      severity: 'error',
-      summary: 'Error Updating Category',
-      detail: err,
-      life: 3000,
-    })
-  }
-}
+const monthlyChartData = computed(() => ({
+  labels: monthlyData.value.map((entry) => entry.date),
+  datasets: [
+    {
+      label: 'Posts per Month',
+      data: monthlyData.value.map((entry) => entry.postcount),
+      borderColor: '#FFA726',
+      fill: false,
+      tension: 0.4,
+    },
+  ],
+}))
 
-async function handleSuspendClick(categoryID: number) {
-  try {
-    await managementStore.suspendCategory(categoryID)
-    toast.add({
-      severity: 'success',
-      summary: 'Category suspended ',
-      detail: 'Category suspended successfully.',
-      life: 3000,
-    })
-    editCategoryPopUp.value.closePopup()
-  } catch (err) {
-    toast.add({
-      severity: 'error',
-      summary: 'Error suspending Category',
-      detail: err,
-      life: 3000,
-    })
-  }
-}
-
-function handleCreateClick() {
-  createCategoryPopUp.value.openPopup()
-}
-async function handleCreate(details: CreateCategoryType) {
-  try {
-    await managementStore.CreateCategory(details)
-    toast.add({
-      severity: 'success',
-      summary: 'Category Created',
-      detail: 'Category created successfully.',
-      life: 3000,
-    })
-    createCategoryPopUp.value.closePopup()
-  } catch (err) {
-    toast.add({
-      severity: 'error',
-      summary: 'Error Creating Category',
-      detail: err,
-      life: 3000,
-    })
-  }
-}
+// Load all reports when component mounts
+onMounted(async () => {
+  loadData()
+})
 </script>

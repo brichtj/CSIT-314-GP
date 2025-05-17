@@ -5,6 +5,7 @@ from .User.UserBoundary import router as user_boundary
 from .Category.CategoryBoundary import router as category_boundary
 from .Shortlist.ShortlistBoundary import router as Shortlist_boundary
 from .Matches.MatchBoundary import router as match_boundary
+from .Reports.ReportBoundary import router as report_boundary
 
 #User Admin
-__all__ = ["match_boundary","service_boundary","user_profile_boundary","user_boundary","category_boundary","Shortlist_boundary"]
+__all__ = ["match_boundary","service_boundary","user_profile_boundary","user_boundary","category_boundary","Shortlist_boundary","report_boundary"]

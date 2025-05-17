@@ -58,7 +58,12 @@ import Dropdown from 'primevue/dropdown'
 import { InputText } from 'primevue'
 import InputNumber from 'primevue/inputnumber'
 import { useToast } from 'primevue/usetoast'
-import type { CreateUserProfileType, CreateUserType, UserProfile } from '@/types/interfaces'
+import type {
+  CreateCategoryType,
+  CreateUserProfileType,
+  CreateUserType,
+  UserProfile,
+} from '@/types/interfaces'
 const toast = useToast()
 
 const createUserProfileValues = ref<CreateUserProfileType>({
@@ -91,7 +96,7 @@ function handleCreateClick() {
   emit('create', createUserProfileValues.value)
 }
 const emit = defineEmits<{
-  (e: 'create', details: CreateUserProfileType): void
+  (e: 'create', details: CreateCategoryType): void
 }>()
 defineExpose({
   openPopup,

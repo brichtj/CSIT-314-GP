@@ -87,6 +87,26 @@ const menuItems = computed(() => {
         },
       ],
     )
+  } else if (auth.user?.UserProfileName === 'PlatformManagement') {
+    items.push(
+      ...[
+        {
+          label: 'Categories',
+          command: () => router.push('/CategoryView'),
+        },
+        {
+          label: 'Reports',
+          command: () => router.push('/ReportsView'),
+        },
+        {
+          label: 'logout',
+          command: () => {
+            auth.logout()
+            router.push('/')
+          },
+        },
+      ],
+    )
   }
 
   return items

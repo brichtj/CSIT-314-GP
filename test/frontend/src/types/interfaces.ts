@@ -49,6 +49,22 @@ export interface CustomUserAccount {
   Address: string | null
   Experience: number
 }
+export interface CreateCategoryType {
+  Title: string
+  Description: string
+}
+export interface UpdateCategoryType {
+  CategoryID: number
+  Title: string
+  Description: string
+  Is_Active: boolean
+}
+export interface CategoryType {
+  CategoryID: number
+  Title: string
+  Description: string
+  IsActive: boolean
+}
 export interface UserProfile {
   UserProfileID: number
   Name: string

@@ -56,6 +56,22 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/UserAdmin/UserProfileView.vue'),
     },
+    {
+      path: '/CategoryView',
+      name: 'categoryView',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/Management/CategoryView.vue'),
+    },
+    {
+      path: '/ReportsView',
+      name: 'reportView',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/Management/ReportsView.vue'),
+    },
   ],
 })
 

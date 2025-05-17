@@ -82,6 +82,7 @@
             <InputText id="title" v-model="editService.Title" class="flex-auto" />
           </div>
           <div>
+            <label for="category" class="font-semibold w-28">Category:</label>
             <Dropdown
               v-model="editService.CategoryID"
               :options="categories"
@@ -90,7 +91,7 @@
               placeholder="Select a Category"
               :filter="true"
             />
-            <p v-if="editService.CategoryID">Selected ID: {{ editService.CategoryID }}</p>
+            <!-- <p v-if="editService.CategoryID">Selected ID: {{ editService.CategoryID }}</p> -->
           </div>
           <div class="flex items-center gap-4">
             <label for="description" class="font-semibold w-28">Description</label>

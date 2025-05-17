@@ -7,6 +7,8 @@ import type {
   CustomUserAccount,
   UpdateUserType,
   UserAccount,
+  UpdateUserProfileType,
+  CreateUserProfileType,
 } from '@/types/interfaces'
 
 // Define the User type
@@ -91,7 +93,31 @@ export const useUserStore = defineStore('user', () => {
       throw err
     }
   }
+  async function suspendUserProfile(userProfileID: number): Promise<boolean> {
+    try {
+      const response = await http.put('/SuspendUserProfile', { UserProfileID: userProfileID })
+      return true
+    } catch (err: any) {
+      throw err
+    }
+  }
 
+  async function updateUserProfile(userProfile: UpdateUserProfileType) {
+    try {
+      const response = await http.put('/updateUserProfile', userProfile)
+      return true
+    } catch (err: any) {
+      throw err
+    }
+  }
+  async function createUserProfile(userProfile: CreateUserProfileType) {
+    try {
+      const response = await http.post('/CreateUserProfile', userProfile)
+      return true
+    } catch (err: any) {
+      throw err
+    }
+  }
   return {
     userAccounts,
     userProfiles,
@@ -101,5 +127,9 @@ export const useUserStore = defineStore('user', () => {
     updateUserAccount,
     suspendUser,
     searchUserProfiles,
+    viewUserProfile,
+    suspendUserProfile,
+    updateUserProfile,
+    createUserProfile,
   }
 })

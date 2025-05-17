@@ -40,6 +40,22 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/CleanerView.vue'),
     },
+    {
+      path: '/UserView',
+      name: 'userView',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/UserAdmin/UserView.vue'),
+    },
+    {
+      path: '/UserProfileView',
+      name: 'userProfileView',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/UserAdmin/UserProfileView.vue'),
+    },
   ],
 })
 

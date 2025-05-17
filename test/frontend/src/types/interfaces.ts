@@ -11,7 +11,7 @@ export interface Service {
   Price: number
   ImageLink: string
 }
-
+//this user is for the own Logged in User
 export interface User {
   Address: string
   Email: string
@@ -25,6 +25,7 @@ export interface User {
   UserProfileName: string
   Username: string
 }
+//this UserAccount is for useradmin view UserAccounts type
 export interface UserAccount {
   UserID: number
   Username: string
@@ -34,6 +35,43 @@ export interface UserAccount {
   UserProfile: number
   Address: boolean
   Experience: string | null
+}
+export interface CustomUserAccount {
+  UserProfileName: string
+  Privilege: string
+  UPActive: boolean
+  UserID: number
+  Username: string
+  Email: string
+  Phone: string
+  IsActive: boolean
+  UserProfile: number
+  Address: string | null
+  Experience: number
+}
+export interface UserProfile {
+  UserProfileID: number
+  Name: string
+  Privilege: string
+  Is_Active: boolean
+}
+export interface CreateUserType {
+  username: string
+  email: string
+  phone: string
+  address: string
+  Experience: number
+  UserProfileID: number
+}
+export interface UpdateUserType {
+  username: string
+  email: string
+  phone: string
+  IsActive: boolean
+  UserID: number
+  address: string
+  Experience: number
+  UserProfileID: number
 }
 // Inherit from Service
 export interface CustomService extends Service {

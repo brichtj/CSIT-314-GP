@@ -1,7 +1,12 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import http from '../../globals.ts' // use the global axios instance
-import type { UserAccount } from '@/types/interfaces'
+import type {
+  CreateUserType,
+  CustomUserAccount,
+  UpdateUserType,
+  UserAccount,
+} from '@/types/interfaces'
 
 // Define the User type
 
@@ -13,7 +18,7 @@ export const useUserStore = defineStore('user', () => {
 
   async function searchUser(searchTerm: string): Promise<boolean> {
     try {
-      const response = await http.get('/SearchUser', {
+      const response = await http.get('/SearchUserAccount', {
         params: { searchTerm: searchTerm },
       })
       userAccounts.value = response.data.message
@@ -23,7 +28,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  async function viewUser(UserID: number): Promise<UserAccount> {
+  async function viewUser(UserID: number): Promise<CustomUserAccount> {
     try {
       const response = await http.get('/ViewUser', {
         params: { UserID: UserID },
@@ -34,5 +39,33 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  return { userAccounts }
+  // Actions
+  async function CreateUserAccount(details: CreateUserType): Promise<boolean> {
+    try {
+      const response = await http.post('/CreateUser', details)
+      return true
+    } catch (err: any) {
+      throw err
+    }
+  }
+
+  async function updateUserAccount(details: UpdateUserType): Promise<boolean> {
+    try {
+      const response = await http.put('/UpdateUserAccount', details)
+      return true
+    } catch (err: any) {
+      throw err
+    }
+  }
+
+  async function suspendUser(UserProfileID: number): Promise<boolean> {
+    try {
+      const response = await http.put('/SuspendUser', { UserProfileID: UserProfileID })
+      return true
+    } catch (err: any) {
+      throw err
+    }
+  }
+
+  return { userAccounts, searchUser, viewUser, CreateUserAccount, updateUserAccount, suspendUser }
 })

@@ -67,6 +67,19 @@ const menuItems = computed(() => {
         },
       ],
     )
+  } else if (auth.user?.UserProfileName === 'UserAdmin') {
+    items.push(
+      ...[
+        {
+          label: 'User Accounts',
+          command: () => router.push('/UserView'),
+        },
+        {
+          label: 'User Profiles',
+          command: () => router.push('/UserProfileView'),
+        },
+      ],
+    )
   }
 
   return items

@@ -189,6 +189,7 @@ class Service:
                     RETURNING "ServiceID"
                     """
             values = (CategoryID, Title, Description, CleanerID, Price, ImageLink)
+            print(query%values)
 
             res =DB().insertFreeStyle(query, values)
 

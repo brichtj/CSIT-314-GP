@@ -16,7 +16,7 @@ export const useAuthenticationStore = defineStore('authentication', () => {
     Phone: '',
     Privilege: '',
     UPActive: false,
-    UserID: 42,
+    UserID: 0,
     UserProfile: 0,
     UserProfileName: 'HomeOwner',
     Username: '',

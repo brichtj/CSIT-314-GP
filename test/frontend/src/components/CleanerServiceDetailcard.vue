@@ -53,8 +53,13 @@
     <template #footer>
       <div class="flex justify-between items-center w-full" v-if="!viewOnly">
         <div class="flex items-center space-x-2">
-          <Button label="Update" icon="pi pi-pencil" @click="updateFields = true" severity="help" />
-          <Button label="Delete" icon="pi pi-trash" @click="updateService" severity="danger" />
+          <Button
+            label="Update"
+            icon="pi pi-pencil"
+            @click="updateFieldVisibile = true"
+            severity="help"
+          />
+          <Button label="Delete" icon="pi pi-trash" @click="handleDeleteClick" severity="danger" />
         </div>
         <div class="flex space-x-2">
           <Button label="Close" icon="pi pi-times" @click="closePopup" severity="warn" />
@@ -62,7 +67,7 @@
       </div>
 
       <Dialog
-        v-model:visible="updateFields"
+        v-model:visible="updateFieldVisibile"
         modal
         header="Edit Service"
         :style="{ width: '30rem' }"
@@ -75,6 +80,17 @@
           <div class="flex items-center gap-4">
             <label for="title" class="font-semibold w-28">Title</label>
             <InputText id="title" v-model="editService.Title" class="flex-auto" />
+          </div>
+          <div>
+            <Dropdown
+              v-model="editService.CategoryID"
+              :options="categories"
+              optionLabel="Title"
+              optionValue="CategoryID"
+              placeholder="Select a Category"
+              :filter="true"
+            />
+            <p v-if="editService.CategoryID">Selected ID: {{ editService.CategoryID }}</p>
           </div>
           <div class="flex items-center gap-4">
             <label for="description" class="font-semibold w-28">Description</label>
@@ -97,8 +113,13 @@
         </div>
 
         <div class="flex justify-end gap-2">
-          <Button type="button" label="Cancel" severity="secondary" @click="updateFields = false" />
-          <Button type="button" label="Save" @click="updateService" />
+          <Button
+            type="button"
+            label="Cancel"
+            severity="secondary"
+            @click="updateFieldVisibile = false"
+          />
+          <Button type="button" label="confirm" @click="updateService" />
         </div>
       </Dialog>
     </template>
@@ -117,6 +138,7 @@ h3 {
 import { ref, computed, onMounted, watchEffect } from 'vue'
 import Dialog from 'primevue/dialog'
 import Button from 'primevue/button'
+import Dropdown from 'primevue/dropdown'
 import { InputText } from 'primevue'
 import type { CustomService } from '@/types/interfaces'
 
@@ -125,9 +147,9 @@ const props = defineProps<{
   viewOnly: boolean
   actualViews: number
   actualLikes: number
-  categories: { CategoryID: number; Title: string }[]
+  categories: { CategoryID: number; Title: string; Description: string; IsActive: boolean }[]
 }>()
-interface Service {
+interface EditServiceType {
   ServiceID: number
   CategoryID: number
   Title: string
@@ -137,20 +159,19 @@ interface Service {
   ImageLink: string
 }
 
-const editService = ref<Service>({
-  ServiceID: 0,
-  CategoryID: 0,
-  Title: '',
-  Description: '',
-  CleanerID: 0,
-  Price: 0,
-  ImageLink: '',
+const editService = ref<EditServiceType>({
+  ServiceID: props.service?.ServiceID ?? 0,
+  CategoryID: props.service?.CategoryID ?? 0,
+  Title: props.service?.Title ?? '',
+  Description: props.service?.Description ?? '',
+  CleanerID: props.service?.CleanerID ?? 0,
+  Price: props.service?.Price ?? 0,
+  ImageLink: props.service?.ImageLink ?? '',
 })
 const visible = ref(false)
 
-const updateFields = ref(false)
+const updateFieldVisibile = ref(false)
 
-const offerPrice = ref<number | null>(null)
 const defaultImage = 'https://www.purevpn.com/wp-content/uploads/2023/03/What-is-IMGUR_.png' // 👈 Update with your actual default path
 const imageSrc = ref(props.service?.ImageLink ?? defaultImage)
 function handleImageError(event: Event) {
@@ -165,9 +186,28 @@ const closePopup = () => {
   visible.value = false
 }
 watchEffect(() => {
-  // Update offerPrice whenever props.service is updated (on openPopup)
-  if (props.service?.Price) {
-    offerPrice.value = props.service?.Price ?? null
+  const service = props.service
+  imageSrc.value = props.service?.ImageLink ?? defaultImage
+  if (service) {
+    editService.value = {
+      ServiceID: service.ServiceID ?? 0,
+      CategoryID: service.CategoryID ?? 0,
+      Title: service.Title ?? '',
+      Description: service.Description ?? '',
+      CleanerID: service.CleanerID ?? 0,
+      Price: service.Price ?? 0,
+      ImageLink: service.ImageLink ?? '',
+    }
+  } else {
+    editService.value = {
+      ServiceID: 0,
+      CategoryID: 0,
+      Title: '',
+      Description: '',
+      CleanerID: 0,
+      Price: 0,
+      ImageLink: '',
+    }
   }
 })
 const formattedDate = computed(() => {
@@ -181,15 +221,19 @@ const formattedDate = computed(() => {
 import InputNumber from 'primevue/inputnumber'
 
 function updateService() {
-  //emit('book', props.service!.ServiceID, offerPrice.value)
-
-  closePopup()
+  emit('update', editService.value)
+  updateFieldVisibile.value = false
+}
+function handleDeleteClick() {
+  emit('delete', props.service?.ServiceID ?? 0)
+  updateFieldVisibile.value = false
 }
 const emit = defineEmits<{
-  (e: 'update', serviceID: number, offerPrice: number): void
-  (e: 'delete', serviceID: number, offerPrice: number): void
+  (e: 'update', details: EditServiceType): void
+  (e: 'delete', serviceID: number): void
 }>()
 defineExpose({
   openPopup,
+  closePopup,
 })
 </script>

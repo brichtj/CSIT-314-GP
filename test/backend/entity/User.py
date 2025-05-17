@@ -154,7 +154,6 @@ class User():
             params = (f"{searchTerm}%",)
             #print("Full SQL:", query % params)
             result = DB().execute_fetchall(query, params)
-            print(result)
             if result is None or len(result) == 0:
                 return []
             else:

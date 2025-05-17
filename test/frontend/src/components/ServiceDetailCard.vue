@@ -112,6 +112,7 @@ const closePopup = () => {
 }
 watchEffect(() => {
   // Update offerPrice whenever props.service is updated (on openPopup)
+  imageSrc.value = props.service?.ImageLink ?? defaultImage
   if (props.service?.Price) {
     offerPrice.value = props.service?.Price ?? null
   }

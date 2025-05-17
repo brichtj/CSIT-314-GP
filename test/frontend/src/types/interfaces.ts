@@ -25,7 +25,16 @@ export interface User {
   UserProfileName: string
   Username: string
 }
-
+export interface UserAccount {
+  UserID: number
+  Username: string
+  Email: string
+  Phone: string
+  IsActive: boolean
+  UserProfile: number
+  Address: boolean
+  Experience: string | null
+}
 // Inherit from Service
 export interface CustomService extends Service {
   // Category details
@@ -52,6 +61,7 @@ export type CustomMatch = Omit<CustomService, 'Username'> & {
   // Match details
   DealPrice: number
   DealDate: string
+  ImageLink: string
 }
 export interface SimpleMatch {
   ServiceID: number

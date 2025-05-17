@@ -51,6 +51,8 @@ class DB:
         Returns all results as a list of dictionaries with column names as keys.
         """
         try:
+            if self.cur.closed:
+                self.cur = self.conn.cursor()
             self.cur.execute(query, params)
             #print(query%params)
             rows = self.cur.fetchall()
@@ -77,6 +79,8 @@ class DB:
         
     def fetch_one_by_key(self, query: str, params) -> dict:
         try:
+            if self.cur.closed:
+                self.cur = self.conn.cursor()
             self.cur.execute(query, (params,))
             row = self.cur.fetchone()
 
@@ -99,6 +103,8 @@ class DB:
         
     def execute_update(self, query, params=()) -> bool:
         try:
+            if self.cur.closed:
+                self.cur = self.conn.cursor()
             self.cur.execute(query, params)
             
             # If the query is returning something, fetch the first row
@@ -121,6 +127,8 @@ class DB:
     #update with error incase no rows returned(e.g the row requested to update does not exist)
     def execute_update_with_error(self, query, params=()) -> bool:
         try:
+            if self.cur.closed:
+                self.cur = self.conn.cursor()
             self.cur.execute(query, params)
             
             # If the query is returning something, fetch the first row
@@ -148,6 +156,8 @@ class DB:
         require_rows=True  # If True, require at least one row to be updated
     ):
         try:
+            if self.cur.closed:
+                self.cur = self.conn.cursor()
             cur = self.conn.cursor()
 
             cur.execute(update1_query, update1_params)

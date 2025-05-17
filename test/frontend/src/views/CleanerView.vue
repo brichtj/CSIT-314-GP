@@ -2,7 +2,12 @@
   <div>
     <SearchBar @search="searchServices" details="Search your services" />
 
-    <Button label="Add" class="bg-blue-500 hover:bg-blue-600 text-white" severity="info" />
+    <Button
+      label="Add"
+      class="bg-blue-500 hover:bg-blue-600 text-white"
+      severity="info"
+      @click="handleAddClick"
+    />
 
     <div class="p-grid p-justify-start p-px-4">
       <div
@@ -14,15 +19,19 @@
       </div>
     </div>
     <CleanerServiceDetailcard
-      ref="popup"
+      ref="editServicePopUp"
       :service="service"
-      @book="handleConfirmBookClick"
+      @update="handleUpdateClick"
+      @delete="handleDeleteClick"
       :view-only="false"
       :actual-likes="actualLikes"
       :actual-views="actualViews"
       :categories="categories"
     />
+    <CreateService ref="createServicePopUp" @create="handleCreateClick" :categories="categories">
+    </CreateService>
   </div>
+  <Toast />
 </template>
 
 <script setup lang="ts">
@@ -35,11 +44,13 @@ import CleanerServiceDetailcard from '@/components/CleanerServiceDetailcard.vue'
 import type { CustomService } from '@/types/interfaces'
 import { useAuthenticationStore } from '@/stores/authentication'
 import Button from 'primevue/button'
-
+import { useToast } from 'primevue/usetoast'
+import CreateService from '@/components/CreateService.vue'
 //serviceStore
 const serviceStore = useServiceStore()
 const authStore = useAuthenticationStore()
 
+const toast = useToast()
 const services = computed(() => serviceStore.services)
 onMounted(() => {
   serviceStore.getServicesForCleaner(authStore.user?.UserID ?? 1, ' ')
@@ -49,7 +60,8 @@ async function searchServices(query: string) {
   //do loading and stuff here
 }
 
-const popup = ref()
+const createServicePopUp = ref()
+const editServicePopUp = ref()
 const service = ref<CustomService | null>(null)
 const actualLikes = ref(0)
 const actualViews = ref(0)
@@ -64,18 +76,101 @@ async function handleViewClick(serviceID: number) {
       'HomeOwner',
       authStore.user?.UserID ?? 1,
     )
-    popup.value.openPopup()
+    editServicePopUp.value.openPopup()
   } catch (err) {
     console.log(err)
   }
 }
-async function handleConfirmBookClick(serviceID: number, offerPrice: number) {
+async function handleUpdateClick(details: any) {
   try {
-    if (authStore.user?.UserID)
-      await serviceStore.confirmService(authStore.user?.UserID, serviceID, offerPrice)
-    else alert('You must be logged in to book a service.')
+    if (authStore.user?.Username.length ?? 0 > 0) {
+      let result = await serviceStore.updateService(details)
+      if (result) {
+        toast.add({
+          severity: 'success',
+          summary: 'Saved',
+          detail: 'Service saved successfully',
+          life: 3000,
+        })
+        editServicePopUp.value.closePopup()
+      } else
+        toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to update',
+          life: 3000,
+        })
+    } else throw 'Please login to update a service'
+  } catch (err) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: err,
+      life: 3000,
+    })
+  }
+}
+
+async function handleAddClick() {
+  try {
+    categories.value = await serviceStore.getCategories(' ')
+    createServicePopUp.value.openPopup()
   } catch (err) {
     console.log(err)
+  }
+}
+async function handleDeleteClick(serviceID: number) {
+  try {
+    if (authStore.user?.Username.length ?? 0 > 0) {
+      await serviceStore.deleteService(serviceID, authStore.user!.UserID)
+      toast.add({
+        severity: 'success',
+        summary: 'Deleted',
+        detail: 'Service deleted successfully',
+        life: 3000,
+      })
+      editServicePopUp.value.closePopup()
+    } else {
+      throw 'Please login to delete a service'
+    }
+  } catch (err) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: err,
+      life: 3000,
+    })
+  }
+}
+
+async function handleCreateClick(details: any) {
+  try {
+    if ((authStore.user?.UserID ?? 0 > 0) && authStore.user?.UserID) {
+      details.CleanerID = authStore.user.UserID
+      let result = await serviceStore.createService(details)
+      if (result) {
+        toast.add({
+          severity: 'success',
+          summary: 'Saved',
+          detail: 'Service saved successfully',
+          life: 3000,
+        })
+        createServicePopUp.value.closePopup()
+      } else
+        toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to create',
+          life: 3000,
+        })
+    } else throw 'Please login to create a service'
+  } catch (err) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: err,
+      life: 3000,
+    })
   }
 }
 </script>

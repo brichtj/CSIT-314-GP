@@ -95,7 +95,6 @@ const props = defineProps<{
   service: CustomMatch | null
   viewOnly: boolean
 }>()
-
 const visible = ref(false)
 
 const offerPrice = ref<number | null>(null)
@@ -106,18 +105,15 @@ function handleImageError(event: Event) {
 }
 
 const openPopup = () => {
+  console.log(props.service)
   visible.value = true
 }
 
 const closePopup = () => {
-  offerPrice.value = null
   visible.value = false
 }
 watchEffect(() => {
-  // Update offerPrice whenever props.service is updated (on openPopup)
-  if (props.service?.Price) {
-    offerPrice.value = props.service?.Price ?? null
-  }
+  imageSrc.value = props.service?.ImageLink ?? defaultImage
 })
 const formattedDate = computed(() => {
   if (!props.service?.DatePosted) return ''

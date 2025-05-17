@@ -191,6 +191,35 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
+  async function updateService(service: any): Promise<boolean> {
+    try {
+      const response = await http.put('/UpdateService', service)
+      return response.data.success
+    } catch (err: any) {
+      throw err
+    }
+  }
+
+  async function deleteService(ServiceID: number, CleanerID: number): Promise<boolean> {
+    try {
+      const response = await http.delete('/DeleteService', {
+        params: { ServiceID: ServiceID, CleanerID: CleanerID },
+      })
+      return response.data.success
+    } catch (err: any) {
+      throw err
+    }
+  }
+
+  async function createService(details: any): Promise<boolean> {
+    try {
+      const response = await http.post('/CreateService', details)
+      return response.data.success
+    } catch (err: any) {
+      throw err
+    }
+  }
+
   return {
     services,
     getServices,
@@ -207,5 +236,8 @@ export const useServiceStore = defineStore('service', () => {
     viewViews,
     viewShortListedCount,
     getCategories,
+    updateService,
+    deleteService,
+    createService,
   }
 })

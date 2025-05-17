@@ -69,7 +69,8 @@ const emit = defineEmits<{
   (e: 'shortList', serviceID: number): void
 }>()
 
-const defaultImage = getRandomImgurLink() // 👈 Update with your actual default path
+//const defaultImage = getRandomImgurLink() // 👈 Update with your actual default path
+const defaultImage = 'https://www.purevpn.com/wp-content/uploads/2023/03/What-is-IMGUR_.png'
 const imageSrc = ref(props.service.ImageLink)
 function handleImageError(event: Event) {
   imageSrc.value = defaultImage

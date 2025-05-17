@@ -29,19 +29,28 @@
         :disabled="form.userProfile !== 'Cleaner'"
       />
 
-      <input v-model="form.password" type="password" placeholder="Password" class="input" required />
+      <input
+        v-model="form.password"
+        type="password"
+        placeholder="Password"
+        class="input"
+        required
+      />
 
       <button type="submit" class="btn">Create</button>
     </form>
 
     <p v-if="message" class="mt-4">{{ message }}</p>
   </div>
+  <Toast />
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import http from '../../globals'
+import { useToast } from 'primevue/usetoast'
 
+const toast = useToast()
 const form = ref({
   username: '',
   password: '',
@@ -49,7 +58,7 @@ const form = ref({
   email: '',
   phone: '',
   address: '',
-  experience: ''
+  experience: '',
 })
 
 const message = ref('')
@@ -71,7 +80,7 @@ const submitForm = async () => {
         password: form.value.password,
         email: form.value.email,
         phone: form.value.phone,
-        address: form.value.address
+        address: form.value.address,
       }
     } else if (form.value.userProfile === 'Cleaner') {
       url = '/CreateCleanerAccount'
@@ -80,7 +89,7 @@ const submitForm = async () => {
         password: form.value.password,
         email: form.value.email,
         phone: form.value.phone,
-        experience: form.value.experience
+        experience: form.value.experience,
       }
     } else {
       message.value = 'Only Cleaner or HomeOwner registration is supported for now.'

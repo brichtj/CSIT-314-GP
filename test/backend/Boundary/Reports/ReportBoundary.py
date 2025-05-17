@@ -15,7 +15,7 @@ router = APIRouter()
     
 #req 7 generate report
 @router.get("/getDailyReport")
-def getReportBoundary():
+def getDailyReportBoundary():
     try:
         controller = GetReportController()
         result = controller.getReportController('daily')
@@ -41,7 +41,7 @@ def getReportBoundary():
             status_code=505
         )
 @router.get("/getWeeklyReport")
-def getReportBoundary():
+def getWeeklyReportBoundary():
     try:
         controller = GetReportController()
         result = controller.getReportController('weekly')  
@@ -66,7 +66,7 @@ def getReportBoundary():
             status_code=505
         )
 @router.get("/getMonthlyReport")
-def getReportBoundary():
+def getMonthlyReportBoundary():
     try:
         controller = GetReportController()
         result = controller.getReportController('monthly')

@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div v-if="loading" class="loading-container">
+    Loading data, please wait...
+    <ProgressSpinner v-if="loading" />
+  </div>
+  <div v-else>
     <h2>Posts per Day</h2>
     <Chart
       v-if="dailyData.length"
@@ -33,9 +37,9 @@
 import { ref, computed, onMounted } from 'vue'
 import { useManagementStore } from '@/stores/management'
 import type { ReportEntry } from '@/types/interfaces'
-
+import ProgressSpinner from 'primevue/progressspinner'
 const managementStore = useManagementStore()
-
+const loading = ref(true)
 // Helper: parse ISO date string -> Date
 const parseDate = (d: string) => new Date(d + 'T00:00:00')
 
@@ -194,9 +198,12 @@ const monthlyChartData = computed(() => ({
     },
   ],
 }))
-
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
 // Load all reports when component mounts
 onMounted(async () => {
-  loadData()
+  await loadData()
+  loading.value = false
 })
 </script>

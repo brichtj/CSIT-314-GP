@@ -1,6 +1,5 @@
 from typing import Self
 from Classes.LoginResponse import LoginResponse
-from .UserProfile import UserProfile
 from Database import DB
 import bcrypt
 from utils.utils import log_exception
@@ -84,15 +83,13 @@ class User():
             raise e
     #req 1.1 view
     @staticmethod
-    def viewUser(UserID:int)->Self:
+    def viewUser(UserID:int):
+        #RETURN TYPE CustomUser
         try:
             query = """
-                        SELECT "UserID", "Username", "UserProfileID", "Email", "Phone", "IsActive", "Address", "Experience"
-                        FROM "user"
-                        WHERE "UserID" = %s
                         
                 SELECT "UserID", "Username",  "Email", "Phone", "IsActive","user"."UserProfileID", "Address", "Experience","Password"
-                ,"Name","Privilege","IsActive"
+                ,"Name","Privilege","IsActive" as "UPActive"
                 FROM "user"
                 Left join "UserProfile" on "UserProfile"."UserProfileID" = "user"."UserProfileID"    
                         WHERE "UserID" = %s
@@ -107,8 +104,7 @@ class User():
            
 
             if result is not None:     
-                userProfile = UserProfile(result["UserProfileID"],result["Name"],result["Privilege"],result["IsActive"])
-                user = User(result["UserID"],result["Username"],result["Email"],result["Phone"],result["IsActive"],result["UserProfileID"],result["Address"],result["Experience"],userProfile)
+                user = CustomUser(result["UserID"],result["Username"],result["Email"],result["Phone"],result["IsActive"],result["UserProfileID"],result["Address"],result["Experience"],result["Name"],result["Privilege"],result["IsActive"])
            
                 return user
             else:               
@@ -191,6 +187,7 @@ class User():
             log_exception(e)
             raise (e)
 
+
 class CustomUser(User):
     def __init__(self,user_id,username=None, email=None, phone=None,is_active=True,userProfileID=None,Address=None,Experience=None,userprofileName = None,Privilege = None,UPActive = None):
         super().__init__(user_id, username, email, phone, is_active,userProfileID,Address,Experience)
@@ -204,6 +201,6 @@ class CustomUser(User):
             "Privilege":self.Privilege,
             "UPActive":self.UPActive
             }
-        parentJson.update(json)
+        json.update(parentJson)
 
-        return parentJson
+        return json

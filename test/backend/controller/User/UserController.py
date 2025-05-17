@@ -31,7 +31,7 @@ class SuspendUserController:
 
 class ViewUserController:
 
-    def ViewUserController(self,UserID:int)->User:
+    def ViewUserController(self,UserID:int):
         
         return User.viewUser(UserID)
 class UpdateUserController:

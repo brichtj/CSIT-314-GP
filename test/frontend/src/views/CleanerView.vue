@@ -10,19 +10,17 @@
         :key="service.ServiceID"
         class="p-col-12 p-md-4 p-lg-3 p-mb-3"
       >
-        <ServiceCard
-          :service="service"
-          @book="handleBookClick"
-          @shortList="handleShortListClick"
-          :view-only="false"
-        />
+        <ServiceCard :service="service" @book="handleViewClick" :view-only="true" />
       </div>
     </div>
-    <ServiceDetailCard
+    <CleanerServiceDetailcard
       ref="popup"
       :service="service"
       @book="handleConfirmBookClick"
       :view-only="false"
+      :actual-likes="actualLikes"
+      :actual-views="actualViews"
+      :categories="categories"
     />
   </div>
 </template>
@@ -33,7 +31,7 @@ import Navbar from '../components/NavBar.vue'
 import SearchBar from '../components/SearchBar.vue'
 import ServiceCard from '../components/ServiceCard.vue'
 import { useServiceStore } from '@/stores/serviceStore'
-import ServiceDetailCard from '@/components/ServiceDetailCard.vue'
+import CleanerServiceDetailcard from '@/components/CleanerServiceDetailcard.vue'
 import type { CustomService } from '@/types/interfaces'
 import { useAuthenticationStore } from '@/stores/authentication'
 import Button from 'primevue/button'
@@ -47,14 +45,20 @@ onMounted(() => {
   serviceStore.getServicesForCleaner(authStore.user?.UserID ?? 1, ' ')
 })
 async function searchServices(query: string) {
-  await serviceStore.getServices(1, query)
+  await serviceStore.getServicesForCleaner(authStore.user?.UserID ?? 1, query)
   //do loading and stuff here
 }
 
 const popup = ref()
 const service = ref<CustomService | null>(null)
-async function handleBookClick(serviceID: number) {
+const actualLikes = ref(0)
+const actualViews = ref(0)
+const categories = ref([])
+async function handleViewClick(serviceID: number) {
   try {
+    actualViews.value = await serviceStore.viewViews(serviceID)
+    actualLikes.value = await serviceStore.viewShortListedCount(serviceID)
+    categories.value = await serviceStore.getCategories(' ')
     service.value = await serviceStore.viewService(
       serviceID,
       'HomeOwner',
@@ -70,15 +74,6 @@ async function handleConfirmBookClick(serviceID: number, offerPrice: number) {
     if (authStore.user?.UserID)
       await serviceStore.confirmService(authStore.user?.UserID, serviceID, offerPrice)
     else alert('You must be logged in to book a service.')
-  } catch (err) {
-    console.log(err)
-  }
-}
-async function handleShortListClick(serviceID: number) {
-  try {
-    if (authStore.user?.UserID)
-      await serviceStore.shortListService(serviceID, authStore.user.UserID)
-    else alert('You must be logged in to shortlist a service.')
   } catch (err) {
     console.log(err)
   }

@@ -159,6 +159,38 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
+  async function viewViews(ServiceID: number): Promise<number> {
+    try {
+      const response = await http.get('/ViewTotalViewbyID', {
+        params: { ServiceID: ServiceID },
+      })
+      return response.data.message
+    } catch (err: any) {
+      throw err
+    }
+  }
+  async function viewShortListedCount(ServiceID: number): Promise<number> {
+    try {
+      const response = await http.get('/ViewTotalshortlistedCountbyID', {
+        params: { ServiceID: ServiceID },
+      })
+      return response.data.message
+    } catch (err: any) {
+      throw err
+    }
+  }
+  async function getCategories(searchTerm: string): Promise<[]> {
+    try {
+      const response = await http.get('/SearchCategory', {
+        params: { keyword: searchTerm },
+      })
+
+      return response.data.message
+    } catch (err: any) {
+      throw err
+    }
+  }
+
   return {
     services,
     getServices,
@@ -172,5 +204,8 @@ export const useServiceStore = defineStore('service', () => {
     viewMatch,
     getMatchesCleaner,
     getServicesForCleaner,
+    viewViews,
+    viewShortListedCount,
+    getCategories,
   }
 })

@@ -337,7 +337,7 @@ class Service:
                             "price",
                             "ImageLink"
                         FROM "Service"
-                        WHERE "Title" ILIKE %s and "CleanerID" = %s;
+                        WHERE "Title" ILIKE %s and "CleanerID" = %s
                     order by "DatePosted"
                     
                     """

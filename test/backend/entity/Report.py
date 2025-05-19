@@ -2,17 +2,28 @@
 from typing import Self
 from Database import DB
 from utils.utils import log_exception
+from datetime import date
 
 # CategoryID
 # Title
 # Description
 
 class Report:
-      
+    def __init__(self,date:date,postcount:int):
+        self.date = date
+        self.postcount = postcount
+        pass
+
+
+    def to_json(self):
+        return {
+            "date": self.date.isoformat(),
+            "postcount": self.postcount,
+        }
 
     #req 7 suspend category
     @staticmethod
-    def getReport(mode:str)->list[dict]:
+    def getReport(mode:str)->list[Self]:
         try:
             #insert into user table
             statement =''
@@ -39,8 +50,8 @@ class Report:
                 """
             params = ()
             result =DB().execute_fetchall(statement,params)
-          
-            return result
+            
+            return [Report(row['date'],row['postcount']) for row in result]
 
 
         except Exception as e:

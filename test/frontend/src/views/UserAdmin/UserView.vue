@@ -70,7 +70,7 @@ async function handleUpdateClick(details: UpdateUserType) {
     toast.add({
       severity: 'success',
       summary: 'Saved',
-      detail: 'User created successfully',
+      detail: 'User updated successfully',
       life: 3000,
     })
   } catch (err) {

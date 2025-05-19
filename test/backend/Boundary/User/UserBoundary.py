@@ -10,6 +10,18 @@ import psycopg2
 
 router = APIRouter()
 
+class LogoutRequest(BaseModel):
+    username: str
+@router.post("/logout")
+def logoutBoundary(data: LogoutRequest):
+    try:
+        return JSONResponse(Response(True, f"Successfully logged out, please come back again someday {data.username}").to_json())
+    except Exception as e:
+        log_exception(e)
+        return JSONResponse(
+            content=Response(False, "internal server error").to_json(),
+            status_code=500
+        )
 
 # misc req login
 class LoginRequest(BaseModel):
@@ -17,7 +29,7 @@ class LoginRequest(BaseModel):
     password: str
 
 @router.post("/login")
-def login(data: LoginRequest):
+def Login(data: LoginRequest):
     try:
         controller = UserLoginController()
         result = controller.login(data.username, data.password)

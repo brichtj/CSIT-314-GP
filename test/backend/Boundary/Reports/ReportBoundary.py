@@ -19,13 +19,10 @@ def getDailyReportBoundary():
     try:
         controller = GetReportController()
         result = controller.getReportController('daily')
-        serialized = [
-    {**row, 'date': row['date'].isoformat()} for row in result
-]
         if result is None:
             return JSONResponse(Response(False,None).to_json())
         else:
-            return JSONResponse(Response(True,serialized).to_json())
+            return JSONResponse(Response(True,[row.to_json() for row in result]).to_json())
     except psycopg2.Error as e:
         message = f"Database Error: {e}"
         log_exception(e)
@@ -45,13 +42,10 @@ def getWeeklyReportBoundary():
     try:
         controller = GetReportController()
         result = controller.getReportController('weekly')  
-        serialized = [
-    {**row, 'date': row['date'].isoformat()} for row in result
-]
         if result is None:
             return JSONResponse(Response(False,None).to_json())
         else:
-            return JSONResponse(Response(True,serialized).to_json())
+            return JSONResponse(Response(True,[row.to_json() for row in result]).to_json())
     except psycopg2.Error as e:
         message = f"Database Error: {e}"
         log_exception(e)
@@ -70,13 +64,10 @@ def getMonthlyReportBoundary():
     try:
         controller = GetReportController()
         result = controller.getReportController('monthly')
-        serialized = [
-    {**row, 'date': row['date'].isoformat()} for row in result
-]
         if result is None:
             return JSONResponse(Response(False,None).to_json())
         else:
-            return JSONResponse(Response(True,serialized).to_json())
+            return JSONResponse(Response(True,[row.to_json() for row in result]).to_json())
     except psycopg2.Error as e:
         message = f"Database Error: {e}"
         log_exception(e)

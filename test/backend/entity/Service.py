@@ -1,6 +1,9 @@
 
+from datetime import datetime
+from typing import Self
 from Database import DB
 from Classes.ServiceResponse import ServiceResponse
+from Classes.CustomService import customService
 from utils.utils import log_exception
 
 # ServiceID
@@ -14,167 +17,29 @@ from utils.utils import log_exception
 # MatchCount
 # Price
 
+        
 
 class Service:
-    def __init__(self):
-        self.ServiceID = None
-        self.db = DB()
-        self.Title = None
 
-    def searchByServiceID(self, ServiceID) -> ServiceResponse:
-        try:
-            self.ServiceID = ServiceID
-            self.pullDetails()
-            if not hasattr(self, 'Title') or not self.Title:
-                return ServiceResponse(False, "Service not found", None)
+    #convert all to capital first
+    def __init__(self, ServiceID=None, CategoryID=None, Title=None, Description=None,
+                DatePosted=None, CleanerID=None, LikeCount=None, ViewCount=None,
+                MatchCount=None, price=None, ImageLink=None):
+        self.ServiceID = ServiceID
+        self.CategoryID = CategoryID
+        self.Title = Title
+        self.Description = Description
+        self.DatePosted = DatePosted
+        self.CleanerID = CleanerID
+        self.LikeCount = LikeCount
+        self.ViewCount = ViewCount
+        self.MatchCount = MatchCount
+        self.price = price
+        self.ImageLink = ImageLink
 
-            self.update_LikeCount()
-            self.update_MatchCount()
-            self.update_ViewCount()
 
-            return ServiceResponse(True, "Service found", self.to_dict())
-
-        except Exception as e:
-            log_exception(e)
-            raise (e)
-
-    def pullDetails(self):
-        query = """
-                SELECT "ServiceID", "CategoryID", "Title", "Description", "DatePosted", "CleanerID", "LikeCount", "ViewCount", "MatchCount", "Price"
-                FROM "Service"
-                WHERE "ServiceID" = %s"""
-        params = (self.ServiceID,)
-
-        result = self.db.execute_fetchone(query, params)
-
-        if result:
-            self.ServiceID = result[0]
-            self.CategoryID = result[1]
-            self.Title = result[2]
-            self.Description = result[3]
-            self.DatePosted = result[4]
-            self.CleanerID = result[5]
-            self.LikeCount = result[6]
-            self.ViewCount = result[7]
-            self.MatchCount = result[8]
-            self.Price = result[9]
-            print(f"{self.ServiceID}: Details pulled")
-            return
-
-        print(f"{self.ServiceID}: Failed to pull datails")
-
-    def get_total_ServiceLikes(self) -> int:
-        query = """
-                SELECT COUNT(DISTINCT "HomeOwnerID")
-                FROM "ServiceLikes"
-                WHERE "ServiceID" = %s
-                GROUP BY "ServiceID"
-                """
-        params = (self.ServiceID,)
-
-        result = self.db.execute_fetchone(query, params)
-
-        if result:
-            print(f'{self.ServiceID}: total ServiceLikes calculated successfully')
-            return result[0]
-
-        print(f'{self.ServiceID}: Failed to calculate total ServiceLikes. Returning 0')
-        return 0
-
-    def update_LikeCount(self):
-        data = self.get_total_ServiceLikes()
-
-        query = """
-                UPDATE "Service"
-                SET "LikeCount" = %s
-                WHERE "ServiceID" = %s
-                """
-        params = (data, self.ServiceID)
-
-        result = self.db.execute_update(query, params)
-
-        if result:
-            self.LikeCount = data
-            print(f'{self.ServiceID}: LikeCount updated')
-            return
-
-        print(f"Failed to update LikeCount")
-
-    def get_total_Views(self) -> int:
-        query = """
-                SELECT COUNT(DISTINCT "HomeOwnerID")
-                FROM "Views"
-                WHERE "ServiceID" = %s
-                GROUP BY "ServiceID"
-                """
-        params = (self.ServiceID,)
-
-        result = self.db.execute_fetchone(query, params)
-
-        if result:
-            print(f'{self.ServiceID}: total Views calculated successfully')
-            return result[0]
-
-        print(f'{self.ServiceID}: Failed to calculate total Views. Returning 0')
-        return 0
-
-    def update_ViewCount(self):
-        data = self.get_total_Views()
-
-        query = """
-                UPDATE "Service"
-                SET "ViewCount" = %s
-                WHERE "ServiceID" = %s
-                """
-        params = (data, self.ServiceID)
-
-        result = self.db.execute_update(query, params)
-
-        if result:
-            self.ViewCount = data
-            print(f'{self.ServiceID}: ViewCount upated')
-            return
-
-        print(f"Failed to update ViewCount")
-
-    def get_total_Matches(self) -> int:
-        query = """
-                SELECT COUNT(*)
-                FROM "Matches"
-                WHERE "ServiceID" = %s
-                GROUP BY "ServiceID"
-                """
-        params = (self.ServiceID,)
-
-        result = self.db.execute_fetchone(query, params)
-
-        if result:
-            print(f'{self.ServiceID}: total Matches calculated successfully')
-            return result[0]
-
-        print(f'{self.ServiceID}: Failed to calculate total Matches. Returning 0')
-        return 0
-
-    def update_MatchCount(self):
-        data = self.get_total_Matches()
-
-        query = """
-                UPDATE "Service"
-                SET "MatchCount" = %s
-                WHERE "ServiceID" = %s
-                """
-        params = (data, self.ServiceID)
-
-        result = self.db.execute_update(query, params)
-
-        if result:
-            self.MatchCount = data
-            print(f'{self.ServiceID}: MatchCount upated')
-            return
-
-        print("Failed to update MatchCount")
-
-    def to_dict(self) -> dict:
+    #to json method
+    def to_json(self) -> dict:
         return {
             "ServiceID": self.ServiceID,
             "CategoryID": self.CategoryID,
@@ -185,5 +50,309 @@ class Service:
             "LikeCount": self.LikeCount,
             "ViewCount": self.ViewCount,
             "MatchCount": self.MatchCount,
-            "Price": self.Price
+            "Price": self.price,
+            "ImageLink": self.ImageLink
         }
+
+##################################################################################
+# Req3.1 Search Service
+##################################################################################
+    @staticmethod
+    def SearchService(mode: int, searchTerm: str)->Self:
+        try:
+
+            query = ''
+            params = ()
+            if mode == 1:#by title
+                if searchTerm.strip() == "":
+                    query = """
+                        SELECT 
+                            "ServiceID",
+                            "Service"."CategoryID",
+                            "Service"."Title",
+                            "Service"."Description",
+                            "DatePosted",
+                            "CleanerID",
+                            "LikeCount",
+                            "ViewCount",
+                            "MatchCount",
+                            "price",
+                            "ImageLink"
+                        FROM "Service"
+                        Left join "Category" on "Category"."CategoryID" = "Service"."CategoryID"
+                        where "Category"."Is_Active" = true
+                        order by "DatePosted"
+                        LIMIT 50
+                    """
+                    params = ()
+                else:
+                    query = """
+                        SELECT 
+                            "ServiceID",
+                            "Service"."CategoryID",
+                            "Service"."Title",
+                            "Service"."Description",
+                            "DatePosted",
+                            "CleanerID",
+                            "LikeCount",
+                            "ViewCount",
+                            "MatchCount",
+                            "price",
+                            "ImageLink"
+                        FROM "Service"
+                        Left join "Category" on "Category"."CategoryID" = "Service"."CategoryID"
+                        WHERE "Service"."Title" ILIKE %s and "Category"."Is_Active" = true
+                        order by "DatePosted"
+                    """
+                    params = (f"%{searchTerm}%",)
+            elif mode == 2:#by category name
+                query = """
+                        SELECT 
+                        "ServiceID",
+                        "Service"."CategoryID",
+                        "Service"."Title",
+                        "Service"."Description",
+                        "DatePosted",
+                        "CleanerID",
+                        "LikeCount",
+                        "ViewCount",
+                        "MatchCount",
+                        "price",
+                        "ImageLink"
+                        FROM "Service"
+                        WHERE "CategoryID" IN(
+                            SELECT "CategoryID"
+                            FROM "Category"
+                            WHERE "Title" ILIKE %s
+                        )
+                        """
+                params = (f"%{searchTerm}%",)
+
+            result = DB().execute_fetchall(query, params)
+            if result is None or len(result) == 0:
+                return []
+            else:
+                return [Service(**row) for row in result]
+
+        except Exception as e:
+            log_exception(e)
+            raise e
+
+##################################################################################
+# Req4.1 View Total Views of Services
+##################################################################################
+    @staticmethod
+    def ViewTotalViewbyID(ServiceID:int)->int:
+        try:
+            query = """
+                    SELECT count(*)
+                    FROM "Views"
+                    WHERE "ServiceID" = %s
+                    """
+            params = (ServiceID,)
+
+            result = DB().fetch_one_by_key(query, params)
+            if result is not None:
+                return result["count"]
+            else:
+                return None
+            
+        except Exception as e:
+            log_exception(e)
+            raise e
+
+
+##################################################################################
+# Req4.2 View Total Shortlisted Count of Services
+##################################################################################
+    @staticmethod
+    def ViewTotalShortlistedCountByID(ServiceID:int)->int:
+        try:
+            query = """
+            SELECT count(*) FROM public."Shortlist_Record" where "ServiceID" = %s
+                    """
+            params = (ServiceID,)
+
+            result = DB().fetch_one_by_key(query, params)
+            if result is not None:
+                return result["count"]
+            else:
+                return None
+
+            return result
+        except Exception as e:
+            log_exception(e)
+            raise e
+
+    #req 2 create service
+    def createService(self,CategoryID:int ,Title:str ,Description:str ,CleanerID:int ,Price:float ,ImageLink:str)->bool:
+        try:
+            query = """
+                    INSERT INTO "Service" ("CategoryID", "Title", "Description", "CleanerID", "price", "ImageLink")
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    RETURNING "ServiceID"
+                    """
+            values = (CategoryID, Title, Description, CleanerID, Price, ImageLink)
+            print(query%values)
+
+            res =DB().insertFreeStyle(query, values)
+
+            return True
+
+        except Exception as e:
+            print(e)
+            log_exception(e)
+            raise (e)
+        
+#req 2, req 3.2,req 3.3 view service by serviceID
+    def viewService(self,ServiceID:int,updateViewCount:bool,HomeOwnerID:int)->customService:
+        try:
+            query = """
+                    SELECT 
+                        "ServiceID",
+                        "Service"."CategoryID",
+                        "Service"."Title",
+                        "Service"."Description",
+                        "DatePosted",
+                        "CleanerID",
+                        "LikeCount",
+                        "ViewCount",
+                        "MatchCount",
+                        "price",
+                        "ImageLink",
+						"Category"."Title" as "CatTitle",
+						"Category"."Description" as "CatDesc",
+						"Category"."Is_Active" as "CatActive",
+						"user"."Username",
+						"user"."Email",
+						"user"."Phone",
+						"user"."IsActive" as "UActive",
+						"user"."Experience"
+                    FROM "Service"
+					left join "Category" on "Category"."CategoryID" = "Service"."CategoryID"
+                    left join "user" on "user"."UserID" = "Service"."CleanerID"
+					WHERE "ServiceID" = %s;
+                """
+            params = (ServiceID,)
+
+            result = DB().fetch_one_by_key(query, params)
+            if updateViewCount == True:
+                updateServiceViewCount = """
+                        UPDATE "Service"
+                        SET "ViewCount" = "ViewCount" + 1
+                        WHERE "ServiceID" = %s;
+                    """
+                
+                addServiceViewCount = """
+                        INSERT INTO "Views" ("HomeOwnerID", "ServiceID")
+                        VALUES (%s, %s)
+                        ON CONFLICT ("HomeOwnerID", "ServiceID") DO NOTHING;
+                    """
+                paramer = (HomeOwnerID,ServiceID,)
+                
+                DB().execute_update(updateServiceViewCount, params)
+                DB().execute_update(addServiceViewCount, paramer)
+
+
+            if result:
+                return customService(**result)
+            else:
+                return None
+        
+        except Exception as e:
+            log_exception(e)
+            raise e
+        
+#req 2 update service by serviceID
+    def updateService(self,CategoryID:int,Title:str,Description:str,price:float,ImageLink:str, ServiceID:int,CleanerID:int)->bool:
+        try:
+            #only cleaner can update his own service, thats why required cleanerID
+            query = """
+                    UPDATE "Service"
+                    SET "CategoryID" = %s,
+                        "Title" = %s,
+                        "Description" = %s,
+                        "price" = %s,
+                        "ImageLink" = %s
+                    WHERE "ServiceID" = %s and "CleanerID" = %s;
+                """
+            params = (CategoryID,Title,Description,price,ImageLink,ServiceID,CleanerID)
+
+            result = DB().execute_update(query, params)
+            return result
+
+
+        except Exception as e:
+            log_exception(e)
+            raise e
+        
+    #req 2 delete service by serviceID
+    def deleteService(self,ServiceID:int,CleanerID:int)->bool:
+        try:
+            query = """
+                    DELETE FROM "Service"
+                    WHERE "ServiceID" = %s and "CleanerID" = %s;
+                """
+            params = (ServiceID,CleanerID,)
+
+            result = DB().execute_delete(query, params)
+            return result
+
+        except Exception as e:
+            log_exception(e)
+            raise e
+        
+    #req 2 search Service by title and cleanerID(so that cleaner can search his own services)
+    def searchServiceByCleanerID(self,Title:str,CleanerID:int)->list[Self]:
+        try:
+            query = ''
+            params = ()
+            if Title.strip() == "":
+                query = """
+                    SELECT 
+                        "ServiceID",
+                        "CategoryID",
+                        "Title",
+                        "Description",
+                        "DatePosted",
+                        "CleanerID",
+                        "LikeCount",
+                        "ViewCount",
+                        "MatchCount",
+                        "price",
+                        "ImageLink"
+                    FROM "Service"
+                    WHERE "CleanerID" = %s
+                    order by "DatePosted"
+                    LIMIT 50
+                """
+                params = (CleanerID,)
+            else:
+                query = """
+                        SELECT 
+                            "ServiceID",
+                            "CategoryID",
+                            "Title",
+                            "Description",
+                            "DatePosted",
+                            "CleanerID",
+                            "LikeCount",
+                            "ViewCount",
+                            "MatchCount",
+                            "price",
+                            "ImageLink"
+                        FROM "Service"
+                        WHERE "Title" ILIKE %s and "CleanerID" = %s
+                    order by "DatePosted"
+                    
+                    """
+                params = ('%'+Title+'%',CleanerID,)
+
+            result = DB().execute_fetchall(query, params)
+            if result is None or len(result) == 0:
+                return []
+            else:
+                return [Service(**row)for row in result]
+        except Exception as e:
+            log_exception(e)
+            raise e

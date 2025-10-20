@@ -13,7 +13,7 @@ router = APIRouter()
 class LogoutRequest(BaseModel):
     username: str
 @router.post("/logout")
-def logoutBoundary(data: LogoutRequest):
+def LogoutBoundary(data: LogoutRequest):
     try:
         return JSONResponse(Response(True, f"Successfully logged out, please come back again someday {data.username}").to_json())
     except Exception as e:
